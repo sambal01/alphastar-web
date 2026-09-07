@@ -1,0 +1,336 @@
+.why-section {
+  background: #FFFFFF;
+}
+
+.why-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.why-card {
+  position: relative;
+  overflow: hidden;
+  padding: 28px;
+  border-radius: 24px;
+  background: #FFFFFF;
+  border: 2px solid #F8FAFA;
+  box-shadow: 0 4px 16px rgba(11, 13, 14, 0.06);
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.why-card-teal {
+  --spot-color: rgba(13, 132, 123, 0.12);
+  --corner-color: rgba(13, 132, 123, 0.12);
+  --hover-border: #A8DDD8;
+  --hover-shadow: 0 18px 36px rgba(13, 132, 123, 0.16);
+  --title-hover: #0D847B;
+}
+
+.why-card-red {
+  --spot-color: rgba(13, 132, 123, 0.12);
+  --corner-color: rgba(13, 132, 123, 0.12);
+  --hover-border: #A8DDD8;
+  --hover-shadow: 0 18px 36px rgba(13, 132, 123, 0.14);
+  --title-hover: #0D847B;
+}
+
+.why-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(220px circle at var(--pointer-x, 50%) var(--pointer-y, 50%), var(--spot-color), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.why-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 100% 100%, var(--corner-color), transparent 68%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.why-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--hover-border);
+  box-shadow: var(--hover-shadow);
+}
+
+.why-card:hover::before,
+.why-card:hover::after {
+  opacity: 1;
+}
+
+.why-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.why-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.why-icon svg {
+  width: 30px;
+  height: 30px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.why-icon svg [stroke] {
+  stroke: currentColor;
+}
+
+.why-icon svg [fill]:not([fill='none']) {
+  fill: currentColor;
+}
+
+.why-icon-teal {
+  background: #EAF7F5;
+  border-color: rgba(168, 221, 216, 0.72);
+  color: #0D847B;
+}
+
+.why-icon-red {
+  background: #EAF7F5;
+  border-color: #A8DDD8;
+  color: #0D847B;
+}
+
+.why-card:hover .why-icon {
+  transform: scale(1.08);
+}
+
+.why-card:hover .why-icon-teal {
+  background: #CFEDEA;
+  border-color: #A8DDD8;
+}
+
+.why-card:hover .why-icon-red {
+  background: #CFEDEA;
+  border-color: #A8DDD8;
+}
+
+.why-stat {
+  display: grid;
+  gap: 4px;
+  justify-items: end;
+  text-align: right;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.stat-label {
+  color: #717780;
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.why-card h3 {
+  font-size: 1.5rem;
+  line-height: 1.25;
+  color: #111418;
+  transition: color 0.3s ease;
+}
+
+.why-card:hover h3 {
+  color: var(--title-hover);
+}
+
+.why-card p {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--gray-600);
+}
+
+.why-accent-line {
+  display: block;
+  width: 0;
+  height: 4px;
+  margin-top: auto;
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.why-card:hover .why-accent-line {
+  width: 100%;
+}
+
+.teal-line {
+  background: linear-gradient(90deg, #CFEDEA 0%, #0D847B 52%, #0D847B 100%);
+}
+
+.red-line {
+  background: linear-gradient(90deg, #CFEDEA 0%, #A8DDD8 52%, #0D847B 100%);
+}
+
+.why-cta-banner {
+  position: relative;
+  overflow: hidden;
+  margin-top: 36px;
+  padding: 34px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #0D847B 0%, #0D847B 52%, #0D847B 100%);
+  color: var(--white);
+  box-shadow: var(--shadow-xl);
+}
+
+.cta-banner-decor-1,
+.cta-banner-decor-2 {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.cta-banner-decor-1 {
+  width: 240px;
+  height: 240px;
+  top: 50%;
+  right: -96px;
+  transform: translateY(-50%);
+  background: radial-gradient(circle, rgba(13, 132, 123, 0.65), rgba(13, 132, 123, 0.46) 48%, transparent 49%);
+}
+
+.cta-banner-decor-2 {
+  width: 210px;
+  height: 210px;
+  left: -100px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: radial-gradient(circle, rgba(13, 132, 123, 0.55), rgba(13, 132, 123, 0.4) 52%, transparent 53%);
+}
+
+.cta-banner-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.cta-banner-content h3,
+.cta-banner-content p {
+  color: var(--white);
+}
+
+.cta-banner-content p {
+  opacity: 0.88;
+}
+
+.cta-banner-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .why-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .why-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .why-grid {
+    gap: 18px;
+  }
+
+  .why-card {
+    padding: 20px;
+    border-radius: 20px;
+    gap: 16px;
+  }
+
+  .why-card-top,
+  .cta-banner-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .why-card-top {
+    gap: 14px;
+  }
+
+  .why-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+  }
+
+  .why-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .why-stat {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .stat-value {
+    font-size: 1.45rem;
+  }
+
+  .why-card h3 {
+    font-size: 1.22rem;
+  }
+
+  .why-card p {
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  .why-cta-banner {
+    margin-top: 28px;
+    padding: 24px 18px;
+    border-radius: 24px;
+  }
+
+  .cta-banner-decor-1 {
+    width: 170px;
+    height: 170px;
+    right: -110px;
+  }
+
+  .cta-banner-decor-2 {
+    width: 150px;
+    height: 150px;
+    left: -90px;
+  }
+
+  .cta-banner-btns {
+    width: 100%;
+  }
+
+  .cta-banner-btns .btn-white-teal,
+  .cta-banner-btns .btn-outline-white {
+    width: 100%;
+  }
+}

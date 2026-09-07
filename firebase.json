@@ -1,0 +1,24 @@
+{
+  "$schema": "./.vscode/firebase-config.schema.json",
+  "hosting": {
+    "site": "alpha-star-clinic-mobile",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "firebase-debug.log*",
+      ".firebase-migration/**",
+      "**/.*",
+      "**/node_modules/**",
+      "admin/**",
+      "backend/**",
+      "components/**",
+      "sql/**",
+      "test-results/**",
+      "**/*.php",
+      "**/*.sql",
+      "**/*.ts",
+      "**/*.tsx"
+    ]
+  }
+}

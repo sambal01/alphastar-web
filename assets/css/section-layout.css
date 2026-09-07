@@ -1,0 +1,1101 @@
+/* Match the Home content dimensions without changing the header or footer. */
+.content-section {
+  --section-title-size: 28px;
+  --section-title-leading: 1.08;
+  --section-body-size: 14.72px;
+  --section-body-leading: 1.6;
+  --section-button-height: 44px;
+  --section-button-size: 12px;
+  --section-column-gap: 28px;
+  --section-media-width: 335px;
+  --section-title-offset: 0px;
+  --section-description-gap: 20px;
+  padding-block: 42px 72px;
+  font-size: var(--section-body-size);
+  line-height: var(--section-body-leading);
+}
+
+.content-section.reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .content-section.reveal > .container {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+
+  .content-section.reveal.is-visible > .container {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-section > .container {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+.content-section .section-header {
+  margin: 0 0 28px;
+  padding-top: var(--section-title-offset);
+  text-align: center;
+}
+
+.content-section :is(.section-header h2, .about-content h2) {
+  max-width: 100%;
+  margin: 0;
+  font-size: var(--section-title-size);
+  line-height: var(--section-title-leading);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+.content-section .section-header h2 {
+  text-align: center;
+}
+
+.content-section p {
+  font-size: var(--section-body-size);
+  line-height: var(--section-body-leading);
+}
+
+.content-section .section-header p {
+  max-width: 680px;
+  margin: var(--section-description-gap) auto 0;
+}
+
+.content-section :is(h3, h4) {
+  font-size: 18px;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.content-section :is(.btn-primary, .btn-outline-teal, .btn-teal-full,
+  .btn-outline-teal-full, .btn-white-teal, .btn-submit) {
+  min-height: var(--section-button-height);
+  padding: 10px 18px;
+  font-size: var(--section-button-size);
+  line-height: 1.4;
+}
+
+.content-section :is(.about-grid, .services-grid, .why-grid, .hours-grid,
+  .faq-grid, .contact-grid) > * {
+  min-width: 0;
+}
+
+.content-section :is(.about-grid, .hours-grid, .faq-grid, .contact-grid) {
+  gap: var(--section-column-gap);
+  align-items: start;
+}
+
+.content-section.about-section {
+  padding-top: 84px;
+}
+
+.content-section .about-grid {
+  grid-template-areas: "copy" "photo";
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.content-section .about-content {
+  grid-area: copy;
+  gap: 16px;
+  padding-top: 0;
+}
+
+.content-section .about-content h2 {
+  margin-bottom: calc(var(--section-description-gap) - 16px);
+}
+
+.content-section .about-image-side {
+  grid-area: photo;
+}
+
+.content-section .about-img-wrap {
+  width: min(100%, 400px);
+  max-width: 400px;
+  margin-inline: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+}
+
+.content-section .about-img {
+  display: block;
+  height: auto;
+  aspect-ratio: 1130 / 1392;
+  border-radius: inherit;
+}
+
+.content-section .services-grid {
+  gap: 16px;
+}
+
+.content-section .service-card {
+  min-height: 0;
+  padding: 18px;
+  gap: 12px;
+  border-radius: 8px;
+}
+
+.content-section .service-title {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.3;
+  overflow-wrap: break-word;
+}
+
+.content-section .services-cta {
+  margin-top: 28px;
+  gap: 14px;
+}
+
+.content-section.why-section > .container {
+  max-width: 1280px;
+}
+
+.content-section .why-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px 24px;
+}
+
+.content-section .why-card {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+  overflow: visible;
+  grid-template-rows: 96px auto 1fr;
+  gap: 16px;
+}
+
+.content-section .why-card::before,
+.content-section .why-card::after {
+  display: none;
+}
+
+.why-feature-icon {
+  --why-icon-image-size: 110%;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  overflow: hidden;
+  background: #79A68C;
+}
+
+.why-feature-icon img {
+  display: block;
+  width: var(--why-icon-image-size);
+  height: var(--why-icon-image-size);
+  max-width: none;
+  object-fit: contain;
+}
+
+/* Normalize the PNGs' different outer margins inside the same circular frame. */
+.why-feature-icon-doctor {
+  --why-icon-image-size: 114%;
+}
+
+.why-feature-icon-hours {
+  --why-icon-image-size: 120%;
+}
+
+.content-section .why-card h3 {
+  --why-heading-size: 28px;
+  margin: 0;
+  font-size: var(--why-heading-size);
+  font-weight: 600;
+  line-height: calc(var(--why-heading-size) * 1.15);
+  letter-spacing: 0;
+  color: var(--premium-black);
+  overflow-wrap: break-word;
+}
+
+.content-section .why-card p {
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--premium-muted);
+}
+
+.content-section .why-cta-banner {
+  width: 100%;
+  max-width: none;
+  margin-top: 28px;
+  padding: 0;
+}
+
+.content-section.why-section.has-boundary-cta {
+  min-height: 0;
+  padding-bottom: 0;
+  overflow: visible;
+  z-index: 1;
+}
+
+.why-section.has-boundary-cta .why-cta-banner {
+  transform: translateY(50%);
+}
+
+.why-section.has-boundary-cta + .hours-section > .container {
+  padding-top: var(--why-cta-overlap, 0px);
+}
+
+.content-section .cta-banner-content {
+  min-height: 120px;
+  padding: 28px 24px;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.content-section .cta-banner-content h3 {
+  font-size: 16px;
+}
+
+.content-section .cta-arrow-btn {
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  flex-basis: 44px;
+}
+
+.why-cta-slides {
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* The shared grid row reserves the taller message's height during sliding. */
+.why-cta-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  align-items: center;
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.why-cta-slide {
+  min-width: 0;
+  padding-right: 16px;
+}
+
+.why-cta-banner .cta-banner-btns {
+  width: auto;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-cta-track {
+    transition: none;
+  }
+}
+
+.content-section :is(.hours-schedule-card, .info-card-white, .info-card-teal,
+  .info-card-item, .booking-form-card, .map-placeholder, .faq-item, .faq-side-card) {
+  border-radius: 8px;
+}
+
+.content-section .hours-card-header {
+  padding: 14px 16px;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.content-section .hours-card-title strong {
+  font-size: 15px;
+}
+
+.content-section .hours-card-title span {
+  font-size: 11px;
+}
+
+.content-section .open-now-badge {
+  width: auto;
+  min-width: 0;
+  height: 28px;
+  min-height: 28px;
+  padding: 0 10px;
+}
+
+.content-section .hours-open-state {
+  font-size: 11px;
+}
+
+.content-section .hours-schedule-card .days-list {
+  grid-auto-rows: 1fr;
+}
+
+.content-section .day-row {
+  min-height: 42px;
+  padding: 9px 14px;
+  gap: 10px;
+}
+
+.content-section :is(.day-name, .day-hours) {
+  font-size: 13px;
+}
+
+.content-section .today-badge {
+  margin-left: 0;
+  font-size: 10px;
+}
+
+.content-section .hours-note {
+  padding: 12px 14px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.content-section .hours-info-cards {
+  gap: 12px;
+}
+
+.content-section :is(.info-card-white, .info-card-teal) {
+  padding: 16px;
+}
+
+.content-section :is(.info-card-white h3, .info-card-teal h3, .walkin-row strong) {
+  font-size: 16px;
+}
+
+.content-section .info-card-teal h3 + p {
+  margin-top: 8px;
+}
+
+.content-section .quick-contact-row {
+  padding-top: 12px;
+}
+
+.content-section a.quick-contact-row strong {
+  color: var(--premium-teal);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.content-section .faq-content {
+  grid-area: questions;
+}
+
+.content-section .faq-side-panel {
+  grid-area: support;
+}
+
+.content-section .faq-grid {
+  --faq-row-height: 72px;
+  --faq-row-gap: 8px;
+  --faq-list-height: calc(5 * var(--faq-row-height) + 4 * var(--faq-row-gap));
+  grid-template-areas: "questions";
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.content-section .faq-side-card {
+  padding: 18px;
+  gap: 14px;
+  grid-template-rows: auto auto 44px 44px auto;
+  top: calc(var(--navbar-height, 106px) + 16px);
+}
+
+.content-section .faq-accordion {
+  height: var(--faq-list-height);
+  gap: var(--faq-row-gap);
+  scrollbar-width: thin;
+}
+
+.content-section .faq-item {
+  min-height: var(--faq-row-height);
+}
+
+.content-section .faq-question {
+  height: calc(var(--faq-row-height) - 4px);
+  padding: 8px 12px;
+  grid-template-columns: 20px minmax(0, 1fr) 16px;
+  gap: 8px;
+}
+
+.content-section :is(.faq-num, .faq-q-text) {
+  font-size: var(--section-body-size);
+  line-height: 1.4;
+}
+
+.content-section .faq-answer {
+  padding-inline: 12px;
+}
+
+.content-section .faq-answer p {
+  padding: 0 0 16px 28px;
+}
+
+.content-section :is(.faq-contact-btn, .faq-call-btn, .hours-home-btn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  line-height: 18px;
+}
+
+.content-section.contact-section {
+  min-height: 0;
+  padding-bottom: 3px;
+}
+
+.content-section .contact-grid {
+  grid-template-areas: "form" "info";
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.content-section .booking-form-card {
+  grid-area: form;
+  padding: 20px;
+  gap: 16px;
+}
+
+.content-section #booking-form,
+.content-section .contact-info-side {
+  min-width: 0;
+  height: 420px;
+  max-height: max(180px, calc(100dvh - var(--navbar-height, 106px) - 48px));
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scroll-padding-block: 12px;
+  padding: 4px 10px 4px 4px;
+}
+
+.content-section .contact-info-side {
+  grid-area: info;
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: 16px;
+}
+
+.content-section .contact-info-cards {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.content-section .info-card-item {
+  min-height: 92px;
+  padding: 14px;
+  grid-template-columns: 40px minmax(0, 1fr);
+  column-gap: 12px;
+}
+
+.content-section .info-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
+}
+
+.content-section .info-card-item strong {
+  font-size: 14px;
+}
+
+.content-section :is(.info-card-item small, .info-card-item span) {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.content-section :is(.map-live-frame, .map-embed) {
+  min-height: 280px;
+}
+
+.content-section .map-footer {
+  flex-wrap: wrap;
+  padding: 12px;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.content-section .booking-form-header {
+  margin-bottom: 0;
+}
+
+.content-section .form-row-2 {
+  gap: 12px;
+}
+
+.content-section .form-group label {
+  font-size: 12px;
+}
+
+.content-section .form-group :is(input, select, textarea) {
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.content-section .form-group textarea {
+  min-height: 92px;
+}
+
+.content-section .booking-slots {
+  gap: 8px;
+}
+
+.content-section .booking-slot-option {
+  min-height: 62px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.content-section .booking-slot-time {
+  font-size: 12px;
+}
+
+.content-section .booking-slot-count {
+  font-size: 10px;
+}
+
+.content-section :is(.booking-review, .form-feedback) {
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.content-section .form-disclaimer {
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@media (min-width: 640px) {
+  .content-section :is(.services-grid, .why-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .content-section .why-card h3 {
+    min-height: calc(var(--why-heading-size) * 2.3);
+  }
+}
+
+@media (min-width: 768px) {
+  .content-section {
+    --section-title-size: 38px;
+    --section-title-leading: 36px;
+    --section-body-size: 13px;
+    --section-body-leading: 21px;
+  }
+
+  .content-section .form-group :is(input, select, textarea) {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 900px) {
+  .content-section {
+    --section-title-size: 43px;
+    --section-title-leading: 39.5px;
+    --section-body-size: 13.5px;
+    --section-body-leading: 22.5px;
+    --section-button-height: 42px;
+    --section-button-size: 11px;
+    --section-column-gap: 24px;
+    --section-title-offset: 9px;
+    --section-description-gap: 25px;
+    min-height: calc(100vh - var(--navbar-height, 106px));
+    padding-top: 53px;
+  }
+
+  .content-section > .container {
+    max-width: 827px;
+  }
+
+  .content-section.about-section {
+    padding-top: 106px;
+  }
+
+  .content-section :is(.hours-grid, .faq-grid, .contact-grid) {
+    grid-template-columns: minmax(0, 1fr) var(--section-media-width);
+  }
+
+  .content-section .hours-grid {
+    align-items: stretch;
+  }
+
+  .content-section .hours-schedule-card {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .content-section .hours-info-cards {
+    grid-template-rows: repeat(3, 1fr);
+  }
+
+  .content-section .services-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .content-section.why-section > .container {
+    padding-inline: 24px;
+  }
+
+  .content-section .why-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .content-section .why-card h3 {
+    --why-heading-size: 30px;
+  }
+
+  .content-section .why-card .why-release-title {
+    font-size: 26px;
+  }
+
+  .why-release-title span {
+    display: block;
+  }
+
+  .content-section .why-cta-banner {
+    max-width: 850px;
+  }
+
+  .content-section .faq-grid {
+    --faq-row-height: 76px;
+    --faq-row-gap: 10px;
+    grid-template-areas: "questions support";
+  }
+
+  .content-section .faq-side-panel {
+    display: block;
+  }
+
+  .content-section .faq-side-card {
+    min-height: var(--faq-list-height);
+  }
+
+  .content-section .contact-grid {
+    grid-template-areas: "form info";
+  }
+
+  .content-section .contact-info-side {
+    height: auto;
+    max-height: none;
+    /* Let the booking card determine the scroll panel's height. */
+    contain: size;
+    align-self: stretch;
+    grid-template-rows: 100% auto;
+    padding-block: 0;
+  }
+
+  .content-section .map-placeholder {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .content-section :is(.map-live-frame, .map-embed) {
+    min-height: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .content-section.about-section > .container {
+    max-width: 1024px;
+  }
+
+  .content-section .about-grid {
+    grid-template-areas: "copy photo";
+    grid-template-columns: minmax(0, 1fr) 400px;
+    align-items: center;
+  }
+}
+
+@media (min-width: 1200px) {
+  .content-section {
+    --section-title-size: 47.3px;
+    --section-title-leading: 43.5px;
+    --section-body-size: 14.85px;
+    --section-body-leading: 24.75px;
+    --section-button-height: 46px;
+    --section-button-size: 12.1px;
+    --section-column-gap: 53px;
+    --section-media-width: 369px;
+    --section-title-offset: 8px;
+    --section-description-gap: 28.5px;
+    padding-top: 62px;
+  }
+
+  .content-section > .container {
+    max-width: 934px;
+  }
+
+  .content-section.about-section {
+    padding-top: 124px;
+  }
+
+  .content-section .why-card {
+    grid-template-rows: 108px auto 1fr;
+  }
+
+  .why-feature-icon {
+    margin-inline-start: 12px;
+  }
+
+  .content-section .why-card h3 {
+    --why-heading-size: 44px;
+  }
+
+  .content-section .why-card .why-release-title {
+    font-size: 36px;
+  }
+
+  .content-section .why-card p {
+    font-size: 18px;
+  }
+
+  .content-section .why-cta-banner {
+    max-width: 980px;
+  }
+}
+
+@media (max-width: 479px) {
+  .content-section .faq-grid {
+    --faq-row-height: 80px;
+  }
+}
+
+@media (max-width: 359px) {
+  .content-section .faq-grid {
+    --faq-row-height: 104px;
+  }
+}
+
+/* Touch layouts keep the desktop dimensions above intact. */
+@media (max-width: 1099px) {
+  .navbar-logo {
+    min-height: 44px;
+  }
+
+  .mobile-link,
+  .btn-mobile-book {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+
+  .mobile-link[aria-current="page"] {
+    color: var(--premium-teal);
+    background: var(--premium-mint);
+    box-shadow: inset 3px 0 var(--premium-teal);
+  }
+
+  body.menu-open .fab-container,
+  body:has(#booking-form:focus-within) .fab-container {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .content-section .form-group :is(input, select, textarea) {
+    font-size: 16px;
+  }
+
+  .bottom-cta-actions :is(.bottom-cta-primary, .bottom-cta-secondary) {
+    min-height: 44px;
+    height: auto;
+    padding: 10px 16px;
+    line-height: 20px;
+    border-radius: 999px;
+  }
+
+  .footer-bottom-inner {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .footer-col ul li a,
+  .footer-legal-link,
+  .map-directions-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 899px) {
+  .hero-section {
+    min-height: 0;
+    padding-block: 32px 64px;
+  }
+
+  .hero-heading {
+    letter-spacing: 0;
+  }
+
+  .hero-subtext {
+    font-size: 14.72px;
+    line-height: 1.6;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    min-height: 44px;
+    height: auto;
+  }
+
+  .hero-offer-frame,
+  .hero-offer-carousel {
+    height: auto;
+  }
+
+  .hero-offer-carousel .offer-slide img {
+    object-fit: contain;
+  }
+
+  .hero-offer-carousel .offer-controls {
+    position: static;
+    min-height: 48px;
+    padding: 0 12px;
+    border-top: 1px solid var(--premium-mint-border);
+    background: var(--premium-white);
+  }
+
+  .hero-offer-carousel .offer-dot {
+    width: 44px;
+    height: 44px;
+  }
+
+  .scroll-indicator {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .content-section {
+    --section-body-size: 14.72px;
+    --section-body-leading: 1.6;
+  }
+
+  .content-section .day-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    min-height: 48px;
+  }
+
+  .content-section .day-name-wrap {
+    width: auto;
+    min-width: 0;
+  }
+
+  .content-section .day-name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 6px;
+    line-height: 1.4;
+  }
+
+  .content-section .day-hours {
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .content-section .faq-grid {
+    grid-template-areas: "questions" "support";
+  }
+
+  .content-section .faq-side-panel {
+    display: block;
+  }
+
+  .content-section .faq-side-card {
+    position: static;
+    min-height: 0;
+  }
+
+  .bottom-cta {
+    min-height: 0;
+    padding: 16px 16px 32px;
+  }
+
+  .bottom-cta-actions {
+    flex-wrap: wrap;
+  }
+
+  .footer-grid {
+    padding-bottom: 48px;
+  }
+
+  .footer-col ul {
+    gap: 2px;
+  }
+
+  .footer-legal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+
+  .site-toast {
+    bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (min-width: 768px) and (max-width: 899px) {
+  .hero-download .app-download-btn {
+    min-height: 48px;
+    height: 48px;
+  }
+
+  .hero-download .chrome-btn-sub {
+    font-size: 8.5px;
+    line-height: 1.2;
+  }
+
+  .hero-download .chrome-btn-main {
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .download-or {
+    height: 48px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-heading {
+    font-size: 32px;
+  }
+
+  .hero-download {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr);
+    gap: 10px 6px;
+    align-items: stretch;
+  }
+
+  .download-label {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 10px;
+    line-height: 1.3;
+    letter-spacing: 0;
+  }
+
+  .hero-download .app-download-btn {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr) 10px;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+    min-height: 56px;
+    height: auto;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .hero-download :is(.chrome-icon-img, .playstore-icon) {
+    width: 22px;
+    height: 22px;
+    max-width: 22px;
+    max-height: 22px;
+  }
+
+  .hero-download .chrome-btn-sub {
+    font-size: 9px;
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .hero-download .chrome-btn-main {
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .hero-download .chrome-btn-arrow {
+    width: 10px;
+    height: 10px;
+  }
+
+  .download-or {
+    height: auto;
+    align-self: center;
+    font-size: 10px;
+  }
+
+  .trust-badges {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .hero-trust-badge {
+    min-height: 28px;
+    height: auto;
+    padding: 6px 10px;
+    font-size: 10px;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  .content-section .cta-banner-content {
+    padding: 20px 16px;
+    gap: 12px;
+  }
+
+  .why-cta-slide {
+    padding-right: 0;
+  }
+
+  .content-section .booking-form-card {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 767px) {
+  .hero-cta-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px;
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  .hero-btn-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 359px) {
+  .hero-heading {
+    font-size: 28px;
+  }
+
+  .content-section :is(.map-live-frame, .map-embed) {
+    min-height: 240px;
+  }
+}

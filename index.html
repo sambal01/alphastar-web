@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Alpha Star Laboratory Clinic - Trusted diagnostic and multispecialty clinic in Rodriguez, Rizal." />
+  <title>Alpha Star Laboratory Clinic - Diagnostic and Multispecialty Clinic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/navbar.css" />
+  <link rel="stylesheet" href="assets/css/hero.css?v=20260906-3" />
+  <link rel="stylesheet" href="assets/css/about.css" />
+  <link rel="stylesheet" href="assets/css/services.css" />
+  <link rel="stylesheet" href="assets/css/why-us.css" />
+  <link rel="stylesheet" href="assets/css/hours.css" />
+  <link rel="stylesheet" href="assets/css/faq.css?v=20260906-1" />
+  <link rel="stylesheet" href="assets/css/contact.css" />
+  <link rel="stylesheet" href="assets/css/footer.css?v=20260907-3" />
+  <link rel="stylesheet" href="assets/css/floating-btn.css?v=20260907-13" />
+  <link rel="stylesheet" href="assets/css/premium-redesign.css?v=20260907-3" />
+  <link rel="stylesheet" href="assets/css/section-layout.css?v=20260907-9" />
+</head>
+<body>
+  <nav id="navbar">
+    <div class="navbar-topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="topbar-phone" aria-label="Message Alpha Star Laboratory Clinic on Messenger">
+            <img class="messenger-logo-icon topbar-phone-icon" src="assets/images/messenger.png" alt="" aria-hidden="true" />
+            <span>Official Messenger</span>
+          </a>
+          <span class="topbar-divider">|</span>
+          <span class="topbar-hours">Mon-Sat 7:00 AM-5:00 PM &middot; Sun 7:00 AM-4:00 PM</span>
+        </div>
+        <div class="topbar-right">
+          <span class="topbar-walkin"><span class="pulse-dot green-pulse"></span><span class="topbar-open-text">Currently Open</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="navbar-main">
+      <div class="container navbar-inner">
+        <button type="button" class="navbar-logo" onclick="scrollToSection('#home')" aria-label="Go to home">
+          <img src="assets/images/Logo.png" alt="Alpha Star Laboratory Clinic" class="navbar-logo-image" />
+        </button>
+        <ul class="navbar-links" id="navbar-links">
+          <li><a href="#home" class="nav-link" data-section="home">Home</a></li>
+          <li><a href="#about" class="nav-link" data-section="about">About</a></li>
+          <li><a href="#services" class="nav-link" data-section="services">Services</a></li>
+          <li><a href="#why-us" class="nav-link" data-section="why-us">Why Us</a></li>
+          <li><a href="#hours" class="nav-link" data-section="hours">Hours</a></li>
+          <li><a href="#faq" class="nav-link" data-section="faq">FAQ</a></li>
+          <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+        </ul>
+        <div class="navbar-cta-group">
+          <button type="button" class="btn-book-now" onclick="scrollToSection('#contact')">Request Visit</button>
+          <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" hidden inert>
+      <a href="#home" class="mobile-link">Home</a>
+      <a href="#about" class="mobile-link">About</a>
+      <a href="#services" class="mobile-link">Services</a>
+      <a href="#why-us" class="mobile-link">Why Us</a>
+      <a href="#hours" class="mobile-link">Hours</a>
+      <a href="#faq" class="mobile-link">FAQ</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+      <button type="button" class="btn-mobile-book" onclick="scrollToSection('#contact'); closeMenu();">Request Appointment</button>
+    </div>
+  </nav>
+  <main>
+    <section id="home" class="hero-section">
+      <div class="hero-bg-decor" aria-hidden="true">
+        <div class="hero-outline hero-outline-1"></div>
+        <div class="hero-outline hero-outline-2"></div>
+        <div class="hero-circle hero-circle-1"></div>
+        <div class="hero-circle hero-circle-2"></div>
+      </div>
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <h1 class="hero-heading">
+            <span class="hero-heading-line">Your <span class="text-teal">Trusted</span></span>
+            <span class="hero-heading-line">Diagnostic and</span>
+            <span class="hero-heading-line"><span class="text-teal">Multispecialty Clinic</span></span>
+          </h1>
+          <p class="hero-subtext">Fast, reliable, and quality healthcare services designed with your comfort in mind. From laboratory exams to executive check-ups, we care for you every step of the way.</p>
+          <div class="hero-cta-row">
+            <button type="button" class="btn-primary hero-btn-primary" onclick="scrollToBookingForm()">
+              Book Appointment
+              <svg class="hero-btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+            <button type="button" class="btn-outline-teal hero-btn-secondary" onclick="scrollToSection('#services')">
+              View Services
+              <svg class="hero-btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+          </div>
+          <div class="hero-download">
+            <p class="download-label">DOWNLOAD OUR APP</p>
+            <button type="button" class="app-download-btn chrome-download-btn" data-coming-soon="Chrome app download">
+              <img src="assets/images/googleicon.png" alt="" class="chrome-icon-img" aria-hidden="true" />
+              <span class="chrome-btn-text"><span class="chrome-btn-sub">Download for</span><span class="chrome-btn-main">Google Chrome</span></span>
+              <span class="chrome-btn-arrow" aria-hidden="true"></span>
+            </button>
+            <span class="download-or">or</span>
+            <button type="button" class="app-download-btn playstore-download-btn" data-coming-soon="Play Store app download">
+              <img src="assets/images/playstore.png" alt="" class="playstore-icon" aria-hidden="true" />
+              <span class="chrome-btn-text"><span class="chrome-btn-sub">Get it on</span><span class="chrome-btn-main">Google Play Store</span></span>
+              <span class="chrome-btn-arrow" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="trust-badges">
+            <div class="trust-badge teal-badge hero-trust-badge"><svg class="trust-badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Licensed Clinic</div>
+            <div class="trust-badge teal-badge hero-trust-badge"><svg class="trust-badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Quality Laboratory</div>
+            <div class="trust-badge teal-badge hero-trust-badge"><svg class="trust-badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Patient-Friendly Care</div>
+          </div>
+        </div>
+        <div class="hero-image-wrap">
+          <div class="hero-img-frame hero-offer-frame">
+            <div class="offer-carousel hero-offer-carousel" data-offers role="region" aria-roledescription="carousel" aria-label="Alpha Star Clinic offers">
+              <div class="offer-track" data-offer-track>
+                <div class="offer-slide" data-offer-slide role="group" aria-roledescription="slide" aria-label="Offer 1 of 3">
+                  <img src="assets/images/offer1.jpg" alt="Alpha Star laboratory promotion poster" width="1122" height="1402" fetchpriority="high" />
+                </div>
+                <div class="offer-slide" data-offer-slide role="group" aria-roledescription="slide" aria-label="Offer 2 of 3" aria-hidden="true">
+                  <img src="assets/images/offer2.jpg" alt="Alpha Star circumcision package poster" width="1122" height="1402" loading="lazy" />
+                </div>
+                <div class="offer-slide" data-offer-slide role="group" aria-roledescription="slide" aria-label="Offer 3 of 3" aria-hidden="true">
+                  <img src="assets/images/offer3.jpg" alt="Alpha Star services and packages poster" width="1122" height="1402" loading="lazy" />
+                </div>
+              </div>
+              <div class="offer-controls">
+                <div class="offer-dots" role="group" aria-label="Choose an offer">
+                  <button type="button" class="offer-dot is-active" data-offer-dot="0" aria-label="Show offer 1" aria-current="true"></button>
+                  <button type="button" class="offer-dot" data-offer-dot="1" aria-label="Show offer 2"></button>
+                  <button type="button" class="offer-dot" data-offer-dot="2" aria-label="Show offer 3"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="scroll-indicator" onclick="scrollToSection('#about')" aria-label="Scroll down"><span>Scroll Down</span><span class="scroll-arrow" aria-hidden="true"></span></button>
+    </section>
+
+    <section id="about" class="about-section content-section reveal">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-image-side">
+            <div class="about-img-wrap">
+              <img src="assets/images/staff.jpg" alt="Healthcare professionals in a clinic setting" class="about-img" />
+              <div class="about-img-border-frame"></div>
+            </div>
+          </div>
+          <div class="about-content">
+            <h2>Caring for Your Health with <span class="text-teal">Expertise</span> and <span class="text-teal">Compassion</span></h2>
+            <p>AlphaStar Laboratory Diagnostic and Multi-Specialty Clinic serves Kasiglahan Village and nearby communities in Rodriguez, Rizal.</p>
+            <p>Planning a check-up or diagnostic test? Contact the clinic to confirm provider schedules, preparation requirements, and availability before your visit.</p>
+            <button type="button" class="btn-primary about-services-btn" onclick="scrollToSection('#services')">
+              <span>Explore Our Services</span>
+              <span class="btn-right-arrow" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="services-section content-section reveal">
+      <div class="container">
+        <div class="section-header">
+          <h2>Our <span class="text-teal">Medical</span> Services</h2>
+          <p>Published diagnostic and healthcare services are shown below. Confirm provider schedules, preparation, pricing, and availability before visiting.</p>
+        </div>
+        <div class="services-grid" id="services-grid"></div>
+        <div class="services-cta">
+          <p>Need a service not listed above? Contact us and we will help you find the right care.</p>
+          <button type="button" class="btn-outline-teal" onclick="scrollToSection('#contact')">Contact Us</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="why-us" class="why-section content-section reveal">
+      <div class="container">
+        <div class="section-header">
+          <h2>Why Patients <span class="text-teal">Choose</span> Us</h2>
+          <p>Verified clinic information, with changing details clearly marked for confirmation.</p>
+        </div>
+        <div class="why-grid">
+          <article class="why-card">
+            <div class="why-feature-icon why-feature-icon-doctor" aria-hidden="true">
+              <img src="assets/images/doctor.png" alt="" width="96" height="96" />
+            </div>
+            <h3>Doctor Services</h3>
+            <p>Regular check-ups, employment requirements, vaccinations, and executive check-ups are listed among the clinic services.</p>
+          </article>
+          <article class="why-card">
+            <div class="why-feature-icon" aria-hidden="true">
+              <img src="assets/images/lab.png" alt="" width="96" height="96" />
+            </div>
+            <h3>Laboratory Testing</h3>
+            <p>Published services include automated blood chemistry, CBC, urinalysis, and other available laboratory tests.</p>
+          </article>
+          <article class="why-card">
+            <div class="why-feature-icon why-feature-icon-hours" aria-hidden="true">
+              <img src="assets/images/hours.png" alt="" width="96" height="96" />
+            </div>
+            <h3 class="why-release-title"><span>Test-Specific</span> <span>Release Times</span></h3>
+            <p>Release schedules vary by test and processing requirements. Ask staff for the expected release time.</p>
+          </article>
+          <article class="why-card">
+            <div class="why-feature-icon" aria-hidden="true">
+              <img src="assets/images/twenty47.png" alt="" width="96" height="96" />
+            </div>
+            <h3>Convenient Hours</h3>
+            <p>The regular schedule covers Monday through Sunday. Holiday closures or adjusted hours should be confirmed in advance.</p>
+          </article>
+        </div>
+        <div class="why-cta-banner" role="region" aria-roledescription="carousel" aria-label="Clinic visit and questions">
+          <div class="cta-banner-decor-1"></div>
+          <div class="cta-banner-decor-2"></div>
+          <div class="cta-banner-content">
+            <div class="cta-banner-copy why-cta-slides" id="why-cta-slides" aria-live="off">
+              <div class="why-cta-track">
+                <div class="why-cta-slide is-active" role="group" aria-roledescription="slide" aria-label="1 of 2">
+                  <h3>Planning a clinic visit?</h3>
+                  <p>Request an appointment or message the clinic to confirm walk-in and provider availability.</p>
+                </div>
+                <div class="why-cta-slide" role="group" aria-roledescription="slide" aria-label="2 of 2" aria-hidden="true">
+                  <h3>Have a question?</h3>
+                  <p>Ask us about services, test preparation, or appointments. We are here to help.</p>
+                </div>
+              </div>
+            </div>
+            <div class="cta-banner-btns">
+              <button type="button" class="cta-arrow-btn" onclick="scrollToSection('#contact')" aria-label="Contact the clinic"><span class="visually-hidden">Contact the clinic</span><span class="cta-arrow-icon" aria-hidden="true"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="hours" class="hours-section content-section reveal">
+      <div class="container">
+        <div class="section-header">
+          <h2>Clinic <span class="text-teal">Hours</span> &amp; Availability</h2>
+          <p>Regular hours are listed below in Philippine time. Holiday schedules may differ.</p>
+        </div>
+        <div class="hours-grid">
+          <div class="hours-schedule-card">
+            <div class="hours-card-header">
+              <div class="hours-card-title">
+                <div><strong>Weekly Schedule</strong><span>Monday-Saturday and Sunday hours differ</span></div>
+              </div>
+              <div class="open-now-badge"><span class="hours-open-state">Currently Open</span></div>
+            </div>
+            <div class="days-list" id="days-list"></div>
+            <div class="hours-note">
+              <span>Hours may vary on holidays. Please message the clinic before visiting.</span>
+            </div>
+          </div>
+          <div class="hours-info-cards">
+            <div class="info-card-teal">
+              <h3>Ask About Home Service</h3>
+              <p>Home service is advertised, subject to location, eligible services, fees, and staff schedule.</p>
+              <button type="button" class="btn-white-teal hours-home-btn" onclick="scrollToSection('#contact')">Ask About Home Service</button>
+            </div>
+            <div class="info-card-white">
+              <h3>Quick Contact</h3>
+              <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="quick-contact-row">
+                <div><small>Official Messenger</small><strong>AlphaStar Laboratory</strong></div>
+              </a>
+              <div class="quick-contact-row">
+                <div><small>Location</small><strong>Kasiglahan Village, Rodriguez</strong></div>
+              </div>
+            </div>
+            <div class="info-card-teal">
+              <div class="walkin-row">
+                <strong>Walk-in Availability Varies</strong>
+              </div>
+              <p>Drug-testing walk-ins are accepted. Confirm consultations, imaging, vaccines, packages, and specialized tests first.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="faq-section content-section reveal">
+      <div class="container">
+        <div class="section-header">
+          <h2>Frequently Asked <span class="text-teal">Questions</span></h2>
+          <p>Find quick answers to common questions about our services, hours, and how we can help you.</p>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-side-panel">
+              <div class="faq-side-card">
+                <h3>Still have questions?</h3>
+                <p>Our friendly staff is ready to help you. Don&apos;t hesitate to reach out through any of our contact channels.</p>
+                <button type="button" class="btn-teal-full faq-contact-btn" onclick="scrollToSection('#contact')">Contact Us</button>
+                <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="btn-outline-teal-full faq-call-btn">
+                  <img class="messenger-logo-icon faq-messenger-icon" src="assets/images/messenger.png" alt="" aria-hidden="true" />
+                  <span>Message on Messenger</span>
+              </a>
+              <div class="faq-quick-facts">
+                <div class="faq-fact"><span>Walk-ins</span><strong>Some services</strong></div>
+                <div class="faq-fact"><span>Home Service</span><strong>Confirm first</strong></div>
+                <div class="faq-fact"><span>Regular Days</span><strong>Mon-Sun</strong></div>
+                <div class="faq-fact"><span>Clinic Hours</span><strong>See schedule</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="faq-content">
+            <div class="faq-accordion" id="faq-accordion"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section content-section reveal">
+      <div class="container">
+        <div class="section-header">
+          <h2>Contact <span class="text-teal">Us</span> Today</h2>
+          <p>Ready to book an appointment or have questions? We are just a message away.</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-info-side" role="region" aria-label="Clinic map and contact details" tabindex="0">
+            <div class="map-placeholder">
+              <div class="map-live-frame">
+                <iframe class="map-embed" src="https://maps.google.com/maps?q=Lot%203-A%20Block%209%20Phase%201B%20Kasiglahan%20Village%20San%20Jose%20Rodriguez%20Rizal&amp;z=17&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Alpha Star Laboratory Clinic map"></iframe>
+                <div class="map-center-pin"><div><span class="map-center-marker"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg></span><div class="map-center-label">Alpha Star Clinic</div></div></div>
+              </div>
+              <div class="map-footer"><span>Lot 3-A, Block 9, Phase 1B, Kasiglahan Village, San Jose, Rodriguez, Rizal</span><a href="https://maps.google.com/?q=Lot+3-A+Block+9+Phase+1B+Kasiglahan+Village+San+Jose+Rodriguez+Rizal" target="_blank" rel="noopener" class="map-directions-link">Get Directions</a></div>
+            </div>
+            <div class="contact-info-cards">
+              <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="info-card-item">
+                <span class="info-icon info-icon-teal" aria-hidden="true">
+                  <img class="messenger-logo-icon" src="assets/images/messenger.png" alt="" aria-hidden="true" />
+                </span>
+                <div>
+                  <small>Official Messenger</small>
+                  <strong>AlphaStar Laboratory</strong>
+                  <span>Message the clinic for current availability</span>
+                </div>
+              </a>
+              <a href="mailto:info@alphastarlabclinic.com" class="info-card-item">
+                <span class="info-icon info-icon-teal info-icon-email" aria-hidden="true">
+                  <img class="system-email-icon" src="assets/images/email.png" alt="" aria-hidden="true" />
+                </span>
+                <div>
+                  <small>Email Address</small>
+                  <strong>info@alphastarlabclinic.com</strong>
+                  <span>Official clinic email</span>
+                </div>
+              </a>
+              <a href="https://maps.google.com/?q=Lot+3-A+Block+9+Phase+1B+Kasiglahan+Village+San+Jose+Rodriguez+Rizal" target="_blank" rel="noopener" class="info-card-item">
+                <span class="info-icon info-icon-teal" aria-hidden="true">
+                  <img class="system-location-icon" src="assets/images/location.png" alt="" aria-hidden="true" />
+                </span>
+                <div>
+                  <small>Clinic Address</small>
+                  <strong>Lot 3-A, Block 9, Phase 1B</strong>
+                  <span>Kasiglahan Village, San Jose, Rodriguez, Rizal (near McDonald's Kasiglahan)</span>
+                </div>
+              </a>
+              <a href="#hours" class="info-card-item">
+                <span class="info-icon info-icon-teal info-icon-hours" aria-hidden="true">
+                  <img class="system-clock-icon" src="assets/images/clock.png" alt="" aria-hidden="true" />
+                </span>
+                <div>
+                  <small>Clinic Hours</small>
+                  <strong>Mon-Sat: 7:00 AM-5:00 PM</strong>
+                  <span>Sunday: 7:00 AM-4:00 PM</span>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="booking-form-card">
+            <div class="booking-form-header"><h3 id="booking-form-title">Book an Appointment</h3><p>Select a service, date, and available 1-hour time slot. The clinic will review and confirm your request.</p></div>
+            <div id="form-feedback" class="form-feedback" aria-live="polite"></div>
+            <form id="booking-form" aria-labelledby="booking-form-title" tabindex="0" novalidate>
+              <div class="form-group"><label for="b-service">Service Needed *</label><select id="b-service" name="service" required><option value="">Select a service...</option><option value="Complete Laboratory">Complete Laboratory</option><option value="Digital X-Ray">Digital X-Ray</option><option value="Ultrasound">Ultrasound</option><option value="ECG">ECG</option><option value="Drug Testing">Drug Testing</option><option value="Pre-Employment Medical Exam">Pre-Employment Medical Exam</option><option value="Executive Check-Up">Executive Check-Up</option><option value="General Check-Up">General Check-Up</option><option value="Medical Certificate">Medical Certificate</option><option value="Home Service">Home Service</option><option value="Painless Tuli">Painless Tuli</option><option value="Student Pack">Student Pack</option><option value="Other">Other</option></select><span class="field-error" id="err-service"></span></div>
+              <div class="form-row-2">
+                <div class="form-group"><label for="b-date">Preferred Date *</label><input type="date" id="b-date" name="date" required /><span class="field-error" id="err-date"></span></div>
+                <div class="form-group"><label for="b-time-slot">Selected Time Slot *</label><input type="text" id="b-time-slot" name="timeSlot" required readonly placeholder="Choose a slot below" /><span class="field-error" id="err-time-slot"></span></div>
+              </div>
+              <div class="form-group">
+                <label>Available 1-hour time slots *</label>
+                <div id="booking-slot-status" class="booking-slot-status" aria-live="polite">Loading available slots...</div>
+                <div id="booking-slots" class="booking-slots" role="radiogroup" aria-label="Available appointment time slots"></div>
+              </div>
+              <div class="form-row-2">
+                <div class="form-group"><label for="b-name">Full Name *</label><input type="text" id="b-name" name="name" required /><span class="field-error" id="err-name"></span></div>
+                <div class="form-group"><label for="b-phone">Phone Number *</label><input type="tel" id="b-phone" name="phone" required /><span class="field-error" id="err-phone"></span></div>
+              </div>
+              <div class="form-group"><label for="b-email">Email Address</label><input type="email" id="b-email" name="email" /><span class="field-error" id="err-email"></span></div>
+              <div class="form-group"><label for="b-message">Message / Additional Notes</label><textarea id="b-message" name="message" rows="3" placeholder="Any special requests or questions..."></textarea></div>
+              <div id="booking-review" class="booking-review" hidden></div>
+              <button type="submit" class="btn-submit" id="submit-btn"><svg class="submit-btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Confirm Booking</button>
+              <p class="form-disclaimer">Appointments are saved to the shared clinic schedule. Full, expired, and closed slots cannot be booked.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="bottom-cta" aria-labelledby="bottom-cta-title">
+      <div class="container bottom-cta-inner">
+        <h2 id="bottom-cta-title">Ready to book your next visit?</h2>
+        <div class="bottom-cta-actions">
+          <button type="button" class="btn-primary bottom-cta-primary" onclick="scrollToBookingForm()">Book an Appointment</button>
+          <button type="button" class="btn-outline-teal bottom-cta-secondary" onclick="scrollToSection('#services')">View Services</button>
+        </div>
+      </div>
+    </section>
+    <img class="contact-bottom-image" src="assets/images/traingledaw.jpg" alt="" aria-hidden="true" />
+  </main>  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <img src="assets/images/Logo2 (2).png" alt="Alpha Star Laboratory Clinic" class="footer-logo footer-logo-image" />
+        <p>Diagnostic and multispecialty clinic serving Kasiglahan Village and nearby communities in Rodriguez, Rizal.</p>
+        <div class="footer-open-status"><span class="pulse-dot green-pulse"></span><span class="footer-open-text">Checking regular hours&hellip;</span></div>
+        <small class="footer-hours-text">Mon-Sat 7:00 AM-5:00 PM &middot; Sun 7:00 AM-4:00 PM</small>
+        <div class="footer-socials">
+          <a href="https://www.facebook.com/alphastarlaboratory/" target="_blank" rel="noopener" class="social-btn" aria-label="Official AlphaStar Facebook"><svg class="footer-social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12S0 5.446 0 12.073c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg></a>
+          <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="social-btn" aria-label="Official AlphaStar Messenger"><svg class="footer-social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 4.975 0 11.111c0 3.497 1.745 6.616 4.472 8.652V24l4.086-2.242c1.09.301 2.246.464 3.442.464 6.627 0 12-4.975 12-11.111S18.627 0 12 0zm1.193 14.963l-3.056-3.259-5.963 3.259 6.559-6.963 3.13 3.259 5.889-3.259-6.559 6.963z"></path></svg></a>
+          <a href="https://www.instagram.com/alphastarclinic?igsi=MXM4amE1MG03ajd6ZA==" target="_blank" rel="noopener" class="social-btn" aria-label="Official AlphaStar Instagram"><svg class="footer-social-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"></rect><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"></circle><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"></circle></svg></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#about">About Us</a></li><li><a href="#services">Services</a></li><li><a href="#why-us">Why Choose Us</a></li><li><a href="#hours">Clinic Hours</a></li><li><a href="#faq">FAQ</a></li><li><a href="#contact">Contact Us</a></li></ul></div>
+      <div class="footer-col"><h4>Our Services</h4><ul><li><a href="#services">Complete Laboratory</a></li><li><a href="#services">Digital X-Ray</a></li><li><a href="#services">Ultrasound</a></li><li><a href="#services">ECG</a></li><li><a href="#services">Drug Testing</a></li><li><a href="#services">Pre-Employment Medical Exam</a></li><li><a href="#services">Executive Check-Up</a></li><li><a href="#services">Home Service</a></li><li><a href="#services">Painless Tuli</a></li><li><a href="#services">Student Pack</a></li></ul></div>
+      <div class="footer-col">
+        <h4>Contact Info</h4>
+        <div class="footer-contact-list">
+          <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="footer-contact-item footer-contact-link"><span class="footer-ci-icon" aria-hidden="true"><img class="footer-contact-icon footer-contact-img" src="assets/images/messenger.png" alt="" /></span><div><span>Official Messenger</span><small>AlphaStar Laboratory</small></div></a>
+          <a href="https://www.instagram.com/alphastarclinic?igsi=MXM4amE1MG03ajd6ZA==" target="_blank" rel="noopener" class="footer-contact-item footer-contact-link"><span class="footer-ci-icon" aria-hidden="true"><img class="footer-contact-icon footer-contact-img footer-instagram-icon" src="assets/images/instagram2.png" alt="" /></span><div><span>Instagram</span><small>@alphastarclinic</small></div></a>
+          <a href="mailto:info@alphastarlabclinic.com" class="footer-contact-item footer-contact-link"><span class="footer-ci-icon" aria-hidden="true"><img class="footer-contact-icon footer-contact-img footer-email-icon" src="assets/images/email.png" alt="" /></span><span>info@alphastarlabclinic.com</span></a>
+          <a href="https://maps.google.com/?q=Lot+3-A+Block+9+Phase+1B+Kasiglahan+Village+San+Jose+Rodriguez+Rizal" target="_blank" rel="noopener" class="footer-contact-item footer-contact-link"><span class="footer-ci-icon" aria-hidden="true"><img class="footer-contact-icon footer-contact-img" src="assets/images/location.png" alt="" /></span><div><span>Lot 3-A, Block 9, Phase 1B, Kasiglahan Village</span><small>San Jose, Rodriguez, Rizal</small></div></a>
+        </div>
+        <button type="button" class="btn-teal-full footer-book-btn" onclick="scrollToSection('#contact')">Request Appointment</button>
+      </div>
+    </div>
+    <div class="footer-bottom"><div class="container footer-bottom-inner"><span>&copy; <span id="current-year">2026</span> Alpha Star Laboratory Clinic. All rights reserved.</span><div class="footer-legal"><button type="button" data-coming-soon="Privacy policy" class="footer-legal-link">Privacy Policy</button><span>&middot;</span><button type="button" data-coming-soon="Terms of service" class="footer-legal-link">Terms of Service</button><span>&middot;</span><button type="button" data-coming-soon="Sitemap" class="footer-legal-link">Sitemap</button></div></div></div>
+  </footer>
+
+  <div class="fab-container" id="fab-container" hidden>
+    <div class="fab-prompt" id="fab-prompt" role="status" aria-live="polite" aria-atomic="true"></div>
+    <div class="fab-menu" id="fab-menu" hidden>
+      <button type="button" class="fab-menu-btn fab-menu-white" onclick="scrollToSection('#contact'); closeFab();"><span class="fab-menu-icon fab-menu-icon-teal" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span class="fab-menu-label">Request Visit</span></button>
+      <a href="mailto:info@alphastarlabclinic.com" class="fab-menu-btn fab-menu-white" onclick="closeFab();"><span class="fab-menu-icon fab-menu-icon-teal" aria-hidden="true"><img class="fab-email-icon" src="assets/images/email.png" alt="" aria-hidden="true" /></span><span class="fab-menu-label">Email Us</span></a>
+      <a href="https://www.instagram.com/alphastarclinic?igsi=MXM4amE1MG03ajd6ZA==" target="_blank" rel="noopener" class="fab-menu-btn fab-menu-white" onclick="closeFab();"><span class="fab-menu-icon fab-menu-icon-teal" aria-hidden="true"><img class="fab-instagram-icon" src="assets/images/instagram2.png" alt="" aria-hidden="true" /></span><span class="fab-menu-label">Message Us</span></a>
+    </div>
+    <button type="button" class="fab-main" id="fab-main" onclick="toggleFab()" aria-expanded="false" aria-label="Open quick actions"><span class="fab-main-ring"></span><span class="fab-main-core"><span class="fab-icon fab-icon-calendar" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span class="fab-icon fab-icon-plus" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></span></button>
+  </div>
+
+  <script src="assets/js/site-config.js"></script>
+  <script src="assets/js/main.js?v=20260907-1"></script>
+  <script src="assets/js/navbar.js?v=20260907-1"></script>
+  <script src="assets/js/services.js"></script>
+  <script src="assets/js/why-us.js?v=20260907-2"></script>
+  <script src="assets/js/faq.js?v=20260906-2"></script>
+  <script type="module" src="assets/js/appointment-slots.js"></script>
+  <script src="assets/js/contact.js"></script>
+  <script src="assets/js/heart-reaction.js?v=20260409-4"></script>
+  <script src="assets/js/floating-btn.js?v=20260906-2"></script>
+</body>
+</html>
+

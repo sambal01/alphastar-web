@@ -1,0 +1,18 @@
+# Local Firebase exports, caches, and logs.
+.firebase-migration/
+.firebase/
+*.log
+
+# Private environment files and service-account keys.
+.env
+.env.*
+!.env.example
+*service-account*.json
+*-firebase-adminsdk-*.json
+*.pem
+*.key
+sql/schema.sql
+
+# Generated dependencies and browser test output.
+node_modules/
+test-results/

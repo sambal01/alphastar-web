@@ -1,0 +1,400 @@
+.fab-container {
+  --fab-size: 54px;
+  position: fixed;
+  right: 30px;
+  bottom: calc(29px + env(safe-area-inset-bottom, 0px));
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.fab-container[hidden],
+.fab-menu[hidden] {
+  display: none !important;
+}
+
+.fab-prompt {
+  position: absolute;
+  right: calc(var(--fab-size) + 12px);
+  bottom: calc(var(--fab-size) / 2);
+  width: max-content;
+  max-width: calc(100vw - var(--fab-size) - 64px);
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 1px solid rgba(13, 132, 123, 0.2);
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: var(--primary-dark);
+  box-shadow: 0 8px 24px rgba(11, 13, 14, 0.1);
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(12px, 50%);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+.fab-prompt::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid rgba(13, 132, 123, 0.2);
+  border-right: 1px solid rgba(13, 132, 123, 0.2);
+  background: #FFFFFF;
+  transform: rotate(45deg);
+}
+
+.fab-prompt.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, 50%);
+}
+
+.fab-menu {
+  display: grid;
+  gap: 10px;
+  justify-items: end;
+  width: min(200px, calc(100vw - 60px));
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transform-origin: bottom right;
+  transition: opacity 0.24s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fab-menu-btn {
+  width: 100%;
+  height: 52px;
+  min-height: 52px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(113, 119, 128, 0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  box-shadow: 0 6px 18px rgba(11, 13, 14, 0.08);
+  transition:
+    opacity 0.26s ease,
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.24s ease,
+    background 0.26s ease,
+    border-color 0.26s ease,
+    color 0.26s ease;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0;
+  transform: translateY(10px);
+  transform-origin: right center;
+  will-change: opacity, transform;
+}
+
+.fab-menu-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(11, 13, 14, 0.12);
+}
+
+.fab-menu-btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 8px 18px rgba(11, 13, 14, 0.14);
+}
+
+.fab-container.is-open .fab-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.fab-container.is-open .fab-menu-btn {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.fab-container.is-open .fab-menu-btn:nth-child(3) {
+  transition-delay: 0.03s;
+}
+
+.fab-container.is-open .fab-menu-btn:nth-child(2) {
+  transition-delay: 0.08s;
+}
+
+.fab-container.is-open .fab-menu-btn:nth-child(1) {
+  transition-delay: 0.13s;
+}
+
+.fab-container.is-open .fab-menu-btn:hover {
+  transform: translateY(-2px) scale(1);
+}
+
+.fab-container.is-open .fab-menu-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.fab-menu-btn:focus-visible,
+.fab-main:focus-visible {
+  outline: 3px solid rgba(13, 132, 123, 0.45);
+  outline-offset: 3px;
+}
+
+.fab-menu-teal {
+  color: var(--white);
+  background: linear-gradient(135deg, #0D847B 0%, #0D847B 100%);
+}
+
+.fab-menu-white {
+  color: var(--gray-900);
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.fab-menu-icon {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.fab-menu-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.fab-email-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  display: block;
+}
+
+.fab-instagram-icon {
+  width: 22px;
+  height: 22px;
+  max-width: none;
+  flex-shrink: 0;
+  object-fit: contain;
+  display: block;
+}
+
+.fab-menu-icon-soft {
+  color: currentColor;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.fab-menu-icon-teal {
+  color: var(--primary);
+  background: var(--premium-mint, #EAF7F5);
+}
+
+.fab-menu-label {
+  display: inline-block;
+  white-space: nowrap;
+  text-align: left;
+  letter-spacing: 0;
+}
+
+.fab-main {
+  position: relative;
+  width: var(--fab-size);
+  height: var(--fab-size);
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s ease, width 0.4s ease, height 0.4s ease;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fab-main:hover {
+  transform: translateY(-2px);
+}
+
+.fab-main:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.fab-main:hover .fab-main-core {
+  box-shadow: 0 18px 34px rgba(13, 132, 123, 0.26);
+}
+
+.fab-main:active .fab-main-core {
+  box-shadow: 0 10px 20px rgba(13, 132, 123, 0.18);
+}
+
+.fab-container:not(.is-open) .fab-main-ring {
+  display: none;
+}
+
+.fab-main-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: transparent;
+  transition: inset 0.4s ease, background 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.fab-container:not(.is-open) .fab-main-core {
+  box-shadow: 0 14px 28px rgba(13, 132, 123, 0.22);
+  animation: none;
+}
+
+.fab-main-core {
+  position: relative;
+  width: var(--fab-size);
+  height: var(--fab-size);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  background: linear-gradient(135deg, #0D847B 0%, var(--primary) 100%);
+  box-shadow: none;
+  transition: width 0.4s ease, height 0.4s ease, background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
+  animation: none;
+}
+
+.fab-icon {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+
+.fab-icon-calendar {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.fab-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.fab-icon-calendar svg {
+  width: 28px;
+  height: 28px;
+}
+
+.fab-icon-plus {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.fab-container.is-open .fab-main {
+  width: var(--fab-size);
+  height: var(--fab-size);
+}
+
+.fab-container.is-open .fab-main-ring {
+  background: transparent;
+  inset: 0;
+  transform: none;
+  animation: none;
+}
+
+.fab-container.is-open .fab-main-core {
+  width: var(--fab-size);
+  height: var(--fab-size);
+  background: var(--premium-teal, #0D847B);
+  border: none;
+  box-shadow: 0 14px 30px rgba(13, 132, 123, 0.24);
+  animation: none;
+}
+
+.fab-container.is-open .fab-icon-calendar {
+  opacity: 0;
+  transform: scale(0.6);
+  animation: none;
+}
+
+.fab-container.is-open .fab-icon-plus {
+  opacity: 1;
+  transform: rotate(45deg) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab-prompt,
+  .fab-main,
+  .fab-main-core,
+  .fab-menu,
+  .fab-menu-btn,
+  .fab-icon {
+    transition: none;
+    animation: none;
+  }
+
+  .fab-prompt {
+    transform: translateY(50%);
+  }
+}
+
+
+@media (max-width: 639px) {
+  .fab-container {
+    right: 16px;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    gap: 10px;
+  }
+
+  .fab-menu {
+    width: min(190px, calc(100vw - 32px));
+  }
+
+  .fab-menu-btn {
+    width: 100%;
+    height: 50px;
+    min-height: 50px;
+    padding: 7px 12px;
+    gap: 10px;
+    font-size: 14px;
+    border-radius: 999px;
+  }
+
+  .fab-main {
+    width: var(--fab-size);
+    height: var(--fab-size);
+  }
+
+  .fab-main-core {
+    width: var(--fab-size);
+    height: var(--fab-size);
+  }
+
+  .fab-container.is-open .fab-main {
+    width: var(--fab-size);
+    height: var(--fab-size);
+  }
+
+  .fab-container.is-open .fab-main-core {
+    width: var(--fab-size);
+    height: var(--fab-size);
+  }
+}
