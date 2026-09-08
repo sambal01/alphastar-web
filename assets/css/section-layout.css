@@ -18,17 +18,17 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hero-section-boundary .scroll-arrow {
-    animation: heroScrollArrow 1.8s ease-in-out infinite;
+  .hero-section-boundary .scroll-indicator {
+    animation: heroScrollIndicator 1.8s ease-in-out infinite;
   }
 }
 
-@keyframes heroScrollArrow {
+@keyframes heroScrollIndicator {
   0%, 100% {
-    transform: translateY(-2px);
+    transform: translate(-50%, calc(-50% - 2px));
   }
   50% {
-    transform: translateY(3px);
+    transform: translate(-50%, calc(-50% + 3px));
   }
 }
 
