@@ -85,34 +85,22 @@ body {
 .navbar-logo {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
   flex-shrink: 0;
+  min-height: 44px;
   padding: 0;
   line-height: 0;
 }
 
-.navbar-logo .navbar-logo-image {
-  width: 52px;
-  height: 52px;
-  flex-shrink: 0;
-  object-fit: contain;
-}
-
 .navbar-logo .navbar-wordmark {
   display: block;
-  width: 174px;
+  width: clamp(174px, 16vw, 210px);
   height: auto;
   object-fit: contain;
 }
 
 @media (max-width: 639px) {
-  .navbar-logo .navbar-logo-image {
-    width: 44px;
-    height: 44px;
-  }
-
   .navbar-logo .navbar-wordmark {
-    width: clamp(112px, 36vw, 150px);
+    width: clamp(140px, 44vw, 174px);
   }
 }
 
