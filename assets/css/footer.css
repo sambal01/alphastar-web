@@ -101,6 +101,42 @@
   object-fit: contain;
 }
 
+.footer-brand-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-brand-heading .footer-logo {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  padding: 4px;
+  border-radius: 8px;
+  background: #FFFFFF;
+}
+
+.footer-brand-name {
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.footer-brand .footer-website-link {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 44px;
+  color: #FFFFFF;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .footer-brand p {
   max-width: 290px;
   line-height: 1.72;
