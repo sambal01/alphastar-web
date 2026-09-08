@@ -914,6 +914,11 @@
     text-align: right;
   }
 
+  /* Leave space outside nested scroll areas for swiping the page. */
+  .content-section:is(.faq-section, .contact-section) > .container {
+    padding-inline: 32px;
+  }
+
   .content-section .faq-grid {
     grid-template-areas: "questions" "support";
   }
@@ -1097,5 +1102,120 @@
 
   .content-section :is(.map-live-frame, .map-embed) {
     min-height: 240px;
+  }
+}
+
+.topbar-messenger-item {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 639px) {
+  .navbar-topbar .topbar-inner {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) 84px;
+    grid-template-rows: minmax(52px, auto);
+    grid-template-areas: "messenger hours status";
+    justify-content: center;
+    width: 100%;
+    max-width: 420px;
+    min-height: 64px;
+    margin-inline: auto;
+    padding: 6px 8px;
+    gap: 6px;
+  }
+
+  .topbar-left {
+    display: contents;
+  }
+
+  .navbar-topbar :is(.topbar-messenger-item, .topbar-right) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    height: 36px;
+  }
+
+  .topbar-messenger-item {
+    grid-area: messenger;
+  }
+
+  .topbar-right {
+    grid-area: status;
+  }
+
+  .navbar-topbar :is(.topbar-phone, .topbar-walkin) {
+    width: 100%;
+    min-width: 0;
+    height: 36px;
+    min-height: 36px;
+    flex: 0 0 auto;
+    padding: 0 6px;
+    gap: 4px;
+    font-size: 10px;
+    line-height: 12px;
+    border-radius: 8px;
+  }
+
+  .navbar-topbar :is(.topbar-phone > span, .topbar-open-text) {
+    min-width: 0;
+    white-space: normal;
+    text-align: center;
+    overflow: visible;
+    flex-shrink: 1;
+  }
+
+  .navbar-topbar .topbar-hours {
+    display: block;
+    grid-area: hours;
+    min-width: 0;
+    font-size: 10px;
+    line-height: 13px;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .topbar-hours-session {
+    display: block;
+  }
+
+  .topbar-time-range {
+    white-space: nowrap;
+  }
+
+  .topbar-hours-divider {
+    display: none;
+  }
+
+  .navbar-topbar .pulse-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+    animation: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .navbar-topbar {
+    display: none;
+  }
+}
+
+/* A phone's desktop-site viewport can be much taller than a laptop screen. */
+@media (min-width: 900px) and (hover: none) and (pointer: coarse) {
+  .hero-section,
+  .content-section {
+    min-height: 0;
+  }
+
+  .bottom-cta {
+    min-height: 0;
+    padding-block: 24px 32px;
+  }
+
+  .footer-grid {
+    padding-bottom: 48px;
   }
 }

@@ -18,21 +18,23 @@
   <link rel="stylesheet" href="assets/css/faq.css?v=20260906-1" />
   <link rel="stylesheet" href="assets/css/contact.css" />
   <link rel="stylesheet" href="assets/css/footer.css?v=20260907-3" />
-  <link rel="stylesheet" href="assets/css/floating-btn.css?v=20260907-13" />
+  <link rel="stylesheet" href="assets/css/floating-btn.css?v=20260907-14" />
   <link rel="stylesheet" href="assets/css/premium-redesign.css?v=20260907-3" />
-  <link rel="stylesheet" href="assets/css/section-layout.css?v=20260907-9" />
+  <link rel="stylesheet" href="assets/css/section-layout.css?v=20260908-1" />
 </head>
 <body>
   <nav id="navbar">
     <div class="navbar-topbar">
-      <div class="container topbar-inner">
+      <div class="container topbar-inner" id="clinic-info" role="region" aria-label="Clinic information">
         <div class="topbar-left">
-          <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="topbar-phone" aria-label="Message Alpha Star Laboratory Clinic on Messenger">
-            <img class="messenger-logo-icon topbar-phone-icon" src="assets/images/messenger.png" alt="" aria-hidden="true" />
-            <span>Official Messenger</span>
-          </a>
+          <div class="topbar-messenger-item">
+            <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="topbar-phone" aria-label="Message Alpha Star Laboratory Clinic on Messenger">
+              <img class="messenger-logo-icon topbar-phone-icon" src="assets/images/messenger.png" alt="" aria-hidden="true" />
+              <span>Official Messenger</span>
+            </a>
+          </div>
           <span class="topbar-divider">|</span>
-          <span class="topbar-hours">Mon-Sat 7:00 AM-5:00 PM &middot; Sun 7:00 AM-4:00 PM</span>
+          <span class="topbar-hours"><span class="topbar-hours-session">Mon-Sat <span class="topbar-time-range">7:00 AM-5:00 PM</span></span><span class="topbar-hours-divider"> &middot; </span><span class="topbar-hours-session">Sun <span class="topbar-time-range">7:00 AM-4:00 PM</span></span></span>
         </div>
         <div class="topbar-right">
           <span class="topbar-walkin"><span class="pulse-dot green-pulse"></span><span class="topbar-open-text">Currently Open</span></span>
@@ -114,11 +116,6 @@
               <span class="chrome-btn-arrow" aria-hidden="true"></span>
             </button>
           </div>
-          <div class="trust-badges">
-            <div class="trust-badge teal-badge hero-trust-badge"><svg class="trust-badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Licensed Clinic</div>
-            <div class="trust-badge teal-badge hero-trust-badge"><svg class="trust-badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Quality Laboratory</div>
-            <div class="trust-badge teal-badge hero-trust-badge"><svg class="trust-badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Patient-Friendly Care</div>
-          </div>
         </div>
         <div class="hero-image-wrap">
           <div class="hero-img-frame hero-offer-frame">
@@ -132,13 +129,6 @@
                 </div>
                 <div class="offer-slide" data-offer-slide role="group" aria-roledescription="slide" aria-label="Offer 3 of 3" aria-hidden="true">
                   <img src="assets/images/offer3.jpg" alt="Alpha Star services and packages poster" width="1122" height="1402" loading="lazy" />
-                </div>
-              </div>
-              <div class="offer-controls">
-                <div class="offer-dots" role="group" aria-label="Choose an offer">
-                  <button type="button" class="offer-dot is-active" data-offer-dot="0" aria-label="Show offer 1" aria-current="true"></button>
-                  <button type="button" class="offer-dot" data-offer-dot="1" aria-label="Show offer 2"></button>
-                  <button type="button" class="offer-dot" data-offer-dot="2" aria-label="Show offer 3"></button>
                 </div>
               </div>
             </div>
@@ -457,7 +447,7 @@
 
   <script src="assets/js/site-config.js"></script>
   <script src="assets/js/main.js?v=20260907-1"></script>
-  <script src="assets/js/navbar.js?v=20260907-1"></script>
+  <script src="assets/js/navbar.js?v=20260907-3"></script>
   <script src="assets/js/services.js"></script>
   <script src="assets/js/why-us.js?v=20260907-2"></script>
   <script src="assets/js/faq.js?v=20260906-2"></script>
