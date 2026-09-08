@@ -85,38 +85,21 @@ body {
 .navbar-logo {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
   flex-shrink: 0;
   padding: 0;
   line-height: 0;
 }
 
 .navbar-logo .navbar-logo-image {
-  display: block;
-  width: 48px;
-  height: 48px;
-  flex: 0 0 48px;
+  width: 60px;
+  height: 60px;
   object-fit: contain;
-}
-
-.navbar-brand-name {
-  color: var(--gray-900);
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0;
-  white-space: nowrap;
 }
 
 @media (max-width: 639px) {
   .navbar-logo .navbar-logo-image {
-    width: 44px;
-    height: 44px;
-    flex-basis: 44px;
-  }
-
-  .navbar-brand-name {
-    font-size: 22px;
+    width: 48px;
+    height: 48px;
   }
 }
 
