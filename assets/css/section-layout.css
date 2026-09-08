@@ -1,3 +1,22 @@
+/* Keep the boundary control outside the hero's clipped content. */
+.hero-section-boundary {
+  position: relative;
+  height: 0;
+  z-index: 2;
+}
+
+.hero-section-boundary .scroll-indicator {
+  top: 0;
+  bottom: auto;
+  min-width: 88px;
+  min-height: 44px;
+  justify-content: center;
+  margin: 0;
+  letter-spacing: 0;
+  transform: translate(-50%, -50%);
+  animation: none;
+}
+
 /* Match the Home content dimensions without changing the header or footer. */
 .content-section {
   --section-title-size: 28px;
@@ -606,6 +625,10 @@
 }
 
 @media (min-width: 900px) {
+  .hero-section {
+    min-height: calc(100vh - var(--navbar-height, 106px) - 24px);
+  }
+
   .content-section {
     --section-title-size: 43px;
     --section-title-leading: 39.5px;
