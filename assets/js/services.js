@@ -103,12 +103,12 @@ const SERVICES_DATA = [
   {
     id: 7,
     title: 'Executive Check-Up',
-    desc: 'Executive check-up services are available for patients arranging scheduled health screening.',
+    desc: 'Executive check-up services are available for patients arranging health screening.',
     category: 'Check-Up',
     color: 'teal',
     tag: null,
     bestFor: 'Patients arranging an executive check-up with the clinic.',
-    prep: 'Confirm the package contents, schedule, and any preparation with Kasiglahan staff.',
+    prep: 'Confirm the package contents, timing, and any preparation with Kasiglahan staff.',
     turnaround: 'Package availability and release times must be confirmed with staff.',
     icon: `<svg viewBox="0 0 48 48" width="32" height="32" fill="none" aria-hidden="true">
       <circle cx="24" cy="18" r="8" fill="#0D847B" opacity=".15"/>
@@ -124,8 +124,8 @@ const SERVICES_DATA = [
     color: 'teal',
     tag: null,
     bestFor: 'Patients seeking a routine consultation or doctor-requested assessment.',
-    prep: 'Confirm the doctor\'s schedule and any document requirements with Kasiglahan staff.',
-    turnaround: 'Doctor availability and consultation schedules must be confirmed with staff.',
+    prep: 'Confirm doctor availability and any document requirements with Kasiglahan staff.',
+    turnaround: 'Doctor availability and consultation timing must be confirmed with staff.',
     icon: `<svg viewBox="0 0 48 48" width="32" height="32" fill="none" aria-hidden="true">
       <path d="M24 8C15.163 8 8 15.163 8 24s7.163 16 16 16 16-7.163 16-16S32.837 8 24 8z" fill="#0D847B" opacity=".1"/>
       <path d="M24 8C15.163 8 8 15.163 8 24s7.163 16 16 16 16-7.163 16-16S32.837 8 24 8z" stroke="#0D847B" stroke-width="2"/>
@@ -158,8 +158,8 @@ const SERVICES_DATA = [
     color: 'teal',
     tag: null,
     bestFor: 'Patients asking whether an eligible service can be provided at their location.',
-    prep: 'Confirm the requested service, coverage area, fees, requirements, and schedule with Kasiglahan staff.',
-    turnaround: 'Availability and timing depend on the requested service and clinic schedule.',
+    prep: 'Confirm the requested service, coverage area, fees, requirements, and availability with Kasiglahan staff.',
+    turnaround: 'Availability and timing depend on the requested service and clinic hours.',
     icon: `<svg viewBox="0 0 48 48" width="32" height="32" fill="none" aria-hidden="true">
       <path d="M24 8L8 20v22h12v-10h8v10h12V20L24 8z" fill="#0D847B" opacity=".15"/>
       <path d="M24 8L8 20v22h12v-10h8v10h12V20L24 8z" stroke="#0D847B" stroke-width="2" stroke-linejoin="round"/>
@@ -175,7 +175,7 @@ const SERVICES_DATA = [
     tag: null,
     bestFor: 'Patients asking about the clinic\'s painless circumcision service.',
     prep: 'Confirm eligibility, preparation instructions, scheduling, and required documents with clinic staff.',
-    turnaround: 'Procedure timing, aftercare, and follow-up schedules must be confirmed with staff.',
+    turnaround: 'Procedure timing, aftercare, and follow-up details must be confirmed with staff.',
     icon: `<svg viewBox="0 0 48 48" width="32" height="32" fill="none" aria-hidden="true">
       <circle cx="24" cy="24" r="15" fill="#0D847B" opacity=".12"/>
       <circle cx="24" cy="24" r="15" stroke="#0D847B" stroke-width="2"/>
@@ -226,26 +226,6 @@ function highlightServiceSelection(serviceTitle) {
   });
 }
 
-function requestServiceBooking(service) {
-  setStoredSelectedService(service.title);
-  highlightServiceSelection(service.title);
-
-  if (typeof window.prefillBookingService === 'function') {
-    window.prefillBookingService(service.title, {
-      focusForm: true,
-      source: 'services',
-      message: `${service.title} selected. Fill out the form below to request this service.`
-    });
-    return;
-  }
-
-  if (typeof window.showSiteToast === 'function') {
-    window.showSiteToast(service.title + ' selected. Please complete the booking form below.');
-  }
-
-  scrollToSection('#contact');
-}
-
 function createServiceCard(service) {
   const card = document.createElement('article');
   card.className = `service-card service-card-${service.color}`;
@@ -293,3 +273,4 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 window.highlightServiceSelection = highlightServiceSelection;
+

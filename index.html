@@ -69,7 +69,6 @@
           <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
         </ul>
         <div class="navbar-cta-group">
-          <button type="button" class="btn-book-now" onclick="scrollToSection('#contact')">Request Visit</button>
           <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
             <span class="hamburger-bar"></span>
             <span class="hamburger-bar"></span>
@@ -86,7 +85,6 @@
       <a href="#hours" class="mobile-link">Hours</a>
       <a href="#faq" class="mobile-link">FAQ</a>
       <a href="#contact" class="mobile-link">Contact</a>
-      <button type="button" class="btn-mobile-book" onclick="scrollToSection('#contact'); closeMenu();">Request Appointment</button>
     </div>
   </nav>
   <main>
@@ -106,8 +104,8 @@
           </h1>
           <p class="hero-subtext">Fast, reliable, and quality healthcare services designed with your comfort in mind. From laboratory exams to executive check-ups, we care for you every step of the way.</p>
           <div class="hero-cta-row">
-            <button type="button" class="btn-primary hero-btn-primary" onclick="scrollToBookingForm()">
-              Book Appointment
+            <button type="button" class="btn-primary hero-btn-primary" onclick="scrollToSection('#services')">
+              View Services
               <svg class="hero-btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             </button>
             <button type="button" class="btn-outline-teal hero-btn-secondary" onclick="scrollToSection('#services')">
@@ -115,19 +113,14 @@
               <svg class="hero-btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             </button>
           </div>
-          <div class="hero-download">
+          <div class="hero-download hero-download-single">
             <p class="download-label">DOWNLOAD OUR APP</p>
-            <button type="button" class="app-download-btn chrome-download-btn" data-coming-soon="Chrome app download">
+            <a class="app-download-btn chrome-download-btn" data-app-download data-download-missing="true" aria-disabled="true">
               <img src="assets/images/googleicon.png" alt="" class="chrome-icon-img" aria-hidden="true" />
-              <span class="chrome-btn-text"><span class="chrome-btn-sub">Download for</span><span class="chrome-btn-main">Google Chrome</span></span>
+              <span class="chrome-btn-text"><span class="chrome-btn-sub">Download through</span><span class="chrome-btn-main">Google Chrome</span></span>
               <span class="chrome-btn-arrow" aria-hidden="true"></span>
-            </button>
-            <span class="download-or">or</span>
-            <button type="button" class="app-download-btn playstore-download-btn" data-coming-soon="Play Store app download">
-              <img src="assets/images/playstore.png" alt="" class="playstore-icon" aria-hidden="true" />
-              <span class="chrome-btn-text"><span class="chrome-btn-sub">Get it on</span><span class="chrome-btn-main">Google Play Store</span></span>
-              <span class="chrome-btn-arrow" aria-hidden="true"></span>
-            </button>
+            </a>
+            <p class="hero-download-note">Download the Alphastar app through Chrome to use mobile features.</p>
           </div>
         </div>
         <div class="hero-image-wrap">
@@ -185,7 +178,6 @@
         <div class="services-grid" id="services-grid"></div>
         <div class="services-cta">
           <p>Need a service not listed above? Contact us and we will help you find the right care.</p>
-          <button type="button" class="btn-outline-teal" onclick="scrollToSection('#contact')">Contact Us</button>
         </div>
       </div>
     </section>
@@ -234,16 +226,16 @@
               <div class="why-cta-track">
                 <div class="why-cta-slide is-active" role="group" aria-roledescription="slide" aria-label="1 of 2">
                   <h3>Planning a clinic visit?</h3>
-                  <p>Request an appointment or message the clinic to confirm walk-in and provider availability.</p>
+                  <p>Download the app to view clinic updates and access mobile features.</p>
                 </div>
                 <div class="why-cta-slide" role="group" aria-roledescription="slide" aria-label="2 of 2" aria-hidden="true">
                   <h3>Have a question?</h3>
-                  <p>Ask us about services, test preparation, or appointments. We are here to help.</p>
+                  <p>Ask us about services, test preparation, or clinic information. We are here to help.</p>
                 </div>
               </div>
             </div>
             <div class="cta-banner-btns">
-              <button type="button" class="cta-arrow-btn" onclick="scrollToSection('#contact')" aria-label="Contact the clinic"><span class="visually-hidden">Contact the clinic</span><span class="cta-arrow-icon" aria-hidden="true"></span></button>
+              <button type="button" class="cta-arrow-btn" onclick="scrollToAppDownload()" aria-label="Download the app"><span class="visually-hidden">Download the app</span><span class="cta-arrow-icon" aria-hidden="true"></span></button>
             </div>
           </div>
         </div>
@@ -306,7 +298,6 @@
               <div class="faq-side-card">
                 <h3>Still have questions?</h3>
                 <p>Our friendly staff is ready to help you. Don&apos;t hesitate to reach out through any of our contact channels.</p>
-                <button type="button" class="btn-teal-full faq-contact-btn" onclick="scrollToSection('#contact')">Contact Us</button>
                 <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="btn-outline-teal-full faq-call-btn">
                   <img class="messenger-logo-icon faq-messenger-icon" src="assets/images/messenger.png" alt="" aria-hidden="true" />
                   <span>Message on Messenger</span>
@@ -330,10 +321,22 @@
       <div class="container">
         <div class="section-header">
           <h2>Contact <span class="text-teal">Us</span> Today</h2>
-          <p>Ready to book an appointment or have questions? We are just a message away.</p>
+          <p>Message the clinic for questions. Download the Alphastar app through Chrome to use mobile features.</p>
         </div>
         <div class="contact-grid">
-          <div class="contact-info-side" role="region" aria-label="Clinic map and contact details" tabindex="0">
+          <div class="app-access-card" aria-labelledby="app-access-title">
+            <h3 id="app-access-title">Download the app to book an appointment</h3>
+            <p class="app-access-description">Get Alphastar on your Android phone to access appointment booking.</p>
+            <ol class="app-access-steps">
+              <li><strong>Open in Chrome</strong><span>Visit this website in Google Chrome on your Android phone.</span></li>
+              <li><strong>Download Alphastar</strong><span>Use the download button to get the app, then open the downloaded APK.</span></li>
+              <li><strong>Install and open</strong><span>Follow your phone's installation prompts and open Alphastar.</span></li>
+              <li><strong>Book an appointment</strong><span>Sign in or create an account, then access appointment booking in the app.</span></li>
+            </ol>
+            <button type="button" class="btn-outline-teal app-access-home-btn" onclick="scrollToSection('#home')">Go to app download</button>
+            <p class="app-access-description" data-download-status role="status">The app download link is being prepared. Please ask clinic staff for the APK link.</p>
+          </div>
+          <div class="contact-info-side" role="region" aria-label="Clinic map and contact details">
             <div class="map-placeholder">
               <div class="map-live-frame">
                 <iframe class="map-embed" src="https://maps.google.com/maps?q=Lot%203-A%20Block%209%20Phase%201B%20Kasiglahan%20Village%20San%20Jose%20Rodriguez%20Rizal&amp;z=17&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Alpha Star Laboratory Clinic map"></iframe>
@@ -341,7 +344,7 @@
               </div>
               <div class="map-footer"><span>Lot 3-A, Block 9, Phase 1B, Kasiglahan Village, San Jose, Rodriguez, Rizal</span><a href="https://maps.google.com/?q=Lot+3-A+Block+9+Phase+1B+Kasiglahan+Village+San+Jose+Rodriguez+Rizal" target="_blank" rel="noopener" class="map-directions-link">Get Directions</a></div>
             </div>
-            <div class="contact-info-cards">
+            <div class="contact-info-cards" role="region" aria-label="Clinic contact details — scroll for all four cards" tabindex="0">
               <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="info-card-item">
                 <span class="info-icon info-icon-teal" aria-hidden="true">
                   <img class="messenger-logo-icon" src="assets/images/messenger.png" alt="" aria-hidden="true" />
@@ -384,39 +387,13 @@
               </a>
             </div>
           </div>
-          <div class="booking-form-card">
-            <div class="booking-form-header"><h3 id="booking-form-title">Book an Appointment</h3><p>Select a service, date, and available 1-hour time slot. The clinic will review and confirm your request.</p></div>
-            <div id="form-feedback" class="form-feedback" aria-live="polite"></div>
-            <form id="booking-form" aria-labelledby="booking-form-title" tabindex="0" novalidate>
-              <div class="form-group"><label for="b-service">Service Needed *</label><select id="b-service" name="service" required><option value="">Select a service...</option><option value="Complete Laboratory">Complete Laboratory</option><option value="Digital X-Ray">Digital X-Ray</option><option value="Ultrasound">Ultrasound</option><option value="ECG">ECG</option><option value="Drug Testing">Drug Testing</option><option value="Pre-Employment Medical Exam">Pre-Employment Medical Exam</option><option value="Executive Check-Up">Executive Check-Up</option><option value="General Check-Up">General Check-Up</option><option value="Medical Certificate">Medical Certificate</option><option value="Home Service">Home Service</option><option value="Painless Tuli">Painless Tuli</option><option value="Student Pack">Student Pack</option><option value="Other">Other</option></select><span class="field-error" id="err-service"></span></div>
-              <div class="form-row-2">
-                <div class="form-group"><label for="b-date">Preferred Date *</label><input type="date" id="b-date" name="date" required /><span class="field-error" id="err-date"></span></div>
-                <div class="form-group"><label for="b-time-slot">Selected Time Slot *</label><input type="text" id="b-time-slot" name="timeSlot" required readonly placeholder="Choose a slot below" /><span class="field-error" id="err-time-slot"></span></div>
-              </div>
-              <div class="form-group">
-                <label>Available 1-hour time slots *</label>
-                <div id="booking-slot-status" class="booking-slot-status" aria-live="polite">Loading available slots...</div>
-                <div id="booking-slots" class="booking-slots" role="radiogroup" aria-label="Available appointment time slots"></div>
-              </div>
-              <div class="form-row-2">
-                <div class="form-group"><label for="b-name">Full Name *</label><input type="text" id="b-name" name="name" required /><span class="field-error" id="err-name"></span></div>
-                <div class="form-group"><label for="b-phone">Phone Number *</label><input type="tel" id="b-phone" name="phone" required /><span class="field-error" id="err-phone"></span></div>
-              </div>
-              <div class="form-group"><label for="b-email">Email Address</label><input type="email" id="b-email" name="email" /><span class="field-error" id="err-email"></span></div>
-              <div class="form-group"><label for="b-message">Message / Additional Notes</label><textarea id="b-message" name="message" rows="3" placeholder="Any special requests or questions..."></textarea></div>
-              <div id="booking-review" class="booking-review" hidden></div>
-              <button type="submit" class="btn-submit" id="submit-btn"><svg class="submit-btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Confirm Booking</button>
-              <p class="form-disclaimer">Appointments are saved to the shared clinic schedule. Full, expired, and closed slots cannot be booked.</p>
-            </form>
-          </div>
         </div>
       </div>
     </section>
     <section class="bottom-cta" aria-labelledby="bottom-cta-title">
       <div class="container bottom-cta-inner">
-        <h2 id="bottom-cta-title">Ready to book your next visit?</h2>
+        <h2 id="bottom-cta-title">Ready to use all Alphastar features?</h2>
         <div class="bottom-cta-actions">
-          <button type="button" class="btn-primary bottom-cta-primary" onclick="scrollToBookingForm()">Book an Appointment</button>
           <button type="button" class="btn-outline-teal bottom-cta-secondary" onclick="scrollToSection('#services')">View Services</button>
         </div>
       </div>
@@ -427,7 +404,6 @@
       <div class="footer-brand">
         <img src="assets/images/Logo2 (2).png" alt="Alpha Star Laboratory Clinic" class="footer-logo footer-logo-image" />
         <p>Diagnostic and multispecialty clinic serving Kasiglahan Village and nearby communities in Rodriguez, Rizal.</p>
-        <a href="https://alpha-star-clinic-mobile.web.app/" class="footer-website-link">alpha-star-clinic-mobile.web.app</a>
         <div class="footer-open-status"><span class="pulse-dot green-pulse"></span><span class="footer-open-text">Checking regular hours&hellip;</span></div>
         <small class="footer-hours-text">Mon-Sat 7:00 AM-5:00 PM &middot; Sun 7:00 AM-4:00 PM</small>
         <div class="footer-socials">
@@ -446,7 +422,6 @@
           <a href="mailto:info@alphastarlabclinic.com" class="footer-contact-item footer-contact-link"><span class="footer-ci-icon" aria-hidden="true"><img class="footer-contact-icon footer-contact-img footer-email-icon" src="assets/images/email.png" alt="" /></span><span>info@alphastarlabclinic.com</span></a>
           <a href="https://maps.google.com/?q=Lot+3-A+Block+9+Phase+1B+Kasiglahan+Village+San+Jose+Rodriguez+Rizal" target="_blank" rel="noopener" class="footer-contact-item footer-contact-link"><span class="footer-ci-icon" aria-hidden="true"><img class="footer-contact-icon footer-contact-img" src="assets/images/location.png" alt="" /></span><div><span>Lot 3-A, Block 9, Phase 1B, Kasiglahan Village</span><small>San Jose, Rodriguez, Rizal</small></div></a>
         </div>
-        <button type="button" class="btn-teal-full footer-book-btn" onclick="scrollToSection('#contact')">Request Appointment</button>
       </div>
     </div>
     <div class="footer-bottom"><div class="container footer-bottom-inner"><span>&copy; <span id="current-year">2026</span> Alphastar. All rights reserved.</span><div class="footer-legal"><button type="button" data-coming-soon="Privacy policy" class="footer-legal-link">Privacy Policy</button><span>&middot;</span><button type="button" data-coming-soon="Terms of service" class="footer-legal-link">Terms of Service</button><span>&middot;</span><button type="button" data-coming-soon="Sitemap" class="footer-legal-link">Sitemap</button></div></div></div>
@@ -455,11 +430,11 @@
   <div class="fab-container" id="fab-container" hidden>
     <div class="fab-prompt" id="fab-prompt" role="status" aria-live="polite" aria-atomic="true"></div>
     <div class="fab-menu" id="fab-menu" hidden>
-      <button type="button" class="fab-menu-btn fab-menu-white" onclick="scrollToSection('#contact'); closeFab();"><span class="fab-menu-icon fab-menu-icon-teal" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span class="fab-menu-label">Request Visit</span></button>
+      <a href="https://m.me/alphastarlaboratory" target="_blank" rel="noopener" class="fab-menu-btn fab-menu-white" onclick="closeFab();"><span class="fab-menu-icon fab-menu-icon-teal" aria-hidden="true"><img class="fab-messenger-icon" src="assets/images/messenger.png" alt="" aria-hidden="true" /></span><span class="fab-menu-label">Message Us</span></a>
       <a href="mailto:info@alphastarlabclinic.com" class="fab-menu-btn fab-menu-white" onclick="closeFab();"><span class="fab-menu-icon fab-menu-icon-teal" aria-hidden="true"><img class="fab-email-icon" src="assets/images/email.png" alt="" aria-hidden="true" /></span><span class="fab-menu-label">Email Us</span></a>
-      <a href="https://www.instagram.com/alphastarclinic?igsi=MXM4amE1MG03ajd6ZA==" target="_blank" rel="noopener" class="fab-menu-btn fab-menu-white" onclick="closeFab();"><span class="fab-menu-icon fab-menu-icon-teal" aria-hidden="true"><img class="fab-instagram-icon" src="assets/images/instagram2.png" alt="" aria-hidden="true" /></span><span class="fab-menu-label">Message Us</span></a>
+      <a href="https://www.instagram.com/alphastarclinic?igsi=MXM4amE1MG03ajd6ZA==" target="_blank" rel="noopener" class="fab-menu-btn fab-menu-white" onclick="closeFab();"><span class="fab-menu-icon fab-menu-icon-teal" aria-hidden="true"><img class="fab-instagram-icon" src="assets/images/instagram2.png" alt="" aria-hidden="true" /></span><span class="fab-menu-label">Follow Us</span></a>
     </div>
-    <button type="button" class="fab-main" id="fab-main" onclick="toggleFab()" aria-expanded="false" aria-label="Open quick actions"><span class="fab-main-ring"></span><span class="fab-main-core"><span class="fab-icon fab-icon-calendar" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span class="fab-icon fab-icon-plus" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></span></button>
+    <button type="button" class="fab-main" id="fab-main" onclick="toggleFab()" aria-expanded="false" aria-label="Open quick actions"><span class="fab-main-ring"></span><span class="fab-main-core"><span class="fab-icon fab-icon-calendar" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span class="fab-icon fab-icon-plus" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></span></button>
   </div>
 
   <script src="assets/js/site-config.js?v=20260908-1"></script>
@@ -468,8 +443,6 @@
   <script src="assets/js/services.js"></script>
   <script src="assets/js/why-us.js?v=20260907-2"></script>
   <script src="assets/js/faq.js?v=20260906-2"></script>
-  <script type="module" src="assets/js/appointment-slots.js"></script>
-  <script src="assets/js/contact.js"></script>
   <script src="assets/js/heart-reaction.js?v=20260409-4"></script>
   <script src="assets/js/floating-btn.js?v=20260906-2"></script>
 </body>

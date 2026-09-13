@@ -2,6 +2,7 @@ window.ALPHASTAR_WEBSITE_CONFIG = Object.freeze({
   siteName: 'Alphastar',
   siteUrl: 'https://alpha-star-clinic-mobile.web.app/',
   apiBaseUrl: window.ALPHASTAR_API_BASE_URL || '',
+  androidApkUrl: window.ALPHASTAR_ANDROID_APK_URL || '',
   firebase: {
     apiKey: 'AIzaSyDovlYRntcWR9RbPRVE3Bvtj_zxy14houI',
     appId: '1:269434063894:web:877eebdb44ead72c837937',

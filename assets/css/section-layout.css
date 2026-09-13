@@ -478,7 +478,8 @@
 .content-section .faq-side-card {
   padding: 18px;
   gap: 14px;
-  grid-template-rows: auto auto 44px 44px auto;
+  grid-template-rows: auto auto auto auto;
+  align-content: start;
   top: calc(var(--navbar-height, 106px) + 16px);
 }
 
@@ -998,6 +999,8 @@
 
   .content-section .faq-grid {
     grid-template-areas: "questions" "support";
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
   }
 
   .content-section .faq-side-panel {
@@ -1006,7 +1009,38 @@
 
   .content-section .faq-side-card {
     position: static;
+    top: auto;
     min-height: 0;
+    height: auto;
+    padding: 16px;
+    gap: 10px;
+    background: #eaf7f5;
+    border: 1px solid #cfe7e3;
+  }
+
+  .content-section .faq-side-card :is(h3, p) {
+    margin: 0;
+  }
+
+  .content-section .faq-side-card p {
+    line-height: 1.5;
+  }
+
+  .content-section .faq-quick-facts {
+    margin-top: 0;
+    gap: 8px;
+  }
+
+  .content-section .faq-fact {
+    flex-wrap: wrap;
+    gap: 4px 8px;
+  }
+
+  .content-section .faq-call-btn {
+    height: auto;
+    min-height: 44px;
+    white-space: normal;
+    background: #ffffff;
   }
 
   .bottom-cta {
@@ -1294,5 +1328,217 @@
 
   .footer-grid {
     padding-bottom: 48px;
+  }
+}
+
+.hero-download.hero-download-single {
+  grid-template-columns: minmax(0, 320px);
+  justify-items: stretch;
+}
+
+.hero-download-note {
+  max-width: 420px;
+  margin: 2px 0 0;
+  color: var(--gray-600, #5f6f70);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.app-download-btn[data-app-download] {
+  text-decoration: none;
+}
+
+.app-download-btn.is-disabled,
+.app-download-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: .72;
+}
+
+.app-access-card {
+  grid-area: form;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 460px;
+  max-height: 460px;
+  overflow: hidden;
+  padding: 22px;
+  border: 1px solid rgba(13, 132, 123, .18);
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, .08);
+}
+
+.app-access-card h3 {
+  margin: 0;
+  color: var(--gray-900, #102526);
+  font-size: clamp(23px, 2.2vw, 28px);
+  line-height: 1.12;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.app-access-description {
+  margin: 0;
+  color: var(--gray-700, #405253);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.app-access-steps {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: app-step;
+}
+
+.app-access-steps li {
+  position: relative;
+  display: grid;
+  gap: 3px;
+  min-height: 44px;
+  padding: 9px 12px 9px 46px;
+  border: 1px solid rgba(13, 132, 123, .14);
+  border-radius: 14px;
+  background: rgba(231, 250, 246, .62);
+  color: var(--gray-700, #405253);
+}
+
+.app-access-steps li::before {
+  counter-increment: app-step;
+  content: counter(app-step);
+  position: absolute;
+  left: 12px;
+  top: 11px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--primary-teal, #0d847b);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.app-access-steps strong {
+  color: var(--gray-900, #102526);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.app-access-steps span {
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.app-access-home-btn {
+  margin-top: 4px;
+  width: min(100%, 220px);
+  min-height: 44px;
+}
+
+.content-section .contact-grid:has(.app-access-card) {
+  align-items: start;
+  gap: 20px;
+}
+
+.content-section .app-access-card {
+  min-height: 0;
+  max-height: none;
+  overflow: visible;
+  align-self: start;
+  padding: 20px;
+  border-radius: 18px;
+}
+
+.content-section .app-access-card h3 {
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.2;
+}
+
+.content-section .app-access-home-btn {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .content-section .contact-grid:has(.app-access-card) {
+    grid-template-areas: "form info";
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.content-section .contact-grid:has(.app-access-card) .contact-info-side {
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  contain: none;
+  grid-template-rows: auto auto;
+  scrollbar-gutter: auto;
+  padding: 0;
+}
+
+.content-section .contact-grid:has(.app-access-card) .contact-info-cards {
+  max-height: 220px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #0d847b #eaf7f5;
+  padding: 4px 8px 4px 4px;
+  scroll-padding-block: 4px;
+}
+
+.content-section .contact-info-cards:focus-visible {
+  outline: 2px solid #0d847b;
+  outline-offset: 3px;
+  border-radius: 18px;
+}
+
+.content-section .contact-grid:has(.app-access-card) .map-live-frame,
+.content-section .contact-grid:has(.app-access-card) .map-embed {
+  min-height: 260px;
+}
+
+@media (max-width: 767px) {
+  .hero-download.hero-download-single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-download-note {
+    max-width: none;
+    text-align: center;
+  }
+
+  .app-access-card {
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+    justify-content: flex-start;
+    border-radius: 18px;
+    padding: 20px;
+  }
+
+  .app-access-card h3 {
+    font-size: 24px;
+  }
+
+  .app-access-description {
+    font-size: 15px;
+  }
+
+  .content-section .contact-grid:has(.app-access-card) .contact-info-side {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .app-access-home-btn {
+    width: 100%;
   }
 }

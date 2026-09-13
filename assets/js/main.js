@@ -66,30 +66,56 @@ function scrollToSection(selector) {
   });
 }
 
-function scrollToBookingForm() {
-  const form = document.getElementById('booking-form');
-  if (!form) {
-    scrollToSection('#contact');
+function getConfiguredAppDownloadUrl() {
+  const configUrl = window.ALPHASTAR_WEBSITE_CONFIG?.androidApkUrl || window.ALPHASTAR_ANDROID_APK_URL || '';
+  return typeof configUrl === 'string' ? configUrl.trim() : '';
+}
+
+function syncAppDownloadLinks() {
+  const downloadUrl = getConfiguredAppDownloadUrl();
+  const hasDownloadUrl = Boolean(downloadUrl);
+
+  document.querySelectorAll('[data-app-download]').forEach((link) => {
+    link.classList.toggle('is-disabled', !hasDownloadUrl);
+    link.setAttribute('aria-disabled', hasDownloadUrl ? 'false' : 'true');
+    link.dataset.downloadMissing = hasDownloadUrl ? 'false' : 'true';
+
+    if (hasDownloadUrl) {
+      link.setAttribute('href', downloadUrl);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener');
+      link.removeAttribute('tabindex');
+    } else {
+      link.removeAttribute('href');
+      link.removeAttribute('target');
+      link.removeAttribute('rel');
+      link.setAttribute('tabindex', '0');
+    }
+  });
+
+  document.querySelectorAll('[data-download-status]').forEach((node) => {
+    node.textContent = hasDownloadUrl
+      ? 'Open this website in Chrome, then tap the download button to install the Alphastar app.'
+      : 'The app download link is being prepared. Please ask clinic staff for the APK link.';
+  });
+}
+
+function scrollToAppDownload() {
+  const downloadButton = document.querySelector('.hero-download [data-app-download], [data-app-download]');
+  if (!downloadButton) {
+    scrollToSection('#home');
     return;
   }
 
   syncNavbarHeightVariable();
-  const navbarOffset = getNavbarOffset();
-  form.scrollTop = 0;
-
-  // Layout offsets exclude the temporary slide-in transform.
-  let formTop = 0;
-  for (let element = form; element; element = element.offsetParent) {
-    formTop += element.offsetTop;
-  }
-  const targetY = formTop - navbarOffset - 18;
+  const targetY = downloadButton.getBoundingClientRect().top + window.scrollY - getNavbarOffset() - 18;
   window.scrollTo({
     top: Math.max(targetY, 0),
     behavior: prefersReducedMotion() ? 'auto' : 'smooth'
   });
 
   window.setTimeout(() => {
-    document.getElementById('b-service')?.focus({ preventScroll: true });
+    downloadButton.focus({ preventScroll: true });
   }, prefersReducedMotion() ? 0 : 450);
 }
 
@@ -109,11 +135,25 @@ function showSiteToast(message) {
 }
 
 function bindPlaceholderDownloads() {
-  document.querySelectorAll('[data-coming-soon]').forEach((link) => {
+  syncAppDownloadLinks();
+
+  document.querySelectorAll('[data-app-download], [data-coming-soon]').forEach((link) => {
     link.addEventListener('click', (event) => {
-      event.preventDefault();
-      const label = link.getAttribute('data-coming-soon') || 'This download';
-      showSiteToast(label + ' is coming soon. Please contact the clinic for updates.');
+      if (link.matches('[data-app-download]')) {
+        if (getConfiguredAppDownloadUrl()) {
+          return;
+        }
+
+        event.preventDefault();
+        showSiteToast('The app download link is being prepared. Please ask clinic staff for the APK link.');
+        return;
+      }
+
+      if (link.matches('[data-coming-soon]')) {
+        event.preventDefault();
+        const label = link.getAttribute('data-coming-soon') || 'This download';
+        showSiteToast(label + ' is coming soon. Please contact the clinic for updates.');
+      }
     });
   });
 }
@@ -405,7 +445,7 @@ function initRevealObserver() {
 }
 
 window.scrollToSection = scrollToSection;
-window.scrollToBookingForm = scrollToBookingForm;
+window.scrollToAppDownload = scrollToAppDownload;
 window.showSiteToast = showSiteToast;
 window.getClinicAvailabilityState = getClinicAvailabilityState;
 
@@ -432,3 +472,4 @@ window.addEventListener('DOMContentLoaded', () => {
     yearNode.textContent = String(new Date().getFullYear());
   }
 });
+

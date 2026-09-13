@@ -185,6 +185,13 @@
   display: block;
 }
 
+.fab-messenger-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
 .fab-instagram-icon {
   width: 22px;
   height: 22px;
