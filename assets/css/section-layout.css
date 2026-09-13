@@ -569,13 +569,28 @@
 }
 
 .content-section .info-card-item {
+  min-width: 0;
   min-height: 92px;
+  height: auto;
   padding: 14px;
   grid-template-columns: 40px minmax(0, 1fr);
   column-gap: 12px;
+  align-items: start;
+}
+
+.content-section .info-card-item > div {
+  min-width: 0;
+  text-align: left;
+}
+
+.content-section .info-card-item > div :is(small, strong, span) {
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .content-section .info-icon {
+  margin: 0;
+  align-self: start;
   width: 40px;
   height: 40px;
   min-width: 40px;
@@ -1484,6 +1499,8 @@
 }
 
 .content-section .contact-grid:has(.app-access-card) .contact-info-cards {
+  grid-auto-rows: max-content;
+  align-content: start;
   max-height: 220px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -1506,6 +1523,16 @@
 }
 
 @media (max-width: 767px) {
+  .content-section .info-card-item {
+    padding: 12px;
+    column-gap: 10px;
+  }
+
+  .content-section .map-footer > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   .hero-download.hero-download-single {
     grid-template-columns: minmax(0, 1fr);
   }

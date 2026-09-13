@@ -208,7 +208,7 @@
 
 .fab-menu-icon-teal {
   color: var(--primary);
-  background: var(--premium-mint, #EAF7F5);
+  background: transparent;
 }
 
 .fab-menu-label {
