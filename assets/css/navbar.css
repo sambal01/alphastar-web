@@ -178,7 +178,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  background: rgba(13, 132, 123, 0.08);
+  background: transparent;
 }
 
 .hamburger-bar {

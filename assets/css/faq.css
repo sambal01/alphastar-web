@@ -7,6 +7,15 @@
   gap: 22px;
 }
 
+/* Keep the questions centered without reserving space for a support card. */
+.content-section .faq-grid.faq-grid-centered {
+  width: 100%;
+  max-width: 680px;
+  margin-inline: auto;
+  grid-template-areas: "questions";
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .faq-content {
   display: grid;
   gap: 12px;

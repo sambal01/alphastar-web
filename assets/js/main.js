@@ -1,8 +1,10 @@
 const CLINIC_TIME_ZONE = 'Asia/Manila';
 const CLINIC_OPEN_MINUTES = 7 * 60;
-const CLINIC_WEEKDAY_CLOSE_MINUTES = 17 * 60;
+const CLINIC_WEEKDAY_CLOSE_MINUTES = 16 * 60;
 const CLINIC_SUNDAY_CLOSE_MINUTES = 16 * 60;
 const OFFER_INTERVAL_MS = 10000;
+const siteText = (key, english, values = {}) => window.AlphastarSiteLanguage?.text(key, english, values)
+  ?? english.replace(/\{(\w+)\}/g, (match, name) => values[name] ?? match);
 
 function formatClinicTime(totalMinutes) {
   const normalizedHour = Math.floor(totalMinutes / 60) % 24;
@@ -30,7 +32,7 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-function getNavbarOffset() {
+function getNavbarOffset({ excludeTopbar = false } = {}) {
   const navbar = document.getElementById('navbar');
   if (!navbar) {
     return 0;
@@ -38,7 +40,8 @@ function getNavbarOffset() {
 
   const topbar = navbar.querySelector('.navbar-topbar');
   const mainbar = navbar.querySelector('.navbar-main');
-  const closedHeight = (topbar?.offsetHeight || 0) + (mainbar?.offsetHeight || 0);
+  const topbarHidden = excludeTopbar || navbar.classList?.contains('topbar-hidden');
+  const closedHeight = (topbarHidden ? 0 : (topbar?.offsetHeight || 0)) + (mainbar?.offsetHeight || 0);
 
   return Math.max((closedHeight || navbar.offsetHeight) - 4, 0);
 }
@@ -49,7 +52,13 @@ function syncNavbarHeightVariable() {
     const topbar = navbar.querySelector('.navbar-topbar');
     const mainbar = navbar.querySelector('.navbar-main');
     const closedHeight = (topbar?.offsetHeight || 0) + (mainbar?.offsetHeight || 0);
+    const visibleHeight = navbar.classList?.contains('topbar-hidden')
+      ? (mainbar?.offsetHeight || 0)
+      : closedHeight;
+    // Keep the expanded layout space stable while only the fixed header moves.
     document.documentElement.style.setProperty('--navbar-height', `${closedHeight || navbar.offsetHeight}px`);
+    document.documentElement.style.setProperty('--navbar-visible-height', `${visibleHeight || navbar.offsetHeight}px`);
+    navbar.style?.setProperty('--navbar-topbar-height', `${topbar?.offsetHeight || 0}px`);
   }
 }
 
@@ -59,7 +68,11 @@ function scrollToSection(selector) {
     return;
   }
 
-  const targetY = element.getBoundingClientRect().top + window.scrollY - getNavbarOffset();
+  const absoluteY = element.getBoundingClientRect().top + window.scrollY;
+  const scrollHeaderEnabled = document.getElementById('navbar')?.classList?.contains('has-scroll-topbar');
+  const targetY = selector === '#home' ? 0 : absoluteY - getNavbarOffset({
+    excludeTopbar: scrollHeaderEnabled && absoluteY > 48
+  });
   window.scrollTo({
     top: Math.max(targetY, 0),
     behavior: prefersReducedMotion() ? 'auto' : 'smooth'
@@ -95,8 +108,8 @@ function syncAppDownloadLinks() {
 
   document.querySelectorAll('[data-download-status]').forEach((node) => {
     node.textContent = hasDownloadUrl
-      ? 'Open this website in Chrome, then tap the download button to install the Alphastar app.'
-      : 'The app download link is being prepared. Please ask clinic staff for the APK link.';
+      ? siteText('download.ready', 'Open this website in Chrome, then tap the download button to install the Alphastar app.')
+      : siteText('download.missing', 'The app download link is being prepared. Please ask clinic staff for the APK link.');
   });
 }
 
@@ -108,7 +121,9 @@ function scrollToAppDownload() {
   }
 
   syncNavbarHeightVariable();
-  const targetY = downloadButton.getBoundingClientRect().top + window.scrollY - getNavbarOffset() - 18;
+  const absoluteY = downloadButton.getBoundingClientRect().top + window.scrollY;
+  const scrollHeaderEnabled = document.getElementById('navbar')?.classList?.contains('has-scroll-topbar');
+  const targetY = absoluteY - getNavbarOffset({ excludeTopbar: scrollHeaderEnabled && absoluteY > 48 }) - 18;
   window.scrollTo({
     top: Math.max(targetY, 0),
     behavior: prefersReducedMotion() ? 'auto' : 'smooth'
@@ -119,18 +134,27 @@ function scrollToAppDownload() {
   }, prefersReducedMotion() ? 0 : 450);
 }
 
-function showSiteToast(message) {
+function syncSiteToast() {
+  const toast = document.querySelector('.site-toast');
+  const current = showSiteToast.current;
+  if (toast && current) toast.textContent = siteText(current.key, current.message, typeof current.values === 'function' ? current.values() : current.values);
+}
+
+function showSiteToast(message, translationKey, values = {}) {
   let toast = document.querySelector('.site-toast');
   if (!toast) {
     toast = document.createElement('div');
     toast.className = 'site-toast';
+    toast.setAttribute('role', 'status');
     document.body.appendChild(toast);
   }
 
-  toast.textContent = message;
+  showSiteToast.current = { message, key: translationKey, values };
+  syncSiteToast();
   clearTimeout(showSiteToast.dismissTimer);
   showSiteToast.dismissTimer = window.setTimeout(() => {
     toast.remove();
+    showSiteToast.current = undefined;
   }, 3200);
 }
 
@@ -145,14 +169,15 @@ function bindPlaceholderDownloads() {
         }
 
         event.preventDefault();
-        showSiteToast('The app download link is being prepared. Please ask clinic staff for the APK link.');
+        showSiteToast('The app download link is being prepared. Please ask clinic staff for the APK link.', 'download.missing');
         return;
       }
 
       if (link.matches('[data-coming-soon]')) {
         event.preventDefault();
         const label = link.getAttribute('data-coming-soon') || 'This download';
-        showSiteToast(label + ' is coming soon. Please contact the clinic for updates.');
+        const labelKey = { 'Privacy policy': 'footer.privacy', 'Terms of service': 'footer.terms', Sitemap: 'footer.sitemap' }[label];
+        showSiteToast('{label} is coming soon. Please contact the clinic for updates.', 'legal.soon', () => ({ label: siteText(labelKey, label) }));
       }
     });
   });
@@ -213,7 +238,7 @@ function renderClinicHours() {
     row.className = 'day-row' + (isToday ? ' day-today' : '');
     row.innerHTML = `
       <div class="day-name-wrap">
-        <span class="day-name">${day}${isToday ? ' <span class="today-badge">Today</span>' : ''}</span>
+        <span class="day-name">${siteText(`days.${day}`, day)}${isToday ? ` <span class="today-badge">${siteText('days.today', 'Today')}</span>` : ''}</span>
       </div>
       <div class="day-hours${isToday ? ' today-hours' : ''}">
         <span>${schedule.label}</span>
@@ -235,12 +260,12 @@ function getClinicAvailabilityState() {
 
   return {
     isOpen,
-    label: isOpen ? 'Currently Open' : 'Currently Closed',
+    label: isOpen ? siteText('status.open', 'Currently Open') : siteText('status.closed', 'Currently Closed'),
     openLabel: schedule.openLabel,
     closeLabel: schedule.closeLabel,
     note: isOpen
-      ? `Open now until ${schedule.closeLabel}. Walk-in availability varies by service.`
-      : `Closed now. Regular hours begin at ${schedule.openLabel}.`
+      ? siteText('status.openNote', 'Open now until {time}. Walk-in availability varies by service.', { time: schedule.closeLabel })
+      : siteText('status.closedNote', 'Closed now. Regular hours begin at {time}.', { time: schedule.openLabel })
   };
 }
 
@@ -273,8 +298,8 @@ function updateOpenState() {
   const footerText = document.querySelector('.footer-open-text');
   if (footerText) {
     footerText.textContent = availability.isOpen
-      ? `Open Until ${availability.closeLabel}`
-      : `Regular Hours Begin at ${availability.openLabel}`;
+      ? siteText('status.openUntil', 'Open Until {time}', { time: availability.closeLabel })
+      : siteText('status.begin', 'Regular Hours Begin at {time}', { time: availability.openLabel });
   }
 }
 
@@ -448,6 +473,7 @@ window.scrollToSection = scrollToSection;
 window.scrollToAppDownload = scrollToAppDownload;
 window.showSiteToast = showSiteToast;
 window.getClinicAvailabilityState = getClinicAvailabilityState;
+window.syncNavbarHeightVariable = syncNavbarHeightVariable;
 
 window.addEventListener('DOMContentLoaded', () => {
   syncNavbarHeightVariable();
@@ -458,6 +484,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   window.setInterval(refreshClinicTimeUI, 60000);
   window.addEventListener('resize', syncNavbarHeightVariable, { passive: true });
+  window.addEventListener('alphastar:languagechange', () => {
+    refreshClinicTimeUI();
+    syncAppDownloadLinks();
+    syncSiteToast();
+    syncNavbarHeightVariable();
+  });
 
   // Fonts and wrapped clinic hours can change the fixed header after page load.
   if ('ResizeObserver' in window) {

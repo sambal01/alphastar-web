@@ -22,6 +22,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const slides = banner?.querySelectorAll('.why-cta-slide');
   const track = banner?.querySelector('.why-cta-track');
+  const arrowButton = banner?.querySelector('.cta-arrow-btn');
+  const arrowLabel = arrowButton?.querySelector('.visually-hidden');
   if (!slides || slides.length < 2 || !track) return;
 
   let activeIndex = 0;
@@ -37,7 +39,19 @@ window.addEventListener('DOMContentLoaded', () => {
       slide.classList.toggle('is-active', active);
       slide.setAttribute('aria-hidden', String(!active));
     });
+    const isFaq = slides[activeIndex].dataset.ctaAction === 'faq';
+    const label = window.AlphastarSiteLanguage?.text(isFaq ? 'action.faq' : 'action.home', isFaq ? 'Go to FAQ' : 'Go to Home') || (isFaq ? 'Go to FAQ' : 'Go to Home');
+    arrowButton?.setAttribute('aria-label', label);
+    if (arrowLabel) arrowLabel.textContent = label;
   };
+
+  arrowButton?.addEventListener('click', () => {
+    if (slides[activeIndex].dataset.ctaAction === 'faq') {
+      window.scrollToSection('#faq');
+    } else {
+      window.scrollToSection('#home');
+    }
+  });
 
   const stop = () => {
     window.clearInterval(timer);
@@ -71,6 +85,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
   document.addEventListener('visibilitychange', start);
+  window.addEventListener('alphastar:languagechange', () => showSlide(activeIndex));
 
   showSlide(0);
   start();

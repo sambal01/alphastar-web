@@ -1,0 +1,87 @@
+.site-language-toggle {
+  flex: 0 0 auto;
+  min-width: 78px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #096d65;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.site-language-toggle[hidden] { display: none; }
+.site-language-toggle:hover { background: transparent; color: #0d847b; text-decoration-thickness: 2px; }
+.site-language-toggle:focus-visible { outline: 2px solid #0d847b; outline-offset: 3px; }
+.navbar-links { min-width: 0; }
+.nav-link { white-space: nowrap; }
+html.is-language-switching { scroll-behavior: auto; }
+.is-language-switching .faq-answer { transition: none; }
+html[lang="tl"] .hero-heading-line { white-space: normal; }
+html[lang="tl"] .hero-heading {
+  font-size: 28px;
+  line-height: 1.08;
+  overflow-wrap: break-word;
+}
+@media (max-width: 359px) {
+  html[lang="tl"] .hero-heading { font-size: 24px; }
+}
+@media (min-width: 768px) and (max-width: 899px) {
+  html[lang="tl"] .hero-heading { font-size: 32px; }
+}
+@media (min-width: 900px) and (max-width: 1199px) {
+  html[lang="tl"] .hero-heading { font-size: 38px; }
+}
+@media (min-width: 1200px) {
+  html[lang="tl"] .hero-heading { font-size: 42px; }
+}
+
+/* Longer Tagalog feature labels keep the same readable hierarchy and rows. */
+html[lang="tl"] #why-us .why-card h3 {
+  --why-heading-size: 26px;
+  font-size: var(--why-heading-size);
+  line-height: 1.2;
+  min-height: 0;
+}
+html[lang="tl"] #why-us .why-release-title span { display: block; }
+@media (min-width: 640px) {
+  html[lang="tl"] #why-us .why-card h3 {
+    --why-heading-size: 28px;
+    min-height: calc(var(--why-heading-size) * 2.4);
+  }
+  @supports (grid-template-rows: subgrid) {
+    html[lang="tl"] #why-us .why-card {
+      grid-row: span 3;
+      grid-template-rows: subgrid;
+      row-gap: 16px;
+    }
+  }
+}
+@media (min-width: 640px) and (max-width: 1099px) {
+  html[lang="tl"] #why-us .why-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  html[lang="tl"] #why-us .why-card h3 {
+    --why-heading-size: clamp(24px, 2.2vw, 30px);
+  }
+}
+@media (max-width: 639px) {
+  .navbar-inner { gap: 8px; }
+  .navbar-logo .navbar-wordmark { width: clamp(130px, 39vw, 174px); }
+  .navbar-cta-group { gap: 4px; }
+  .site-language-toggle { min-width: 70px; padding: 8px; font-size: 12px; }
+}
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .navbar-inner { gap: 14px; }
+  .navbar-links { gap: 12px; }
+  .nav-link { font-size: 14px; }
+}

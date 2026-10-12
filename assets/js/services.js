@@ -231,8 +231,8 @@ function createServiceCard(service) {
   card.className = `service-card service-card-${service.color}`;
   card.dataset.serviceTitle = service.title;
   card.innerHTML = `
-    <h3 class="service-title">${service.title}</h3>
-    <p class="service-desc">${service.desc}</p>
+    <h3 class="service-title" data-i18n="service.${service.id}.title">${service.title}</h3>
+    <p class="service-desc" data-i18n="service.${service.id}.desc">${service.desc}</p>
   `;
 
   if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -260,6 +260,7 @@ function renderServices() {
     grid.appendChild(createServiceCard(service));
   });
   highlightServiceSelection(selectedServiceTitle);
+  window.AlphastarSiteLanguage?.apply(grid);
 }
 
 window.addEventListener('DOMContentLoaded', () => {

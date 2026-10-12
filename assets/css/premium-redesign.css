@@ -379,9 +379,9 @@ body {
 }
 
 .hamburger-btn {
-  border: 1px solid var(--premium-mint-border);
+  border: 0;
   border-radius: 16px;
-  background: var(--premium-mint);
+  background: transparent;
 }
 
 .hamburger-bar {
@@ -623,10 +623,14 @@ body {
   overflow: hidden;
   isolation: isolate;
   background-color: var(--premium-white);
-  background-image: url("../images/Designe.jpg");
+  background-image: url("../images/Designee.png");
   background-repeat: no-repeat;
   background-position: center calc(100% + 48px);
   background-size: max(138%, 2000px) auto;
+}
+
+.why-section {
+  background-image: none;
 }
 
 .about-section::before,

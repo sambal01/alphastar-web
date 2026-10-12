@@ -60,7 +60,7 @@
   min-width: 0;
   height: 100%;
   aspect-ratio: auto;
-  background: transparent;
+  background: var(--white);
 }
 
 .hero-section .hero-offer-carousel .offer-slide img {
@@ -69,6 +69,67 @@
   height: 100%;
   object-fit: contain;
   object-position: center;
+}
+
+.hero-section .hero-offer-carousel .offer-slide-fill img {
+  object-fit: cover;
+}
+
+.hero-section .hero-grid {
+  align-items: center;
+}
+
+.hero-section .hero-content {
+  display: grid;
+  align-self: center;
+  gap: clamp(18px, 2.4vw, 28px);
+  padding-top: 0;
+}
+
+.hero-section .hero-branding {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: start;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  row-gap: 0;
+}
+
+.hero-section .hero-heading {
+  display: block;
+}
+
+.hero-section .hero-heading-line {
+  display: block;
+  min-width: 0;
+  white-space: normal;
+}
+
+@media (max-width: 767px) {
+  #home.hero-section {
+    padding-top: 16px;
+  }
+
+  /* Match the About heading's typography and natural text flow on phones. */
+  .hero-section .hero-heading,
+  html[lang="tl"] .hero-section .hero-heading {
+    font-size: 28px;
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-align: left;
+    overflow-wrap: break-word;
+  }
+
+  .hero-section .hero-heading-line {
+    display: inline;
+  }
+}
+
+.hero-section .hero-subtext,
+.hero-section .hero-download {
+  margin-top: 0;
 }
 
 /* Match the Home content dimensions without changing the header or footer. */
@@ -170,12 +231,13 @@
 }
 
 .content-section.about-section {
-  padding-top: 84px;
+  padding-top: 42px;
 }
 
 .content-section .about-grid {
   grid-template-areas: "copy" "photo";
   grid-template-columns: minmax(0, 1fr);
+  align-items: center;
 }
 
 .content-section .about-content {
@@ -589,6 +651,10 @@
 }
 
 .content-section .info-icon {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   margin: 0;
   align-self: start;
   width: 40px;
@@ -689,6 +755,21 @@
     --section-body-leading: 21px;
   }
 
+  .content-section .about-grid {
+    grid-template-areas: "photo copy";
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .content-section .about-image-side {
+    justify-self: start;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .content-section .about-img-wrap {
+    margin-inline: 0;
+  }
+
   .content-section .form-group :is(input, select, textarea) {
     font-size: 14px;
   }
@@ -718,7 +799,7 @@
   }
 
   .content-section.about-section {
-    padding-top: 106px;
+    padding-top: 53px;
   }
 
   .content-section :is(.hours-grid, .faq-grid, .contact-grid) {
@@ -810,8 +891,8 @@
   }
 
   .content-section .about-grid {
-    grid-template-areas: "copy photo";
-    grid-template-columns: minmax(0, 1fr) 400px;
+    grid-template-areas: "photo copy";
+    grid-template-columns: 400px minmax(0, 1fr);
     align-items: center;
   }
 }
@@ -836,7 +917,7 @@
   }
 
   .content-section.about-section {
-    padding-top: 124px;
+    padding-top: 62px;
   }
 
   .content-section .why-card {
@@ -1329,6 +1410,45 @@
   }
 }
 
+/* Move just the fixed header; leave the page's reserved header space unchanged. */
+#navbar.has-scroll-topbar {
+  transition: transform 280ms ease, border-color 240ms ease, background 240ms ease;
+}
+
+#navbar.has-scroll-topbar .navbar-topbar {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 200ms ease, visibility 280ms;
+}
+
+#navbar.has-scroll-topbar.topbar-hidden {
+  transform: translate3d(0, calc(0px - var(--navbar-topbar-height, 0px)), 0);
+}
+
+#navbar.has-scroll-topbar.topbar-hidden .navbar-topbar {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.content-section .faq-side-card {
+  top: calc(var(--navbar-visible-height, var(--navbar-height, 106px)) + 16px);
+}
+
+@media (max-width: 1099px) {
+  #navbar.has-scroll-topbar .mobile-menu.open {
+    max-height: calc(100vh - var(--navbar-visible-height, var(--navbar-height, 108px)));
+    max-height: calc(100dvh - var(--navbar-visible-height, var(--navbar-height, 108px)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #navbar.has-scroll-topbar,
+  #navbar.has-scroll-topbar .navbar-topbar {
+    transition: none;
+  }
+}
+
 /* A phone's desktop-site viewport can be much taller than a laptop screen. */
 @media (min-width: 900px) and (hover: none) and (pointer: coarse) {
   .hero-section,
@@ -1347,16 +1467,21 @@
 }
 
 .hero-download.hero-download-single {
+  display: grid;
+  width: 100%;
+  max-width: 100%;
   grid-template-columns: minmax(0, 320px);
-  justify-items: stretch;
+  justify-content: start;
+  justify-items: start;
 }
 
-.hero-download-note {
-  max-width: 420px;
-  margin: 2px 0 0;
-  color: var(--gray-600, #5f6f70);
-  font-size: 14px;
-  line-height: 1.55;
+.hero-download-single .download-label {
+  margin: 0;
+  text-align: left;
+}
+
+.hero-download-single .app-download-btn {
+  max-width: 100%;
 }
 
 .app-download-btn[data-app-download] {
@@ -1369,157 +1494,65 @@
   opacity: .72;
 }
 
-.app-access-card {
-  grid-area: form;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 12px;
-  align-self: stretch;
-  min-width: 0;
-  min-height: 460px;
-  max-height: 460px;
-  overflow: hidden;
-  padding: 22px;
-  border: 1px solid rgba(13, 132, 123, .18);
-  border-radius: 24px;
-  background: #ffffff;
-  box-shadow: 0 18px 42px rgba(15, 23, 42, .08);
-}
-
-.app-access-card h3 {
-  margin: 0;
-  color: var(--gray-900, #102526);
-  font-size: clamp(23px, 2.2vw, 28px);
-  line-height: 1.12;
-  letter-spacing: 0;
-  text-wrap: balance;
-}
-
-.app-access-description {
-  margin: 0;
-  color: var(--gray-700, #405253);
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.app-access-steps {
-  display: grid;
-  gap: 9px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: app-step;
-}
-
-.app-access-steps li {
-  position: relative;
-  display: grid;
-  gap: 3px;
-  min-height: 44px;
-  padding: 9px 12px 9px 46px;
-  border: 1px solid rgba(13, 132, 123, .14);
-  border-radius: 14px;
-  background: rgba(231, 250, 246, .62);
-  color: var(--gray-700, #405253);
-}
-
-.app-access-steps li::before {
-  counter-increment: app-step;
-  content: counter(app-step);
-  position: absolute;
-  left: 12px;
-  top: 11px;
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 999px;
-  background: var(--primary-teal, #0d847b);
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.app-access-steps strong {
-  color: var(--gray-900, #102526);
-  font-size: 14px;
-  line-height: 1.25;
-}
-
-.app-access-steps span {
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.app-access-home-btn {
-  margin-top: 4px;
-  width: min(100%, 220px);
-  min-height: 44px;
-}
-
-.content-section .contact-grid:has(.app-access-card) {
+.content-section .contact-grid.contact-grid-centered {
+  grid-template-areas: "info";
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
   align-items: start;
   gap: 20px;
 }
 
-.content-section .app-access-card {
-  min-height: 0;
-  max-height: none;
-  overflow: visible;
-  align-self: start;
-  padding: 20px;
-  border-radius: 18px;
-}
-
-.content-section .app-access-card h3 {
-  font-size: clamp(22px, 2vw, 28px);
-  line-height: 1.2;
-}
-
-.content-section .app-access-home-btn {
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  .content-section .contact-grid:has(.app-access-card) {
-    grid-template-areas: "form info";
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.content-section .contact-grid:has(.app-access-card) .contact-info-side {
+.content-section .contact-grid-centered .contact-info-side {
   height: auto;
   max-height: none;
   overflow: visible;
   contain: none;
+  grid-template-areas: "map" "details";
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto;
+  grid-auto-rows: auto;
+  gap: 20px;
   scrollbar-gutter: auto;
+  align-self: start;
   padding: 0;
 }
 
-.content-section .contact-grid:has(.app-access-card) .contact-info-cards {
+.content-section .contact-grid-centered .contact-info-cards {
+  grid-area: details;
   grid-auto-rows: max-content;
   align-content: start;
-  max-height: 220px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  scrollbar-color: #0d847b #eaf7f5;
-  padding: 4px 8px 4px 4px;
-  scroll-padding-block: 4px;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
 }
 
-.content-section .contact-info-cards:focus-visible {
-  outline: 2px solid #0d847b;
-  outline-offset: 3px;
-  border-radius: 18px;
+.content-section .contact-grid-centered .map-placeholder {
+  grid-area: map;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto auto;
 }
 
-.content-section .contact-grid:has(.app-access-card) .map-live-frame,
-.content-section .contact-grid:has(.app-access-card) .map-embed {
-  min-height: 260px;
+.content-section .contact-grid-centered .map-live-frame,
+.content-section .contact-grid-centered .map-embed {
+  min-height: clamp(260px, 34vw, 360px);
+}
+
+@media (min-width: 768px) {
+  .content-section .contact-grid-centered .contact-info-side {
+    grid-template-areas: "map details";
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    grid-template-rows: auto;
+    align-items: start;
+    gap: 24px;
+  }
+
+  .content-section .contact-grid-centered .map-placeholder {
+    align-self: stretch;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
 }
 
 @media (max-width: 767px) {
@@ -1534,38 +1567,41 @@
   }
 
   .hero-download.hero-download-single {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 236px);
+    justify-content: start;
   }
 
-  .hero-download-note {
-    max-width: none;
-    text-align: center;
+  .hero-download-single .download-label {
+    text-align: left;
   }
 
-  .app-access-card {
-    min-height: 0;
-    max-height: none;
-    overflow: visible;
-    justify-content: flex-start;
-    border-radius: 18px;
-    padding: 20px;
+  .hero-download-single .app-download-btn {
+    grid-template-columns: 24px minmax(0, 1fr) 14px;
+    gap: 8px;
+    max-width: 100%;
+    min-height: 48px;
+    padding: 7px 10px;
+    border-radius: 12px;
   }
 
-  .app-access-card h3 {
-    font-size: 24px;
+  .hero-download-single .chrome-icon-img {
+    width: 24px;
+    height: 24px;
+    max-width: 24px;
+    max-height: 24px;
   }
 
-  .app-access-description {
-    font-size: 15px;
+  .hero-download-single .chrome-btn-sub {
+    font-size: 11px;
   }
 
-  .content-section .contact-grid:has(.app-access-card) .contact-info-side {
-    height: auto;
-    max-height: none;
-    overflow: visible;
+  .hero-download-single .chrome-btn-main {
+    font-size: 14px;
   }
 
-  .app-access-home-btn {
-    width: 100%;
+  .hero-download-single .chrome-btn-arrow {
+    width: 14px;
+    height: 14px;
   }
+
 }
