@@ -140,7 +140,8 @@
     const toggle = document.getElementById('site-language-toggle');
     if (!toggle) return;
     toggle.hidden = false;
-    toggle.textContent = language === 'tl' ? 'English' : 'Tagalog';
+    const label = toggle.querySelector('.site-language-label') || toggle;
+    label.textContent = language === 'tl' ? 'English' : 'Tagalog';
     toggle.setAttribute('aria-label', language === 'tl' ? 'Gawing English ang website' : 'Switch website to Tagalog');
     toggle.title = toggle.getAttribute('aria-label');
   }

@@ -1,24 +1,36 @@
 .site-language-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   flex: 0 0 auto;
-  min-width: 78px;
+  min-width: 112px;
   min-height: 44px;
-  padding: 8px 10px;
-  border: 0;
-  border-radius: 0;
+  padding: 7px 10px;
+  border: 1px solid #0d847b;
+  border-radius: 8px;
   background: transparent;
   box-shadow: none;
   color: #096d65;
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.4;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 180ms ease, border-color 180ms ease;
   cursor: pointer;
 }
+.site-language-icon {
+  display: block;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  max-width: 26px;
+}
+.site-language-label { white-space: nowrap; }
 .site-language-toggle[hidden] { display: none; }
-.site-language-toggle:hover { background: transparent; color: #0d847b; text-decoration-thickness: 2px; }
+.site-language-toggle:hover { background: transparent; color: #0d847b; border-color: #096d65; }
 .site-language-toggle:focus-visible { outline: 2px solid #0d847b; outline-offset: 3px; }
 .navbar-links { min-width: 0; }
 .nav-link { white-space: nowrap; }
@@ -78,7 +90,8 @@ html[lang="tl"] #why-us .why-release-title span { display: block; }
   .navbar-inner { gap: 8px; }
   .navbar-logo .navbar-wordmark { width: clamp(130px, 39vw, 174px); }
   .navbar-cta-group { gap: 4px; }
-  .site-language-toggle { min-width: 70px; padding: 8px; font-size: 12px; }
+  .site-language-toggle { min-width: 96px; gap: 6px; padding: 7px 8px; font-size: 12px; }
+  .site-language-icon { flex-basis: 22px; width: 22px; height: 22px; max-width: 22px; }
 }
 @media (min-width: 1100px) and (max-width: 1279px) {
   .navbar-inner { gap: 14px; }
