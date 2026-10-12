@@ -4,7 +4,7 @@ module.exports = {
   sourceSha256: '422c129fb0a7f0e93cb820f8fa6121e6723a4995aeb34133ab1401e2d61730c2',
   ui: {
     home: 'Balik sa Simula', skip: 'Pumunta sa nilalaman', contents: 'Sa pahinang ito',
-    eyebrow: 'Alphastar Mobile at Website', updated: 'Huling update:', updatedDate: '12 Oktubre 2026',
+    updated: 'Huling update:', updatedDate: '12 Oktubre 2026',
     scope: 'Ito rin ang mga notice na nasa mobile app. May hiwalay na paliwanag sa ibaba tungkol sa paggamit ng website. Magtanong sa clinic kung may hindi malinaw.',
     legalNavigation: 'Mga notice at tuntunin', privacy: 'Privacy ng Datos', terms: 'Mga Tuntunin at Kondisyon',
     privacyPageTitle: 'Privacy ng Datos | Alphastar', termsPageTitle: 'Mga Tuntunin at Kondisyon | Alphastar',

@@ -22,7 +22,7 @@ const files = { privacy: 'privacy-policy.html', terms: 'terms-and-conditions.htm
 const escapeHtml = text => String(text).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const catalog = {};
 const ui = {
-  home: 'Back to Home', skip: 'Skip to content', contents: 'On this page', eyebrow: 'Alphastar Mobile & Website',
+  home: 'Back to Home', skip: 'Skip to content', contents: 'On this page',
   updated: 'Last updated:', updatedDate: notices.privacy.updatedAt,
   scope: 'The mobile-app notices are reproduced below, with separate sections for this website. Ask the clinic if anything is unclear.',
   legalNavigation: 'Legal information', privacy: 'Privacy Policy', terms: 'Terms and Conditions',
@@ -121,7 +121,7 @@ for (const [kind, notice] of Object.entries(notices)) {
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Poppins:wght@600&amp;display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="assets/css/main.css"/>
   <link rel="stylesheet" href="assets/css/site-language.css?v=20261012-6"/>
-  <link rel="stylesheet" href="assets/css/legal.css?v=20261012-1"/>
+  <link rel="stylesheet" href="assets/css/legal.css?v=20261012-2"/>
 </head>
 <body class="legal-page" data-legal-notice="${kind}">
   <a href="#legal-document" class="legal-skip-link">${common('skip')}</a>
@@ -134,8 +134,7 @@ for (const [kind, notice] of Object.entries(notices)) {
   <main class="legal-layout">
     <article class="legal-document" id="legal-document" aria-labelledby="legal-title" tabindex="-1">
       <div class="legal-introduction">
-        <p class="legal-eyebrow">${common('eyebrow')}</p>
-        <div class="legal-brand-row"><img class="legal-brand-logo" src="assets/images/alphastarlogo.png" alt="" width="88" height="88"/><h1 class="legal-title" id="legal-title"><span>Alphastar</span>${common(kind)}</h1></div>
+        <div class="legal-brand-row"><img class="legal-brand-logo" src="assets/images/alphastarlogo.png" alt="" width="88" height="88"/><h1 class="legal-title" id="legal-title"><span>Alphastar</span> ${common(kind)}</h1></div>
         <p class="legal-lead" data-i18n="legal.${kind}.introduction">${escapeHtml(notice.introduction)}</p>
         <p class="legal-scope">${common('scope')}</p>
         <p class="legal-updated">${common('updated')} <time datetime="${updatedIsoDate}">${common('updatedDate')}</time></p>
@@ -146,7 +145,7 @@ for (const [kind, notice] of Object.entries(notices)) {
     </article>
   </main>
   <footer class="legal-footer"><div class="legal-footer-inner"><p>&copy; <span id="current-year">2026</span> Alphastar. <span data-i18n="footer.rights">All rights reserved.</span></p><nav aria-label="Legal information" data-i18n-aria-label="legal.legalNavigation"><a href="privacy-policy.html"${kind === 'privacy' ? ' aria-current="page"' : ''}>${common('privacy')}</a><a href="terms-and-conditions.html"${kind === 'terms' ? ' aria-current="page"' : ''}>${common('terms')}</a></nav></div></footer>
-  <script src="assets/js/legal-translations.js?v=20261012-1"></script>
+  <script src="assets/js/legal-translations.js?v=20261012-2"></script>
   <script src="assets/js/site-language.js?v=20261012-2"></script>
   <script src="assets/js/legal-notices.js?v=20261012-1"></script>
 </body>

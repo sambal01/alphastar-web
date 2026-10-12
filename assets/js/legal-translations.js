@@ -3,7 +3,6 @@ window.AlphastarLegalTranslations = Object.freeze({
   "legal.home": "Balik sa Simula",
   "legal.skip": "Pumunta sa nilalaman",
   "legal.contents": "Sa pahinang ito",
-  "legal.eyebrow": "Alphastar Mobile at Website",
   "legal.updated": "Huling update:",
   "legal.updatedDate": "12 Oktubre 2026",
   "legal.scope": "Ito rin ang mga notice na nasa mobile app. May hiwalay na paliwanag sa ibaba tungkol sa paggamit ng website. Magtanong sa clinic kung may hindi malinaw.",

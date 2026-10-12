@@ -29,6 +29,7 @@ let browser;
   for (const file of ['index.html', ...Object.values(files)]) {
     const html = await fs.readFile(path.join(root, file), 'utf8');
     assert.doesNotMatch(html, /Terms of Service|Sitemap|data-coming-soon/);
+    if (file !== 'index.html') assert.doesNotMatch(html, /legal-eyebrow|legal\.eyebrow|Alphastar Mobile &amp; Website/, `${file}: extra label is removed`);
     for (const [, css] of html.matchAll(/href="(assets\/css\/[^"?]+)(?:\?[^\"]*)?"/g)) postcss.parse(await fs.readFile(path.join(root, css), 'utf8'), { from: css });
   }
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -83,12 +84,17 @@ let browser;
           const intro = document.querySelector('.legal-lead').getBoundingClientRect();
           const logo = document.querySelector('.legal-brand-logo').getBoundingClientRect();
           const range = document.createRange(); range.selectNodeContents(document.querySelector('#legal-title'));
+          const titleLines = new Set([...range.getClientRects()].filter(rect => rect.width).map(rect => Math.round(rect.top))).size;
           const titleFits = [...range.getClientRects()].filter(rect => rect.width).every(rect => rect.right <= title.right + 1 && rect.bottom <= intro.top);
           const languageBindings = [...document.querySelectorAll('[data-i18n], [data-i18n-aria-label], [data-i18n-content]')].map(node => node.getAttribute('data-i18n') || node.getAttribute('data-i18n-aria-label') || node.getAttribute('data-i18n-content')).filter(key => key.startsWith('legal.'));
           return {
             overflow: document.documentElement.scrollWidth > innerWidth,
             clippedParagraph: [...document.querySelectorAll('.legal-section p, .legal-section li')].some(node => node.scrollWidth > node.clientWidth + 1),
-            titleFits, logoFits: logo.right <= title.left + 1,
+            titleFits, titleLines,
+            titleText: document.querySelector('#legal-title').textContent,
+            titleSpansInline: [...document.querySelectorAll('#legal-title span')].every(node => getComputedStyle(node).display === 'inline'),
+            eyebrowCount: document.querySelectorAll('.legal-eyebrow, [data-i18n="legal.eyebrow"]').length,
+            logoFits: logo.right <= title.left + 1,
             idsUnique: ids.length === new Set(ids).size,
             targetsValid: targets.every(id => document.getElementById(id)),
             contentsOpen: document.querySelector('.legal-contents').open,
@@ -101,6 +107,10 @@ let browser;
         });
         const scope = `${kind}/${width}/${language}`;
         assert.ok(!metrics.overflow && !metrics.clippedParagraph && metrics.titleFits && metrics.logoFits, `${scope}: no clipping/overlap (${JSON.stringify(metrics)})`);
+        assert.equal(metrics.eyebrowCount, 0, `${scope}: no extra label above the heading`);
+        assert.ok(metrics.titleSpansInline, `${scope}: brand and document title are not forced onto separate lines`);
+        assert.equal(metrics.titleText, `Alphastar ${language === 'en' ? (kind === 'privacy' ? 'Privacy Policy' : 'Terms and Conditions') : (kind === 'privacy' ? 'Privacy ng Datos' : 'Mga Tuntunin at Kondisyon')}`, `${scope}: heading has a space between brand and title`);
+        if (width >= 1440) assert.equal(metrics.titleLines, 1, `${scope}: desktop title stays on one line`);
         assert.ok(metrics.idsUnique && metrics.targetsValid, `${scope}: valid contents anchors`);
         assert.equal(metrics.contentsOpen, width >= 1000, `${scope}: compact contents on mobile`);
         assert.deepEqual(metrics.missingTranslations, [], `${scope}: full Tagalog coverage`);
