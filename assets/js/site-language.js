@@ -54,8 +54,8 @@
     'footer.hours': 'Lun–Sab 7:00 AM–4:00 PM · Linggo 7:00 AM–4:00 PM',
     'footer.links': 'Mga Link', 'footer.about': 'Tungkol sa Amin', 'footer.why': 'Bakit Alphastar', 'footer.contact': 'Kausapin Kami',
     'footer.services': 'Mga Serbisyo', 'footer.contactInfo': 'Detalye ng Kontak', 'footer.rights': 'Lahat ng karapatan ay nakalaan.',
-    'footer.privacy': 'Privacy ng Datos', 'footer.terms': 'Mga Tuntunin', 'footer.sitemap': 'Mapa ng Website',
-    'legal.soon': 'Inihahanda pa ang {label}. Magtanong sa clinic para sa update.',
+    'footer.privacy': 'Privacy ng Datos', 'footer.terms': 'Mga Tuntunin at Kondisyon',
+    'a11y.legal': 'Mga notice at tuntunin',
     'menu.open': 'Buksan ang menu', 'menu.close': 'Isara ang menu',
     'a11y.clinicInfo': 'Impormasyon ng clinic', 'a11y.messenger': 'Mag-message sa Alpha Star Laboratory Clinic sa Messenger',
     'a11y.offers': 'Mga alok ng Alpha Star Clinic', 'a11y.offer1': 'Alok 1 sa 3', 'a11y.offer2': 'Alok 2 sa 3', 'a11y.offer3': 'Alok 3 sa 3',
@@ -116,7 +116,7 @@
   const originals = new WeakMap();
   let revision = 0;
   function text(key, english, values = {}) {
-    const copy = language === 'tl' ? TAGALOG[key] || english : english;
+    const copy = language === 'tl' ? TAGALOG[key] || window.AlphastarLegalTranslations?.[key] || english : english;
     return String(copy).replace(/\{(\w+)\}/g, (match, name) => Object.hasOwn(values, name) ? String(values[name]) : match);
   }
   function translate(element, attribute, key) {
@@ -186,7 +186,11 @@
       slide.querySelector('img')?.setAttribute('data-i18n-alt', `a11y.poster${index + 1}`);
     });
     document.querySelectorAll('.why-cta-slide').forEach((slide, index) => slide.setAttribute('data-i18n-aria-label', `a11y.slide${index + 1}`));
-    for (const [selector, attribute, key] of bindings) document.querySelectorAll(selector).forEach(element => element.setAttribute(attribute === 'text' ? 'data-i18n' : `data-i18n-${attribute}`, key));
+    for (const [selector, attribute, key] of bindings) document.querySelectorAll(selector).forEach(element => {
+      const binding = attribute === 'text' ? 'data-i18n' : `data-i18n-${attribute}`;
+      // Legal pages have their own title and description, not the Home metadata.
+      if (!element.hasAttribute(binding)) element.setAttribute(binding, key);
+    });
     apply(); syncToggle();
     document.getElementById('site-language-toggle')?.addEventListener('click', () => setLanguage(language === 'tl' ? 'en' : 'tl'));
   });

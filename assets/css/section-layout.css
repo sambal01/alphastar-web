@@ -1481,6 +1481,10 @@
 }
 
 .hero-download-single .app-download-btn {
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, max-content) auto;
+  gap: 8px;
+  width: fit-content;
   max-width: 100%;
 }
 
@@ -1576,7 +1580,7 @@
   }
 
   .hero-download-single .app-download-btn {
-    grid-template-columns: 24px minmax(0, 1fr) 14px;
+    grid-template-columns: 24px minmax(0, max-content) 14px;
     gap: 8px;
     max-width: 100%;
     min-height: 48px;

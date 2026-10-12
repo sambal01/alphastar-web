@@ -161,24 +161,13 @@ function showSiteToast(message, translationKey, values = {}) {
 function bindPlaceholderDownloads() {
   syncAppDownloadLinks();
 
-  document.querySelectorAll('[data-app-download], [data-coming-soon]').forEach((link) => {
+  document.querySelectorAll('[data-app-download]').forEach((link) => {
     link.addEventListener('click', (event) => {
-      if (link.matches('[data-app-download]')) {
-        if (getConfiguredAppDownloadUrl()) {
-          return;
-        }
-
-        event.preventDefault();
-        showSiteToast('The app download link is being prepared. Please ask clinic staff for the APK link.', 'download.missing');
+      if (getConfiguredAppDownloadUrl()) {
         return;
       }
-
-      if (link.matches('[data-coming-soon]')) {
-        event.preventDefault();
-        const label = link.getAttribute('data-coming-soon') || 'This download';
-        const labelKey = { 'Privacy policy': 'footer.privacy', 'Terms of service': 'footer.terms', Sitemap: 'footer.sitemap' }[label];
-        showSiteToast('{label} is coming soon. Please contact the clinic for updates.', 'legal.soon', () => ({ label: siteText(labelKey, label) }));
-      }
+      event.preventDefault();
+      showSiteToast('The app download link is being prepared. Please ask clinic staff for the APK link.', 'download.missing');
     });
   });
 }
