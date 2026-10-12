@@ -45,8 +45,8 @@
 .clinic-chat-header-button { width: 32px; height: 44px; display: grid; place-items: center; flex: 0 0 auto; color: #fff; }
 .clinic-chat-header-button svg { width: 17px; height: 17px; }
 .clinic-chat-header-button:hover { background: #096d65; }
-.clinic-chat-language { flex: 0 0 auto; min-width: 60px; min-height: 44px; padding: 0 8px; border: 0; border-radius: 0; background: transparent; box-shadow: none; color: #fff; font-size: 12px; font-weight: 600; line-height: 1.4; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; cursor: pointer; }
-.clinic-chat-language:hover { background: transparent; text-decoration-thickness: 2px; }
+.clinic-chat-language { color: #fff; }
+.clinic-chat-language:hover { background: transparent; color: #fff; }
 .clinic-chat-intro { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; color: #0d847b; }
 .clinic-chat-intro p { margin: 0; color: inherit; font-size: 14px; font-weight: 600; line-height: 1.5; }
 .clinic-chat-intro-spinner { width: 32px; height: 32px; border: 3px solid #d9eeeb; border-top-color: #0d847b; border-radius: 50%; animation: clinic-intro-spin 800ms linear infinite; }

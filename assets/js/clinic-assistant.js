@@ -222,7 +222,8 @@
     function syncLanguage() {
       panel.setAttribute('lang', language === 'filipino' ? 'tl' : 'en');
       if (languageControl) {
-        languageControl.textContent = language === 'filipino' ? 'English' : 'Tagalog';
+        const label = languageControl.querySelector('.clinic-chat-language-label') || languageControl;
+        label.textContent = language === 'filipino' ? 'English' : 'Tagalog';
         languageControl.setAttribute('aria-label', language === 'filipino' ? 'Switch to English' : 'Switch to Tagalog');
         languageControl.setAttribute('title', languageControl.getAttribute('aria-label'));
       }

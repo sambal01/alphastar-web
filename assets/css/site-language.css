@@ -1,36 +1,47 @@
-.site-language-toggle {
+.language-switch {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   flex: 0 0 auto;
-  min-width: 112px;
+  min-width: 44px;
   min-height: 44px;
-  padding: 7px 10px;
-  border: 1px solid #0d847b;
-  border-radius: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
   background: transparent;
   box-shadow: none;
-  color: #096d65;
   font: inherit;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
   text-decoration: none;
   white-space: nowrap;
-  transition: color 180ms ease, border-color 180ms ease;
+  transition: color 180ms ease;
   cursor: pointer;
 }
-.site-language-icon {
-  display: block;
-  flex: 0 0 26px;
-  width: 26px;
-  height: 26px;
-  max-width: 26px;
+.language-switch-box {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 32px;
+  padding: 5px 7px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  pointer-events: none;
 }
+.language-switch-icon {
+  display: block;
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  max-width: 18px;
+}
+.site-language-toggle { color: #096d65; }
 .site-language-label { white-space: nowrap; }
 .site-language-toggle[hidden] { display: none; }
-.site-language-toggle:hover { background: transparent; color: #0d847b; border-color: #096d65; }
+.site-language-toggle:hover { background: transparent; color: #0d847b; }
 .site-language-toggle:focus-visible { outline: 2px solid #0d847b; outline-offset: 3px; }
 .navbar-links { min-width: 0; }
 .nav-link { white-space: nowrap; }
@@ -90,8 +101,7 @@ html[lang="tl"] #why-us .why-release-title span { display: block; }
   .navbar-inner { gap: 8px; }
   .navbar-logo .navbar-wordmark { width: clamp(130px, 39vw, 174px); }
   .navbar-cta-group { gap: 4px; }
-  .site-language-toggle { min-width: 96px; gap: 6px; padding: 7px 8px; font-size: 12px; }
-  .site-language-icon { flex-basis: 22px; width: 22px; height: 22px; max-width: 22px; }
+  .language-switch-box { padding-inline: 6px; }
 }
 @media (min-width: 1100px) and (max-width: 1279px) {
   .navbar-inner { gap: 14px; }
