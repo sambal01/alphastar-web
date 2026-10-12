@@ -95,8 +95,15 @@
 .clinic-chat-support-error { color: #9f3030; }
 .clinic-chat-support-error:empty, .clinic-chat-support-note:empty { display: none; }
 .clinic-chat-topic.is-secondary { color: #096d65; border-color: #cfe5e1; background: #eaf7f5; }
-.clinic-chat-status { font-size: 10px; line-height: 1.4; color: #617976; min-height: 16px; padding: 0 12px 3px; flex: 0 0 auto; margin: 0; }
-.clinic-chat-status.is-typing::before { content: '\2022\2022\2022'; display: inline-block; margin-right: 5px; letter-spacing: 2px; color: #0d847b; animation: clinic-typing-pulse 900ms ease-in-out infinite alternate; }
+.clinic-chat-status { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.clinic-chat-typing { display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: start; gap: 10px; margin: 10px 10px 12px; min-width: 0; animation: clinic-message-in 180ms ease-out both; }
+.clinic-chat-typing[hidden] { display: none !important; }
+.clinic-chat-typing-content { min-width: 0; }
+.clinic-chat-typing-bubble { display: flex; align-items: center; justify-content: center; gap: 5px; width: fit-content; min-width: 56px; min-height: 36px; padding: 10px; border: 1px solid #e2e2e2; border-radius: 3px; background: #fff; }
+.clinic-chat-typing-dot { flex: 0 0 6px; width: 6px; height: 6px; border-radius: 50%; background: #0d847b; opacity: .45; animation: clinic-typing-bounce 960ms ease-in-out infinite; }
+.clinic-chat-typing-dot:nth-child(2) { animation-delay: 120ms; }
+.clinic-chat-typing-dot:nth-child(3) { animation-delay: 240ms; }
+.clinic-chat-typing-label { margin: 4px 0 0 2px; color: #617976; font-size: 11px; font-weight: 400; line-height: 16px; overflow-wrap: anywhere; }
 .clinic-chat-status:empty { display: none; }
 .clinic-chat-composer { flex: 0 0 auto; display: flex; align-items: center; min-height: 44px; gap: 4px; padding: 0 6px; border-top: 1px solid #e2e2e2; background: #fff; }
 .clinic-chat-composer textarea { flex: 1; min-width: 0; min-height: 36px; max-height: 88px; resize: none; border: 0; border-radius: 0; padding: 7px 4px; color: #123b37; background: #fff; font-size: 16px; line-height: 22px; }
@@ -110,7 +117,7 @@
   from { opacity: 0; transform: translateY(8px) scale(0.98); }
   to { opacity: 1; transform: none; }
 }
-@keyframes clinic-typing-pulse { from { opacity: 0.35; } to { opacity: 1; } }
+@keyframes clinic-typing-bounce { 0%, 50%, 100% { opacity: .45; transform: translateY(0); } 25% { opacity: 1; transform: translateY(-3px); } }
 @keyframes clinic-intro-spin { to { transform: rotate(360deg); } }
 
 @media (max-width: 639px) {
@@ -129,6 +136,6 @@
   .clinic-chat, .fab-container .fab-main { transition: none; }
   .clinic-chat { transform: none; }
   .clinic-chat-message { animation: none; }
-  .clinic-chat-status.is-typing::before { animation: none; }
+  .clinic-chat-typing, .clinic-chat-typing-dot { animation: none; }
   .clinic-chat-intro-spinner { animation: none; }
 }

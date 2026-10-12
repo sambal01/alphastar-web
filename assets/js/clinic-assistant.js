@@ -170,6 +170,8 @@
     const input = document.getElementById('clinic-chat-input');
     const send = document.getElementById('clinic-chat-send');
     const status = document.getElementById('clinic-chat-status');
+    const typing = document.getElementById('clinic-chat-typing');
+    const typingLabel = document.getElementById('clinic-chat-typing-label');
     if (!panel || !log || !topics || !form || !input || !send || !status) return;
     const scroller = document.getElementById('clinic-chat-body') || log;
     let pendingOpenMessage;
@@ -205,6 +207,14 @@
     let currentTopicCards = [];
     const labelFor = id => flow?.labelFor(id, language) || labels[id]?.[language === 'filipino' ? 1 : 0] || id;
     const localized = (en, fil) => language === 'filipino' ? fil : en;
+    function syncTypingIndicator() {
+      const visible = busy && !document.hidden && !panel.hidden && panel.getAttribute('aria-hidden') !== 'true' && !panel.classList.contains('is-connecting');
+      if (typing) typing.hidden = !visible;
+      if (typingLabel) typingLabel.textContent = localized('Alphastar is typing…', 'Sumasagot ang Alphastar…');
+      log.setAttribute('aria-busy', String(busy));
+    }
+    new MutationObserver(syncTypingIndicator).observe(panel, { attributes: true, attributeFilter: ['hidden', 'aria-hidden', 'class'] });
+    document.addEventListener('visibilitychange', syncTypingIndicator);
     const clockFormat = new Intl.DateTimeFormat('en-PH', { hour: 'numeric', minute: '2-digit', hour12: true });
 
     function bindTranslation(element, update) {
@@ -251,6 +261,7 @@
         details.body.setAttribute('lang', language === 'filipino' ? 'tl' : 'en');
       }
       if (busy) status.textContent = pendingMenuSelection ? localized('Loading…', 'Sandali lang…') : localized('Alphastar is replying…', 'Sumasagot ang Alphastar…');
+      syncTypingIndicator();
       window.syncFabLanguage?.();
       refreshTimestamps();
     }
@@ -582,7 +593,8 @@
       status.textContent = menuSelection ? localized('Loading…', 'Sandali lang…')
         : localized('Alphastar is replying…', 'Sumasagot ang Alphastar…');
       syncComposer();
-      revealMessage(questionRow);
+      syncTypingIndicator();
+      revealMessage(typing || questionRow);
       previousTopic = topic;
       activePrompt = undefined;
       pendingTimer = window.setTimeout(() => {
