@@ -1,5 +1,6 @@
 .clinic-chat {
   /* This is a dialog, not a padded page section. */
+  --chat-max-height: 392px;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -7,7 +8,7 @@
   right: 0;
   bottom: 0;
   width: min(325px, calc(100vw - 60px));
-  height: min(392px, calc(var(--chat-viewport-height, 100dvh) - 58px - env(safe-area-inset-bottom, 0px)));
+  height: min(var(--chat-max-height), calc(var(--chat-viewport-height, 100dvh) - 58px - env(safe-area-inset-bottom, 0px)));
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -121,14 +122,14 @@
 @keyframes clinic-intro-spin { to { transform: rotate(360deg); } }
 
 @media (max-width: 639px) {
-  .clinic-chat { width: min(325px, calc(100vw - 32px)); height: min(392px, calc(var(--chat-viewport-height, 100dvh) - 36px - env(safe-area-inset-bottom, 0px))); }
+  .clinic-chat { --chat-max-height: 450px; width: min(340px, calc(100vw - 32px)); height: min(var(--chat-max-height), calc(var(--chat-viewport-height, 100dvh) - 36px - env(safe-area-inset-bottom, 0px))); }
   .fab-container.is-open { bottom: calc(18px + env(safe-area-inset-bottom, 0px) + var(--chat-keyboard-offset, 0px)); }
   .clinic-chat-header-button { width: 44px; }
   .clinic-chat-topic { min-height: 44px; }
 }
 /* VisualViewport shrinks for a phone keyboard even when media queries do not. */
 .fab-container.is-open.is-chat-compact { bottom: calc(8px + env(safe-area-inset-bottom, 0px) + var(--chat-keyboard-offset, 0px)); gap: 0; }
-.clinic-chat.is-compact { height: min(392px, calc(var(--chat-viewport-height, 100dvh) - 24px - env(safe-area-inset-bottom, 0px))); }
+.clinic-chat.is-compact { height: min(var(--chat-max-height), calc(var(--chat-viewport-height, 100dvh) - 24px - env(safe-area-inset-bottom, 0px))); }
 /* Do not let keyboard dismissal move or stretch the fading panel. */
 .fab-container.is-closing { bottom: var(--chat-closing-bottom); }
 .fab-container.is-closing .clinic-chat { height: var(--chat-closing-height); }

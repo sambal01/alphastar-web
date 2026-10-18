@@ -19,6 +19,8 @@
     'create-account-help': ['Create a Patient Account', 'Gumawa ng Patient Account'],
     'change-password-help': ['Change Password', 'Palitan ang Password'],
     'change-pin-help': ['Change PIN', 'Palitan ang PIN'],
+    'authenticator-help': ['Authenticator Setup and Sign-in', 'Pag-setup at Sign-in sa Authenticator'],
+    'authenticator-recovery': ['Lost Authenticator / Recovery Codes', 'Nawalang Authenticator / Recovery Codes'],
     'smpe-fill-help': ['Fill Up an SMPE Form', 'Sagutan ang SMPE Form'],
     'smpe-view-help': ['View Submitted SMPE Forms', 'Tingnan ang Na-submit na SMPE'],
     'smpe-review-help': ['Pending Review / Form Status', 'Status ng SMPE Form'],
@@ -41,13 +43,14 @@
     ['smpe', 'SMPE form / review status', 'SMPE form / status'], ['services', 'Service availability / fees', 'Serbisyo / presyo'],
     ['results', 'Result-release enquiry', 'Pagkuha ng resulta'], ['other', 'Other clinic question', 'Ibang tanong sa clinic'],
   ].map(([id, label, tagalog]) => Object.freeze({ id, label, tagalog })));
-  const technicalTopics = ['password-recovery', 'pin-recovery', 'email-code-help', 'google-signin-help', 'mobile-data', 'main-menu'];
+  const technicalTopics = ['password-recovery', 'pin-recovery', 'authenticator-help', 'authenticator-recovery', 'email-code-help', 'google-signin-help', 'mobile-data', 'main-menu'];
   function resolve(input, { previousTopic, prompt, unknownCount = 0 } = {}) {
     const text = normalize(input);
     const short = text.replace(/[!?.,]/g, '').trim();
     const topic = base().resolveTopic(text, previousTopic);
     // Safety always wins, even in the middle of a yes/no or support flow.
     if (['urgent', 'medical-advice', 'privacy-refusal'].includes(topic)) return topic;
+    if (['terms', 'privacy', 'authenticator-help', 'authenticator-recovery'].includes(topic)) return topic;
     if (topic === 'staff' && /\b(?:talk|speak|connect|contact|kausap|makakausap)\b/.test(text)) return 'staff';
     if (/^(?:not helpful|that (?:did not|didn't) help|this (?:did not|didn't) help|hindi nakatulong)(?: po)?$/.test(short)) return 'feedback-unhelpful';
     if (/^(?:cancel|stop|cancel (?:the |my )?(?:draft|support (?:draft|request))|kanselahin|i-cancel)(?: po)?$/.test(short)
@@ -64,6 +67,7 @@
     if (/\b(?:technical support|technical help|app issue|app problem|troubleshoot|tulong sa app|problema sa app|ayaw gumana ang app)\b/.test(text)) return 'technical-help';
     if (/\b(?:prepare|write|draft)\b.*\b(?:support|message|clinic|staff)\b/.test(text)) return 'support-request';
     if (/\b(?:download|install|apk)\b/.test(text)) return 'install-guide';
+    if (/\bpin\b/.test(text) && /\b(?:forgot|forgotten|lost|reset|recover|nakalimutan|nawala)\b/.test(text)) return 'pin-recovery';
     if (topic === 'account-help' || /\b(?:google|otp|verification|password|pin)\b/.test(text)) {
       if (/\b(?:google|gmail sign[- ]?in)\b/.test(text)) return 'google-signin-help';
       if (/\b(?:otp|verification|verify|code|resend)\b/.test(text)) return 'email-code-help';
@@ -96,7 +100,7 @@
       if (['security', 'account-help', 'technical-help'].includes(previousTopic)) return 'technical-help';
       if (previousTopic?.startsWith('smpe-')) return previousTopic;
       if (previousTopic === 'records-guide') return 'smpe-fill-help';
-      if (['password-recovery', 'pin-recovery', 'google-signin-help', 'email-code-help', 'create-account-help', 'change-pin-help', 'change-password-help'].includes(previousTopic)) return previousTopic;
+      if (['password-recovery', 'pin-recovery', 'google-signin-help', 'email-code-help', 'create-account-help', 'change-pin-help', 'change-password-help', 'authenticator-help', 'authenticator-recovery', 'status'].includes(previousTopic)) return previousTopic;
     }
     if (previousTopic === 'hours' && /^(?:where|what address|address|saan|nasaan)(?: po)?$/.test(short)) return 'hours';
     if (previousTopic === 'smpe-review-help' && /^(?:when|how long|any update|kailan|gaano katagal)(?: po)?$/.test(short)) return 'smpe-review-help';
@@ -135,11 +139,15 @@
       'clarify-answer': pair('What is your yes or no about? Choose a topic below so I can help.', 'Tungkol saan ang oo o hindi mo? Pumili sa ibaba para matulungan kita.'),
     };
     if (details[topic]) result.text = details[topic];
+    const security = window.AlphastarSecurityGuides?.[topic === 'pin-recovery' || topic === 'change-pin-help' ? 'pin-help' : topic];
+    if (security) result.text = fil ? security.tagalog : security.english;
+    if (topic === 'terms') result.text = pair('The Terms and Conditions explain responsible use of Alphastar, account security, home-service requests, SMPE forms and the limits of automated chat. A request is not a confirmed visit. Read them together with Privacy Policy using the links below. The legal pages open separately so you can keep this conversation.', 'Ipinaliliwanag ng Terms and Conditions ang tamang paggamit ng Alphastar, account security, home-service requests, SMPE forms at limitasyon ng chatbot. Hindi pa confirmed na visit ang isang request. Basahin ito kasama ng Privacy Policy sa mga link sa ibaba. Bubukas nang hiwalay ang legal page para manatili ang usapan.');
     let topics = result.topics;
     let prompt;
     if (topic === 'app') topics = ['booking-guide', 'records-guide', 'technical-help', 'profile-help', 'security', 'install-guide', 'main-menu'];
     if (['account-help', 'technical-help'].includes(topic)) topics = technicalTopics;
-    if (topic === 'security') topics = ['change-pin-help', 'change-password-help', 'install-guide', 'main-menu'];
+    if (topic === 'security') topics = ['pin-recovery', 'change-password-help', 'authenticator-help', 'authenticator-recovery', 'main-menu'];
+    if (['authenticator-help', 'authenticator-recovery'].includes(topic)) topics = ['authenticator-help', 'authenticator-recovery', 'security', 'staff', 'main-menu'];
     if (topic === 'services') topics = ['laboratory-services', 'imaging-services', 'consultation-services', 'vaccination-services', 'examination-services', 'onsite-services', 'main-menu'];
     if (topic === 'records-guide') topics = ['smpe-fill-help', 'smpe-view-help', 'smpe-review-help', 'drafts', 'main-menu'];
     if (['password-recovery', 'pin-recovery', 'email-code-help', 'google-signin-help', 'create-account-help'].includes(topic)) topics = ['technical-help', 'staff', 'main-menu'];
@@ -161,7 +169,7 @@
     if (['unknown', 'clarify-answer'].includes(topic)) topics = ['technical-help', 'about', 'staff', 'main-menu'];
     // Every mobile-feature guide offers a way to reach the official download,
     // without suggesting that the website can operate a patient's account.
-    const mobileGuides = ['app', 'booking-guide', 'records-guide', 'account-help', 'technical-help', 'profile-help', 'security', 'drafts', 'mobile-data', 'requirements', 'app-installed', 'password-recovery', 'pin-recovery', 'email-code-help', 'google-signin-help', 'create-account-help', 'change-password-help', 'change-pin-help'];
+    const mobileGuides = ['app', 'booking-guide', 'records-guide', 'account-help', 'technical-help', 'profile-help', 'security', 'drafts', 'mobile-data', 'requirements', 'app-installed', 'password-recovery', 'pin-recovery', 'email-code-help', 'google-signin-help', 'create-account-help', 'change-password-help', 'change-pin-help', 'authenticator-help', 'authenticator-recovery'];
     if ((mobileGuides.includes(topic) || topic.startsWith('smpe-')) && !topics.includes('view-download') && !topics.includes('install-guide')) topics = [...topics.filter(id => id !== 'main-menu'), 'view-download', 'main-menu'];
     const noFeedback = ['greeting', 'thanks', 'main-menu', 'identity', 'about', 'app', 'services', 'account-help', 'technical-help', 'security', 'records-guide', 'staff', 'support-request', 'support-declined', 'draft-cancelled', 'staff-offer', 'feedback-helpful', 'feedback-unhelpful', 'unknown', 'clarify-answer', 'urgent', 'medical-advice', 'privacy-refusal'];
     return { ...result, topics: topics.slice(), prompt, feedback: !prompt && !noFeedback.includes(topic), supportForm: topic === 'support-request' };

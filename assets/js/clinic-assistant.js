@@ -20,6 +20,10 @@
     'account-help': ['Login / PIN Help', 'Tulong sa Login / PIN'],
     'profile-help': ['Profile and Address', 'Profile at Address'],
     security: ['Security Settings', 'Security Settings'],
+    privacy: ['Privacy Policy', 'Privacy Policy'],
+    terms: ['Terms and Conditions', 'Mga Tuntunin at Kundisyon'],
+    'view-privacy-policy': ['View Privacy Policy', 'Basahin ang Privacy Policy'],
+    'view-terms-and-conditions': ['View Terms and Conditions', 'Basahin ang Terms and Conditions'],
     drafts: ['Saved Forms and Drafts', 'Mga Na-save na Form'],
     'mobile-data': ['Mobile Data / Wi-Fi', 'Mobile Data / Wi-Fi'],
     prices: ['Service Prices', 'Presyo ng Serbisyo'],
@@ -34,7 +38,7 @@
     messenger: ['Open Messenger', 'Buksan ang Messenger'],
     email: ['Email the Clinic', 'Email ang Clinic'],
   };
-  const mainTopics = ['about', 'app', 'install-guide', 'staff'];
+  const mainTopics = ['about', 'app', 'install-guide', 'privacy', 'terms', 'security', 'staff'];
   const aboutTopics = ['hours', 'services', 'parking', 'home-service', 'license', 'main-menu'];
   const appTopics = ['booking-guide', 'records-guide', 'account-help', 'profile-help', 'security', 'main-menu'];
   const normalize = input => String(input).toLowerCase().normalize('NFKC')
@@ -52,18 +56,24 @@
     if (!text) return 'unknown';
     if (/\b(emergency|urgent|stroke|seizure|unconscious|severe bleeding|chest pain|can't breathe|cannot breathe|hirap huminga|(?:di|hindi) makahinga|nahimatay|nawalan ng malay|matinding pagdurugo|sakit sa dibdib|matinding sakit)\b/.test(text)) return 'urgent';
     if (/\b(diagnos(?:e|is|es|ing|ed)|prescriptions?|medications?|medicines?|gamot|reseta|symptoms?|sakit|lagnat|ubo|pain|masakit|treatments?|doses?|dosage|inom)\b/.test(text)) return 'medical-advice';
-    const secret = /\b(passwords?|pin|passcode|otp|verification code|api key|private key|access token)\b/;
+    const secret = /\b(passwords?|pin|passcode|otp|verification code|authenticator code|recovery codes?|setup key|api key|private key|access token)\b/;
     const reveal = /\b(show|tell|give|reveal|display|send|retrieve|what is|what's|ano ang|ipakita|pakita|ibigay)\b/;
     const instructions = /\b(reset|forgot|forgotten|change|create|recover|expired|invalid|incorrect|receive|resend|verify|not working|hindi|wala|nakalimutan|palitan)\b/;
-    if ((/\b(other|another) (?:patient|person|user)|someone else's|ibang (?:pasyente|patient|tao)|(?:private|personal|confidential) (?:staff|employee)/.test(text) && /\b(record|records|results?|password|otp|pin|profile|medical history|address|email|phone|information|details)\b/.test(text)) || (secret.test(text) && reveal.test(text) && !instructions.test(text))) return 'privacy-refusal';
+    if ((/\b(other|another) (?:patient|person|user)|someone else's|ibang (?:pasyente|patient|tao)|(?:private|personal|confidential) (?:staff|employee)/.test(text) && /\b(record|records|results?|password|otp|pin|profile|medical history|address|email|phone|information|details)\b/.test(text)) || (secret.test(text) && reveal.test(text) && !instructions.test(text) && !/^(?:what is|what's|ano ang) (?:an? |the purpose of (?:an? )?)(?:authenticator code|pin|otp|recovery code|verification code)\b/.test(text))) return 'privacy-refusal';
+    if (/\b(terms?(?: and| &)? (?:conditions?|service)|terms of (?:conditions?|service)|termos|kundisyon|mga tuntunin)\b/.test(text)) return 'terms';
     if (/\b(privacy|data protection|data privacy|confidentiality|who can see|sino.*makakakita)\b|\b(can|could|will).*\b(staff|clinic).*\b(see|access|view).*\bmy\b/.test(text)) return 'privacy';
     if (/\b(are you (?:an? )?(?:ai|bot|human|robot)|who are you|what are you|what can you do|sino ka|ano ka|bot ka|ai ka)\b/.test(text)) return 'identity';
     if (previousTopic === 'hours' && /^(?:(?:and|on|what about|how about|sa|kapag) )?(?:sunday|saturday|weekends?|holidays?|linggo|sabado)(?: po)?$/.test(short)) return 'hours';
     if (/^(?:how long|how many (?:hours|days)|gaano katagal|ilang (?:oras|araw))(?: po)?$/.test(short)) return previousTopic === 'results' ? 'results' : 'unknown';
     if (/\b(talk|speak|connect|contact|chat|need|want)\b.*\b(staff|agent|human|support|clinic|someone)\b|\b(staff|agent|human|receptionist)\b.*\b(available|online)\b|\b(kausap|makakausap)\b|\b(?:phone number|contact number)\b.*\bclinic\b|\bclinic\b.*\b(?:phone number|contact number)\b/.test(text) || /^(staff|agent|support|human|agent support)(?: please| po)?$/.test(short)) return 'staff';
+    if (/\b(authenticator|authenticcator|authentecator|authentication app|2fa|two[- ](?:factor|step)|double authenticator|recovery codes?|backup codes?)\b/.test(text)) return /\b(lost|forgot|forgotten|missing|recover|recovery|backup|not saved|didn't save|did not save|haven't saved|cannot access|can't access|new phone|broken phone|nawala|nakalimutan|hindi na[- ]?save|di na[- ]?save|walang code)\b/.test(text) ? 'authenticator-recovery' : 'authenticator-help';
+    if (['authenticator-help', 'authenticator-recovery'].includes(previousTopic) && /\bcodes?\b/.test(text) && /\b(lost|forgot|not saved|didn't save|did not save|nawala|hindi na[- ]?save)\b/.test(text)) return 'authenticator-recovery';
+    if (/\bcodes?\b/.test(text) && /\b(lost|forgot|forgotten|not saved|didn't save|did not save|nawala|nakalimutan|hindi na[- ]?save)\b/.test(text) && !/\b(?:email|otp|verification|password|pin)\b/.test(text)) return 'security';
+    if (/\bpin\b/.test(text) && /\b(forgot|forgotten|lost|recover|reset|nakalimutan|nawala)\b/.test(text)) return 'account-help';
+    if (/^(?:what time|when|what date|what day|anong oras|anong petsa|kailan)(?: po)?$/.test(short) && previousTopic === 'status') return 'status';
     if (/\b(mobile data|wi-?fi|internet|connection|offline|not loading|won't load|ayaw mag[- ]?load)\b/.test(text)) return 'mobile-data';
     if (/\b(drafts?|minimize|switch apps|unsaved|uninstall|reinstall|nawala|disappeared|stay saved|save my form)\b/.test(text)) return 'drafts';
-    if (/\b(security settings|change (?:my )?(?:pin|password)|(?:palitan|baguhin).*(?:pin|password))\b/.test(text)) return 'security';
+    if (/\b(security|seguridad|protect (?:my )?account|change (?:my )?(?:pin|password)|(?:palitan|baguhin).*(?:pin|password))\b/.test(text)) return 'security';
     if (secret.test(text) || /\b(log[- ]?in|sign[- ]?in|sign[- ]?up|log[- ]?out|register|registration|account|verification email)\b|\b(change|update|palitan)\b.*\bemail\b/.test(text)) return 'account-help';
     if (/\b(where|nasaan|saan|location|directions)\b.*\b(clinic|kasiglahan|alphastar)\b|\b(clinic|kasiglahan) address\b/.test(text)) return 'hours';
     if (/\b(profile|home address|house (?:number|no)|street|village|subdivision|barangay|province|zip|postal|my address|address ko)\b|\b(change|update|edit|palitan|baguhin)\b.*\b(name|pangalan|address|phone|contact number)\b/.test(text)) return 'profile-help';
@@ -76,7 +86,7 @@
     if (/\b(requirements?|bring|dadalhin|dalhin)\b/.test(text)) return 'requirements';
     if (/\b(records?|smpe|medical history|medical forms?|physical examination|form ?2)\b/.test(text)) return 'records-guide';
     if (/\b(queue|pila|my turn|numero sa pila)\b/.test(text)) return 'queue-guide';
-    if (/\b(my|aking) (?:appointment|schedule|booking)\b|\b(?:appointment|schedule|booking) ko\b|\b(appointment|booking) (?:status|confirmed|pending)\b|\b(?:confirmed|pending) (?:appointment|booking)\b|^(?:any update|update|status|what about now|may update)(?: po| na)?$/.test(short)) return 'status';
+    if (/\b(my|aking)\b.{0,32}\b(?:appointment|schedule|booking)\b|\b(?:appointment|schedule|booking)\b.{0,24}\bko\b|\b(appointment|booking) (?:status|confirmed|pending)\b|\b(?:confirmed|pending) (?:appointment|booking)\b|\bi (?:have |have already |already )?booked\b|\bi (?:have |have already |already )?(?:submitted|requested)\b.{0,32}\b(?:appointment|booking)\b|\bi have (?:an? )?(?:book(?:ed)? )?(?:appointment|booking)\b|\b(?:nakapag[- ]?book|nag[- ]?book (?:na )?ako|may (?:appointment|booking) (?:na )?ako)\b|^(?:any update|update|status|what about now|may update)(?: po| na)?$/.test(short)) return /\b(how (?:to|do i|can i)|paano|saan)\b.*\b(book|booking|mag[- ]?book)\b/.test(text) ? 'booking-guide' : 'status';
     if (/\b(how|paano|guide|steps|saan)\b.*\b(book|booking|appointment|mag[- ]?book)\b/.test(text)) return 'booking-guide';
     if (/\b(walk[- ]?ins?)\b/.test(text)) return 'walk-ins';
     if (/\b(home[- ]service|home visit|house call|at home|walk[- ]?in|in[- ]?person|sa bahay)\b/.test(text)) return 'home-service';
@@ -118,10 +128,10 @@
       security: pair('Open Profile > Security Settings in the app. Choose Change PIN or Change password. Change password is for email/password accounts; Google users change their password through Google.', 'Buksan ang Profile > Security Settings sa app. Piliin ang Change PIN o Change password. Para sa email/password account ang Change password. Kung Google ang gamit mo, sa Google palitan ang password.'),
       drafts: pair('Saved profiles and submitted forms stay with your account. Sign in to the same account after reinstalling. Unfinished drafts are only on your phone and may be lost after logout, uninstall, or clearing app data. Tap Save or Submit when ready.', 'Nasa account mo ang na-save na profile at na-submit na form. Gamitin ang parehong account kapag nag-install ulit. Sa phone lang ang hindi pa tapos na draft; puwedeng mawala kapag nag-logout, nag-uninstall, o nag-clear ng app data. Pindutin ang Save o Submit kapag tapos na.'),
       'mobile-data': pair('Yes, mobile data or Wi-Fi works. Check that your internet is connected, then try again. You need internet to sign in, submit forms, and open saved records. If it still will not load, ask staff for help.', 'Oo, puwede ang mobile data o Wi-Fi. Tingnan kung may internet, tapos subukan ulit. Kailangan ng internet para mag-login, mag-submit ng form, at buksan ang na-save na record. Kung ayaw pa rin, humingi ng tulong sa staff.'),
-      status: pair('For an update on a home-service request, contact clinic staff through Messenger or email below. I cannot access your patient account or confirm a booking here. Use Alphastar Mobile to submit a new home-service request.', 'Para sa update ng home-service request, kausapin ang staff sa Messenger o email sa ibaba. Hindi ko nakikita ang account mo o makukumpirma ang booking dito. Sa Alphastar Mobile mag-submit ng bagong home-service request.'),
+      status: pair('Already booked and asking for the date or time? This public website chatbot cannot access your patient account, see your booking or confirm a visit. Open Alphastar Mobile > Profile > Appointment Schedule and select your request. Pending means you still need clinic confirmation. If you cannot find it, ask staff privately before submitting another request. Do not post your booking ID or personal details here.', 'Nakapag-book ka na at hinahanap ang petsa o oras? Hindi nakikita ng public website chatbot ang account o booking mo at hindi ito makakakumpirma ng visit. Buksan ang Alphastar Mobile > Profile > Appointment Schedule at piliin ang request. Kapag Pending, kailangan pa ang kumpirmasyon ng clinic. Kung wala roon, magtanong muna nang pribado sa staff bago mag-submit ulit. Huwag ilagay rito ang booking ID o personal na detalye.'),
       reschedule: pair('To change the date or time of a home-service request, contact clinic staff. Wait for their confirmation before making plans. This chat has not changed your request.', 'Para palitan ang petsa o oras ng home-service request, kausapin ang staff. Hintayin ang kumpirmasyon nila bago magplano. Hindi binago ng chat ang request mo.'),
       cancel: pair('To cancel a home-service request, contact clinic staff and wait for confirmation. Nothing is cancelled through this chat.', 'Para kanselahin ang home-service request, kausapin ang staff at hintayin ang kumpirmasyon. Walang nakansela sa chat na ito.'),
-      'queue-guide': pair('Alphastar Mobile does not have a queue feature. For clinic assistance, contact staff. You can use the mobile app for home-service requests, your profile, SMPE forms, and Security Settings.', 'Walang queue feature ngayon sa Alphastar Mobile. Kausapin ang staff kung kailangan ng tulong sa clinic. Sa mobile app, puwede ang home-service request, profile, SMPE, at Security Settings.'),
+      'queue-guide': pair('Home-service booking does not create a clinic queue ticket. For an in-person visit, clinic staff manage check-in and queue assignment. If an active ticket is available in your mobile account, use the app’s Queue screen. This public chatbot cannot look up, assign or change your queue number.', 'Hindi gumagawa ng clinic queue ticket ang home-service booking. Staff ang namamahala sa check-in at pila para sa in-person visit. Kung may active ticket sa mobile account mo, tingnan ang Queue screen. Hindi kayang makita, gumawa o baguhin ng public chatbot ang queue number mo.'),
       prices: pair('In the Alphastar mobile app, check the service in Book Appointment, then ask staff for the total price and any home-service fee. I do not have a final price quote here.', 'Sa Alphastar mobile app, tingnan ang serbisyo sa Book Appointment, tapos itanong sa staff ang kabuuang presyo at bayad sa home service. Wala akong tiyak na presyo dito.'),
       payment: pair('Ask staff which payment methods, PhilHealth benefits, or HMOs apply to your service. Confirm the fee and requirements before your visit.', 'Itanong sa staff kung anong bayad, PhilHealth benefit, o HMO ang puwede sa serbisyo mo. Alamin muna ang presyo at mga kailangan bago pumunta.'),
       results: pair('Result times depend on the test. Ask staff when and how to get yours. Medical History shows SMPE forms, not proof that a lab result is ready. I cannot open or explain your results here.', 'Depende sa test kung kailan lalabas ang resulta. Itanong sa staff kung kailan at paano makukuha. SMPE forms ang nasa Medical History, hindi patunay na ready na ang lab result. Hindi ko mabubuksan o maipapaliwanag ang resulta dito.'),
@@ -130,6 +140,7 @@
       parking: pair('There is no car parking at Kasiglahan. Space for 1–3 motorcycles may be available. Ask staff before visiting; parking is not reserved through chat.', 'Walang paradahan ng kotse sa Kasiglahan. Puwedeng may lugar para sa 1–3 motor, depende sa bakante. Magtanong muna sa staff; hindi makakapag-reserve ng parking dito.'),
       license: pair('Ask Kasiglahan staff for the current DOH/FDA X-ray licence and its expiry date. An old notice does not confirm that it is still valid.', 'Itanong sa staff ang kasalukuyang DOH/FDA licence ng X-ray at kung kailan ito mag-e-expire. Hindi sapat ang lumang notice para malaman kung valid pa ito.'),
       privacy: pair('This chat does not look up patient accounts. Messages stay in this tab until you reload; nothing is sent to staff automatically. Keep passwords, PINs, codes, and medical results private. Contact clinic staff for questions about how patient information is handled.', 'Hindi nakikita ng chat ang patient account mo. Nasa tab na ito lang ang messages hanggang mag-reload; hindi ito kusang ipinapadala sa staff. Huwag ibigay ang password, PIN, code, o medical result. Sa staff magtanong kung paano iniingatan ang patient information.'),
+      terms: pair('Read the Alphastar Terms and Conditions and Privacy Policy using the links below. They explain responsible use, account security, requests, SMPE forms and the limits of automated chat. A request is not a confirmed visit.', 'Basahin ang Alphastar Terms and Conditions at Privacy Policy sa mga link sa ibaba. Ipinaliliwanag nito ang tamang paggamit, account security, requests, SMPE forms at limitasyon ng chatbot. Hindi pa confirmed na visit ang isang request.'),
       identity: pair('I’m the Alphastar Help Bot, not a live staff member or doctor. I can explain clinic services and app steps. I cannot open private records, give medical advice, or confirm bookings.', 'Ako ang Alphastar Help Bot, hindi staff o doktor. Makakatulong ako sa mga serbisyo at paggamit ng app. Hindi ko mabubuksan ang private records, magbibigay ng payong medikal, o magkukumpirma ng booking.'),
       'privacy-refusal': pair('I cannot show private passwords, codes, or another patient’s records. For your own account, use the recovery steps in the app or ask staff. Do not share private details here.', 'Hindi ko maipapakita ang password, code, o record ng ibang pasyente. Para sa sarili mong account, gamitin ang recovery sa app o magtanong sa staff. Huwag ibigay ang private details dito.'),
       staff: pair('Do you need help? Choose Messenger or email below. Write and send your message there; this chat is not sent automatically. Staff may not reply right away.', 'Kailangan mo ba ng tulong? Piliin ang Messenger o email sa ibaba. Ikaw ang magsusulat at magpapadala doon; hindi kusang ipapadala ang chat na ito. Puwedeng hindi agad makasagot ang staff.'),
@@ -141,10 +152,12 @@
       unknown: pair('Sorry, I’m not sure what you mean yet. Is this about a home service, the app, or an SMPE form? Choose a topic below or tell me a little more.', 'Pasensya, hindi ko pa gets ang tanong. Tungkol ba ito sa home service, app, o SMPE form? Pumili sa ibaba o dagdagan nang kaunti ang tanong mo.'),
     };
     if (['greeting', 'thanks', 'main-menu', 'identity'].includes(topic)) topics = mainTopics;
+    if (topic === 'privacy') topics = ['view-privacy-policy', 'view-terms-and-conditions', 'main-menu'];
+    if (topic === 'terms') topics = ['view-terms-and-conditions', 'view-privacy-policy', 'main-menu'];
     if (topic === 'about') topics = aboutTopics;
     if (topic === 'app') topics = [...appTopics, 'view-download'];
     if (topic === 'install-guide') topics = ['view-download', 'account-help', 'staff', 'main-menu'];
-    if (['status', 'reschedule', 'cancel'].includes(topic)) topics = ['messenger', 'email', 'main-menu'];
+    if (['status', 'reschedule', 'cancel'].includes(topic)) topics = ['view-download', 'messenger', 'email', 'main-menu'];
     if (topic === 'queue-guide') topics = ['install-guide', 'staff', 'main-menu'];
     if (topic === 'hours') topics = ['view-contact', 'staff', 'main-menu'];
     if (topic === 'services') topics = ['home-service', 'prices', 'staff', 'main-menu'];
@@ -159,7 +172,11 @@
     return { text: answers[topic] || answers.unknown, topics: topics.slice(), language };
   }
 
-  const containsPrivateDetails = input => /[\w.+-]+@[\w.-]+\.[a-z]{2,}|(?:\d[\s-]?){6,}|\b(?:password|pin|otp|verification code|api key|private key|access token)(?:\s+ko)?\s*(?:is|ay|:|=)\s*\S+|\b(?:my|ang|aking) (?:address|name|full name|birthday|date of birth|patient id|record id|diagnosis|medical result|lab result|test result|blood sugar|blood pressure)\s*(?:is|ay|:|=)|\b(?:pangalan|address|tirahan|birthday|kaarawan|patient id|record id|resulta)\s+ko\s*(?:ay|:|=)/i.test(input);
+  const containsPrivateDetails = input => {
+    if (/[\w.+-]+@[\w.-]+\.[a-z]{2,}|(?:\d[\s-]?){6,}|\b[a-f0-9]{8}(?:-[a-f0-9]{8}){3}\b|\b[A-Z2-7]{32}\b|\b(?:[A-Z2-7]{4}[ -]){7}[A-Z2-7]{4}\b|otpauth:\/\/|-----BEGIN (?:RSA )?PRIVATE KEY-----|\b(?:my|ang|aking) (?:address|name|full name|birthday|date of birth|patient id|record id|diagnosis|medical result|lab result|test result|blood sugar|blood pressure)\s*(?:is|ay|:|=)|\b(?:pangalan|address|tirahan|birthday|kaarawan|patient id|record id|resulta)\s+ko\s*(?:ay|:|=)/i.test(input)) return true;
+    const labelled = String(input).match(/\b(?:password|pin|otp|verification code|authenticator code|setup key|recovery code|api key|private key|access token)(?:\s+ko)?\s*(?:is\b|ay\b|:|=)\s*(\S+)/i);
+    return Boolean(labelled && !/^(?:not|incorrect|invalid|expired|missing|lost|forgotten|unavailable|different|hindi|wala|nawala|nakalimutan)\b/i.test(labelled[1]));
+  };
   window.AlphastarClinicAssistant = Object.freeze({ resolveTopic, replyFor, languageFor, languageCommand, containsPrivateDetails });
 
   window.addEventListener('DOMContentLoaded', () => {
@@ -427,12 +444,14 @@
       topics.replaceChildren();
       currentTopicCards = ids.map(id => ({ id, label: labelFor(id) }));
       for (const id of ids) {
-        const isLink = ['messenger', 'email', 'view-download'].includes(id);
+        const legalPage = { 'view-privacy-policy': 'privacy-policy.html', 'view-terms-and-conditions': 'terms-and-conditions.html' }[id];
+        const isLink = Boolean(legalPage) || ['messenger', 'email', 'view-download'].includes(id);
         const action = document.createElement(isLink ? 'a' : 'button');
         action.className = `clinic-chat-topic${id === 'staff' || isLink ? ' is-staff' : ''}`;
         bindTopic(action, id);
         if (isLink) {
-          action.href = id === 'view-download' ? '#app-download' : id === 'messenger' ? 'https://m.me/alphastarlaboratory' : 'mailto:info@alphastarlabclinic.com';
+          action.href = legalPage || (id === 'view-download' ? '#app-download' : id === 'messenger' ? 'https://m.me/alphastarlaboratory' : 'mailto:info@alphastarlabclinic.com');
+          if (legalPage) { action.target = '_blank'; action.rel = 'noopener noreferrer'; }
           if (id === 'messenger') { action.target = '_blank'; action.rel = 'noopener noreferrer'; }
           if (id === 'view-download') action.addEventListener('click', event => {
             event.preventDefault();
