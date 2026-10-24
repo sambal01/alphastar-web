@@ -1492,6 +1492,24 @@
   text-decoration: none;
 }
 
+.hero-download-single .android-logo {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: none;
+  object-fit: contain;
+}
+
+.hero-download-single .download-release {
+  max-width: 100%;
+  margin: 0;
+  color: var(--gray-500, #526562);
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
 .app-download-btn.is-disabled,
 .app-download-btn[aria-disabled="true"] {
   cursor: not-allowed;

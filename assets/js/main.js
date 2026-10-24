@@ -81,12 +81,23 @@ function scrollToSection(selector) {
 
 function getConfiguredAppDownloadUrl() {
   const configUrl = window.ALPHASTAR_WEBSITE_CONFIG?.androidApkUrl || window.ALPHASTAR_ANDROID_APK_URL || '';
-  return typeof configUrl === 'string' ? configUrl.trim() : '';
+  if (typeof configUrl !== 'string' || !configUrl.trim()) return '';
+  try {
+    const url = new URL(configUrl.trim(), window.location.href);
+    // Public downloads must use HTTPS. Same-origin HTTP is allowed for local
+    // development; executable / data URLs must never become a download button.
+    if (url.protocol !== 'https:' && !(url.protocol === 'http:' && url.origin === window.location.origin)) return '';
+    if (url.username || url.password) return '';
+    return url.href;
+  } catch { return ''; }
 }
 
 function syncAppDownloadLinks() {
   const downloadUrl = getConfiguredAppDownloadUrl();
   const hasDownloadUrl = Boolean(downloadUrl);
+  const release = window.ALPHASTAR_WEBSITE_CONFIG?.androidApkRelease;
+  const matchingRelease = hasDownloadUrl && release?.url &&
+    new URL(release.url, window.location.href).href === downloadUrl ? release : null;
 
   document.querySelectorAll('[data-app-download]').forEach((link) => {
     link.classList.toggle('is-disabled', !hasDownloadUrl);
@@ -95,20 +106,33 @@ function syncAppDownloadLinks() {
 
     if (hasDownloadUrl) {
       link.setAttribute('href', downloadUrl);
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener');
+      if (new URL(downloadUrl).origin === window.location.origin) {
+        link.setAttribute('download', matchingRelease?.filename || '');
+        link.removeAttribute('target'); link.removeAttribute('rel');
+      } else {
+        link.removeAttribute('download');
+        link.setAttribute('target', '_blank'); link.setAttribute('rel', 'noopener noreferrer');
+      }
       link.removeAttribute('tabindex');
     } else {
       link.removeAttribute('href');
       link.removeAttribute('target');
       link.removeAttribute('rel');
+      link.removeAttribute('download');
       link.setAttribute('tabindex', '0');
     }
   });
 
+  document.querySelectorAll('[data-app-download-release]').forEach((node) => {
+    node.hidden = !matchingRelease;
+    if (matchingRelease) node.textContent = siteText('download.release', 'Version {version} · {size} MB · Testing build', {
+      version: matchingRelease.version, size: (matchingRelease.bytes / 1000000).toFixed(1),
+    });
+  });
+
   document.querySelectorAll('[data-download-status]').forEach((node) => {
     node.textContent = hasDownloadUrl
-      ? siteText('download.ready', 'Open this website in Chrome, then tap the download button to install the Alphastar app.')
+      ? siteText('download.ready', 'Tap Download for Android to save the APK, then open the downloaded file to install Alphastar.')
       : siteText('download.missing', 'The app download link is being prepared. Please ask clinic staff for the APK link.');
   });
 }
