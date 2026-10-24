@@ -125,7 +125,7 @@ function syncAppDownloadLinks() {
 
   document.querySelectorAll('[data-app-download-release]').forEach((node) => {
     node.hidden = !matchingRelease;
-    if (matchingRelease) node.textContent = siteText('download.release', 'Version {version} · {size} MB · Testing build', {
+    if (matchingRelease) node.textContent = siteText('download.release', 'Version {version} · {size} MB', {
       version: matchingRelease.version, size: (matchingRelease.bytes / 1000000).toFixed(1),
     });
   });

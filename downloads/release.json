@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.56",
-  "versionCode": 57,
-  "filename": "Alphastar-1.0.56-build57-test.apk",
-  "url": "Alphastar-1.0.56-build57-test.apk",
-  "sizeBytes": 95754420,
-  "sha256": "fe7b66d003c068392c5d2eb309c7e37785a47b94752037f4903868bc431f8d3c",
+  "version": "1.0.57",
+  "versionCode": 58,
+  "filename": "Alphastar-1.0.57-build58.apk",
+  "url": "Alphastar-1.0.57-build58.apk",
+  "sizeBytes": 95758692,
+  "sha256": "ed09ea116261545cbe1a4748c201d5c4f6f7b5e8930f1a875f1865448b3f3207",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Latest existing verified testing APK. Newer source edits are not included until a new APK is built."
+  "note": "Version 1.0.57 / build 58 packages the current mobile frontend, including the cleaned reschedule screen. Existing development signing certificate retained. Requires the matching home-service booking backend; not Play Store or production-signing approval."
 }
