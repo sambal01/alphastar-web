@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.57",
-  "versionCode": 58,
-  "filename": "Alphastar-1.0.57-build58.apk",
-  "url": "Alphastar-1.0.57-build58.apk",
-  "sizeBytes": 95758692,
-  "sha256": "ed09ea116261545cbe1a4748c201d5c4f6f7b5e8930f1a875f1865448b3f3207",
+  "version": "1.0.58",
+  "versionCode": 59,
+  "filename": "Alphastar-1.0.58-build59.apk",
+  "url": "Alphastar-1.0.58-build59.apk",
+  "sizeBytes": 95759100,
+  "sha256": "2cf28a0e042af029311c596247f71e66b51db5b582b9949bc9b412b6f4a77316",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.57 / build 58 packages the current mobile frontend, including the cleaned reschedule screen. Existing development signing certificate retained. Requires the matching home-service booking backend; not Play Store or production-signing approval."
+  "note": "Version 1.0.58 / build 59 includes one-patient hourly home-service slots with gray booked hours and a shared three-patient daily maximum. Existing development signing certificate retained. Requires matching booking backend with slotCapacity 1; not Play Store or production-signing approval."
 }
