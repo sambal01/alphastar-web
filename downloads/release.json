@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.59",
-  "versionCode": 60,
-  "filename": "Alphastar-1.0.59-build60.apk",
-  "url": "Alphastar-1.0.59-build60.apk",
-  "sizeBytes": 95763080,
-  "sha256": "3606ed1b3784bd3dc91697de2e8d245e71483b92c98f2c10494f7e8ab67eb74b",
+  "version": "1.0.60",
+  "versionCode": 61,
+  "filename": "Alphastar-1.0.60-build61.apk",
+  "url": "Alphastar-1.0.60-build61.apk",
+  "sizeBytes": 95766856,
+  "sha256": "0e563a0a74c485ca3be88f412712cca5ddb46b5d23e55107cbee040a3141e2c8",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.59 / build 60 permits one service and one active appointment per patient, with gray booked hours and a shared three-patient limit per Philippine date. Includes staff-approval/payment guidance, a logout-style reschedule confirmation and readable service/status cards. Requires matching booking backend with patientActiveLimit 1 and singleService true. Existing development signing certificate retained; not Play Store or production-signing approval."
+  "note": "Version 1.0.60 / build 61 unifies app alerts and popup dialogs with the logout mint/teal style. Staff home-service cancellations create private in-app notices and move the record to History; notification-opened History returns to Notifications with one Back. Includes the previous single-service/active-booking and three-patient daily rules. Matching cancellation server update is deployed. Existing development signing certificate retained; not Play Store or production-signing approval."
 }
