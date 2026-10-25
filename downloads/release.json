@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.58",
-  "versionCode": 59,
-  "filename": "Alphastar-1.0.58-build59.apk",
-  "url": "Alphastar-1.0.58-build59.apk",
-  "sizeBytes": 95759100,
-  "sha256": "2cf28a0e042af029311c596247f71e66b51db5b582b9949bc9b412b6f4a77316",
+  "version": "1.0.59",
+  "versionCode": 60,
+  "filename": "Alphastar-1.0.59-build60.apk",
+  "url": "Alphastar-1.0.59-build60.apk",
+  "sizeBytes": 95763080,
+  "sha256": "3606ed1b3784bd3dc91697de2e8d245e71483b92c98f2c10494f7e8ab67eb74b",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.58 / build 59 includes one-patient hourly home-service slots with gray booked hours and a shared three-patient daily maximum. Existing development signing certificate retained. Requires matching booking backend with slotCapacity 1; not Play Store or production-signing approval."
+  "note": "Version 1.0.59 / build 60 permits one service and one active appointment per patient, with gray booked hours and a shared three-patient limit per Philippine date. Includes staff-approval/payment guidance, a logout-style reschedule confirmation and readable service/status cards. Requires matching booking backend with patientActiveLimit 1 and singleService true. Existing development signing certificate retained; not Play Store or production-signing approval."
 }
