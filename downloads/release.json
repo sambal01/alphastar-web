@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.61",
-  "versionCode": 62,
-  "filename": "Alphastar-1.0.61-build62.apk",
-  "url": "Alphastar-1.0.61-build62.apk",
-  "sizeBytes": 96848585,
-  "sha256": "201b7cb3a37f604210194c71b5aa5ff5bd825d4a64f0151e35141e38b702628c",
+  "version": "1.0.62",
+  "versionCode": 63,
+  "filename": "Alphastar-1.0.62-build63.apk",
+  "url": "Alphastar-1.0.62-build63.apk",
+  "sizeBytes": 96878001,
+  "sha256": "c6341e8b8d6446d6146c72a750971d499fe848bf8d205c2e9e6db73b6169c53f",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.61 / build 62 includes the active-appointment booking screen, simpler shared dialogs and Medical History cards. Matching home-service operations use 7–9 AM, 9–11 AM and 1–3 PM windows, one patient per slot and three per date, with saved staff updates and reminders. Phone push delivery needs separate Expo/FCM configuration and is not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
+  "note": "Version 1.0.62 / build 63 adds encrypted per-patient Help Bot history saved on this Android device, a reference-style Prepare a Support Message form with explicit copy, and appointment-update comment popups in Notifications instead of Appointment Schedule. No automatic transcript sharing or cloud chat synchronization; live-agent conversations remain separate. Existing home-service booking behavior is unchanged. Phone push delivery needs separate Expo/FCM configuration and is not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
 }
