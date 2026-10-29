@@ -2,11 +2,11 @@ window.ALPHASTAR_WEBSITE_CONFIG = Object.freeze({
   siteName: 'Alphastar',
   siteUrl: 'https://alphastarkasiglahan.com/',
   apiBaseUrl: window.ALPHASTAR_API_BASE_URL || '',
-  androidApkUrl: window.ALPHASTAR_ANDROID_APK_URL || 'downloads/Alphastar-1.0.60-build61.apk',
+  androidApkUrl: window.ALPHASTAR_ANDROID_APK_URL || 'downloads/Alphastar-1.0.61-build62.apk',
   androidApkRelease: window.ALPHASTAR_ANDROID_APK_URL ? null : Object.freeze({
-    version: '1.0.60', build: 61, bytes: 95766856,
-    filename: 'Alphastar-1.0.60-build61.apk',
-    url: 'downloads/Alphastar-1.0.60-build61.apk', testing: true
+    version: '1.0.61', build: 62, bytes: 96848585,
+    filename: 'Alphastar-1.0.61-build62.apk',
+    url: 'downloads/Alphastar-1.0.61-build62.apk', testing: true
   }),
   firebase: {
     apiKey: 'AIzaSyDovlYRntcWR9RbPRVE3Bvtj_zxy14houI',

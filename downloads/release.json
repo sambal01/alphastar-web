@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.60",
-  "versionCode": 61,
-  "filename": "Alphastar-1.0.60-build61.apk",
-  "url": "Alphastar-1.0.60-build61.apk",
-  "sizeBytes": 95766856,
-  "sha256": "0e563a0a74c485ca3be88f412712cca5ddb46b5d23e55107cbee040a3141e2c8",
+  "version": "1.0.61",
+  "versionCode": 62,
+  "filename": "Alphastar-1.0.61-build62.apk",
+  "url": "Alphastar-1.0.61-build62.apk",
+  "sizeBytes": 96848585,
+  "sha256": "201b7cb3a37f604210194c71b5aa5ff5bd825d4a64f0151e35141e38b702628c",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.60 / build 61 unifies app alerts and popup dialogs with the logout mint/teal style. Staff home-service cancellations create private in-app notices and move the record to History; notification-opened History returns to Notifications with one Back. Includes the previous single-service/active-booking and three-patient daily rules. Matching cancellation server update is deployed. Existing development signing certificate retained; not Play Store or production-signing approval."
+  "note": "Version 1.0.61 / build 62 includes the active-appointment booking screen, simpler shared dialogs and Medical History cards. Matching home-service operations use 7–9 AM, 9–11 AM and 1–3 PM windows, one patient per slot and three per date, with saved staff updates and reminders. Phone push delivery needs separate Expo/FCM configuration and is not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
 }
