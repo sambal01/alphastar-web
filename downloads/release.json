@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.62",
-  "versionCode": 63,
-  "filename": "Alphastar-1.0.62-build63.apk",
-  "url": "Alphastar-1.0.62-build63.apk",
-  "sizeBytes": 96878001,
-  "sha256": "c6341e8b8d6446d6146c72a750971d499fe848bf8d205c2e9e6db73b6169c53f",
+  "version": "1.0.63",
+  "versionCode": 64,
+  "filename": "Alphastar-1.0.63-build64.apk",
+  "url": "Alphastar-1.0.63-build64.apk",
+  "sizeBytes": 96878289,
+  "sha256": "1636b1b4a659538199b60ca303085243491889956b8112fcca38d96996c42dc5",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.62 / build 63 adds encrypted per-patient Help Bot history saved on this Android device, a reference-style Prepare a Support Message form with explicit copy, and appointment-update comment popups in Notifications instead of Appointment Schedule. No automatic transcript sharing or cloud chat synchronization; live-agent conversations remain separate. Existing home-service booking behavior is unchanged. Phone push delivery needs separate Expo/FCM configuration and is not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
+  "note": "Version 1.0.63 / build 64 keeps the successful booking confirmation inside Book Appointment instead of Home, and combines the active-home-service notice with its teal schedule link. Done/Back stay in booking; Schedule Back returns to booking. Encrypted per-patient device Help Bot history, the support-message form and appointment-update notification popups remain included. Booking rules and backend services are unchanged. Phone push delivery needs separate Expo/FCM configuration and is not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
 }
