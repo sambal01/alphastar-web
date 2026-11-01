@@ -130,7 +130,7 @@
       'onsite-services': pair('For company on-site services, contact staff about the location, schedule, tests, and price quote. Company bookings are not made through this chat.', 'Para sa serbisyo sa lugar ng kumpanya, kausapin ang staff tungkol sa lugar, schedule, tests, at presyo. Hindi dito sa chat ginagawa ang company booking.'),
       'feedback-helpful': pair('Glad that helped! Your feedback stays in this chat only. What else do you need?', 'Mabuti at nakatulong! Dito lang sa chat ang feedback mo. Ano pa ang kailangan mo?'),
       'feedback-unhelpful': pair('Sorry that did not help. Want help writing a message to staff?', 'Pasensya kung hindi nakatulong. Gusto mo bang gumawa ng message para sa staff?'),
-      'staff-offer': pair('I’m not sure of the answer. Want help writing a message to staff?', 'Hindi ako sigurado sa sagot. Gusto mo bang gumawa ng message para sa staff?'),
+      'staff-offer': pair('I don’t have a reliable answer. Choose Chat with staff for human help, or prepare a message to send yourself. Staff may be offline.', 'Wala akong maaasahang sagot. Piliin ang Makipag-chat sa staff para sa human help, o gumawa ng message na ikaw ang magpapadala. Maaaring offline ang staff.'),
       'support-request': pair('Write your question below. I’ll help prepare a message for staff. You will review it and send it through Messenger or email yourself.', 'Isulat ang tanong mo sa ibaba. Tutulungan kitang gumawa ng message para sa staff. Babasahin mo muna ito, tapos ikaw ang magpapadala sa Messenger o email.'),
       'support-prepared': pair('Your message is ready. It has not been sent. Review it, then send the email draft or copy it into Messenger.', 'Handa na ang message mo. Hindi pa ito naipapadala. Basahin muna, tapos i-send sa email o kopyahin sa Messenger.'),
       'support-declined': pair('No problem! Choose another topic and we’ll continue.', 'Sige, walang problema! Pumili ng ibang tanong at ituloy natin.'),
@@ -160,13 +160,13 @@
       topics = ['app-installed', 'install-guide', 'profile-help', 'main-menu']; prompt = 'install-check';
     }
     if (['feedback-unhelpful', 'staff-offer'].includes(topic)) {
-      topics = ['support-request', 'support-declined']; prompt = 'staff-offer';
+      topics = ['human-chat', 'support-request', 'support-declined']; prompt = 'staff-offer';
     }
-    if (topic === 'staff') topics = ['messenger', 'email', 'support-request', 'main-menu'];
+    if (topic === 'staff') topics = ['human-chat', 'messenger', 'email', 'support-request', 'main-menu'];
     if (['support-request', 'support-prepared'].includes(topic)) { topics = []; prompt = 'support-draft'; }
     if (['feedback-helpful', 'support-declined', 'draft-cancelled'].includes(topic)) topics = base().replyFor('main-menu', language).topics;
     if (topic === 'app-installed') topics = ['profile-help', 'requirements', 'staff', 'main-menu'];
-    if (['unknown', 'clarify-answer'].includes(topic)) topics = ['technical-help', 'about', 'staff', 'main-menu'];
+    if (['unknown', 'clarify-answer'].includes(topic)) topics = ['human-chat', 'technical-help', 'staff', 'main-menu'];
     // Every mobile-feature guide offers a way to reach the official download,
     // without suggesting that the website can operate a patient's account.
     const mobileGuides = ['app', 'booking-guide', 'records-guide', 'account-help', 'technical-help', 'profile-help', 'security', 'drafts', 'mobile-data', 'requirements', 'app-installed', 'password-recovery', 'pin-recovery', 'email-code-help', 'google-signin-help', 'create-account-help', 'change-password-help', 'change-pin-help', 'authenticator-help', 'authenticator-recovery'];

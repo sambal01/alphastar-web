@@ -6,6 +6,7 @@
   'use strict';
 
   const labels = {
+    'human-chat': ['Chat with staff', 'Makipag-chat sa staff'],
     about: ['About Alphastar', 'Tungkol sa Alphastar'],
     app: ['About the App', 'Tungkol sa App'],
     'install-guide': ['Download Our App', 'I-download ang App'],
@@ -143,7 +144,7 @@
       terms: pair('Read the Alphastar Terms and Conditions and Privacy Policy using the links below. They explain responsible use, account security, requests, SMPE forms and the limits of automated chat. A request is not a confirmed visit.', 'Basahin ang Alphastar Terms and Conditions at Privacy Policy sa mga link sa ibaba. Ipinaliliwanag nito ang tamang paggamit, account security, requests, SMPE forms at limitasyon ng chatbot. Hindi pa confirmed na visit ang isang request.'),
       identity: pair('I’m the Alphastar Help Bot, not a live staff member or doctor. I can explain clinic services and app steps. I cannot open private records, give medical advice, or confirm bookings.', 'Ako ang Alphastar Help Bot, hindi staff o doktor. Makakatulong ako sa mga serbisyo at paggamit ng app. Hindi ko mabubuksan ang private records, magbibigay ng payong medikal, o magkukumpirma ng booking.'),
       'privacy-refusal': pair('I cannot show private passwords, codes, or another patient’s records. For your own account, use the recovery steps in the app or ask staff. Do not share private details here.', 'Hindi ko maipapakita ang password, code, o record ng ibang pasyente. Para sa sarili mong account, gamitin ang recovery sa app o magtanong sa staff. Huwag ibigay ang private details dito.'),
-      staff: pair('Do you need help? Choose Messenger or email below. Write and send your message there; this chat is not sent automatically. Staff may not reply right away.', 'Kailangan mo ba ng tulong? Piliin ang Messenger o email sa ibaba. Ikaw ang magsusulat at magpapadala doon; hindi kusang ipapadala ang chat na ito. Puwedeng hindi agad makasagot ang staff.'),
+      staff: pair('Choose Chat with staff to open Tawk.to. Enter your name and email, then type your concern in the staff chat. This bot conversation is not sent automatically. Staff may be offline.', 'Piliin ang Makipag-chat sa staff para buksan ang Tawk.to. Ilagay ang pangalan at email, at isulat ang concern doon. Hindi kusang ipinapadala ang bot conversation. Maaaring offline ang staff.'),
       'main-menu': pair('What do you need help with? Choose a topic below or type your question.', 'Saan mo kailangan ng tulong? Pumili sa ibaba o i-type ang tanong mo.'),
       greeting: pair('Choose a topic below or type your question. I’m here to guide you.', 'Pumili sa ibaba o i-type ang tanong mo. Tutulungan kita sa mga hakbang.'),
       thanks: pair('You’re welcome! What else can I help you with?', 'Walang anuman! Ano pa ang maitutulong ko?'),
@@ -166,8 +167,8 @@
     if (topic === 'records-guide') topics = ['drafts', 'mobile-data', 'staff', 'main-menu'];
     if (topic === 'account-help') topics = ['security', 'staff', 'main-menu'];
     if (['records-guide', 'profile-help', 'account-help', 'security', 'drafts', 'mobile-data'].includes(topic)) topics = [...topics.filter(id => id !== 'main-menu'), 'view-download', 'main-menu'];
-    if (topic === 'staff') topics = ['messenger', 'email', 'main-menu'];
-    if (topic === 'unknown') topics = ['main-menu', 'view-faq', 'staff'];
+    if (topic === 'staff') topics = ['human-chat', 'messenger', 'email', 'main-menu'];
+    if (topic === 'unknown') topics = ['human-chat', 'main-menu', 'view-faq'];
     if (topic === 'urgent') topics = []; // Do not present routine chat as emergency support.
     return { text: answers[topic] || answers.unknown, topics: topics.slice(), language };
   }
@@ -464,6 +465,7 @@
           action.type = 'button';
           action.addEventListener('click', () => {
             if (busy || panel.classList.contains('is-connecting')) return;
+            if (id === 'human-chat') { topics.replaceChildren(); renderHumanForm(); return; }
             if (id.startsWith('view-')) {
               const section = { 'view-faq': '#faq', 'view-contact': '#contact' }[id];
               window.closeFab?.();
@@ -475,6 +477,31 @@
         }
         topics.appendChild(action);
       }
+    }
+    function renderHumanForm() {
+      const support = document.createElement('form'); support.className = 'clinic-chat-support';
+      const heading = document.createElement('h3'); heading.textContent = localized('Chat with staff', 'Makipag-chat sa staff');
+      const inputs = {};
+      for (const [id, en, fil, type] of [['name','Name','Pangalan','text'],['email','Email','Email','email']]) {
+        const label = document.createElement('label'); label.textContent = localized(en, fil);
+        const field = document.createElement('input'); field.name = id; field.type = type; field.required = true; field.maxLength = id === 'name' ? 100 : 255; field.autocomplete = id;
+        label.appendChild(field); support.appendChild(label); inputs[id] = field;
+      }
+      const consentLabel = document.createElement('label'); consentLabel.className = 'clinic-chat-consent';
+      const consent = document.createElement('input'); consent.type = 'checkbox'; consent.required = true;
+      consentLabel.append(consent, document.createTextNode(localized('Share my name and email with Tawk.to and clinic staff for this chat. Staff may be offline.', 'Ibahagi ang pangalan at email ko sa Tawk.to at clinic staff para sa chat na ito. Maaaring offline ang staff.')));
+      const status = document.createElement('p'); status.className = 'clinic-chat-support-error'; status.setAttribute('role','alert');
+      const open = document.createElement('button'); open.type = 'submit'; open.className = 'clinic-chat-topic'; open.textContent = localized('Open staff chat', 'Buksan ang staff chat');
+      const back = document.createElement('button'); back.type = 'button'; back.className = 'clinic-chat-topic'; back.textContent = localized('Back', 'Bumalik'); back.addEventListener('click', () => renderTopics(['human-chat','messenger','email','main-menu']));
+      support.prepend(heading); support.append(consentLabel, status, open, back); topics.appendChild(support);
+      support.addEventListener('submit', async event => {
+        event.preventDefault(); if (open.disabled || !support.reportValidity()) return;
+        open.disabled = true; back.disabled = true; status.textContent = localized('Opening staff chat...', 'Binubuksan ang staff chat...');
+        try { await window.AlphastarHumanChat.open({name:inputs.name.value, email:inputs.email.value, consent:consent.checked}); status.textContent = ''; }
+        catch { status.textContent = localized('Unable to open staff chat. Retry or go back to use Messenger or email.', 'Hindi mabuksan ang staff chat. Subukan muli o bumalik para gamitin ang Messenger o email.'); }
+        finally { open.disabled = false; back.disabled = false; }
+      });
+      revealMessage(support); inputs.name.focus();
     }
     function renderSupportForm() {
       const support = document.createElement('form');
