@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.66",
-  "versionCode": 67,
-  "filename": "Alphastar-1.0.66-build67.apk",
-  "url": "Alphastar-1.0.66-build67.apk",
-  "sizeBytes": 96867981,
-  "sha256": "3e8f58e801fc874232f719a2932c7909113f437c64030367c71edf190fa00362",
+  "version": "1.0.67",
+  "versionCode": 68,
+  "filename": "Alphastar-1.0.67-build68.apk",
+  "url": "Alphastar-1.0.67-build68.apk",
+  "sizeBytes": 96872677,
+  "sha256": "7720a1fec20843257ec736cf42516340740834cfeebce8590ed5d7d4c21daf08",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.66 / build 67 adds the support welcome/request flow, verified first-name or anonymous staff connection, Helpful/Not helpful feedback, explicit ending, read-only Chats history and mobile continuation. Mobile conversations remain saved across logout/app exit. Website close/refresh ends its guest session with a heartbeat timeout fallback; the loading-only pane locks the page behind Chat with Us. Per-patient unread indicators and Human Chat notification routing are included. Matching desktop/backend sources include limited first-session compatibility for earlier clients without reopening ended chats. The Help Bot transcript and booking details are not automatically shared. Physical-phone installation and notification delivery are not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
+  "note": "Version 1.0.67 / build 68 adds bidirectional typing indicators, first-name message labels, initials or clinic-logo avatars and relative message times. Matching desktop/backend sources use one alert per conversation with per-patient unread dots and the Your account / Alphastar Staff connection dropdown. Typing expires automatically and does not transmit draft text or create notifications. Historical authors and mobile conversations remain saved; website exit still ends the guest session. The Help Bot transcript and booking details are not automatically shared. Physical-phone installation and actual notification delivery are not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
 }

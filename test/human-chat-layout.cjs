@@ -7,7 +7,7 @@ const root=path.resolve(__dirname,'..');let server,browser;
   let releaseCreate,holdCreate=true,number=0;
   const add=(chat,sender,text,name)=>chat.conversation.messages.push({id:crypto.randomBytes(32).toString('hex'),sender,text,name:name|| (sender==='system'?'System':'Synthetic Visitor'),time:new Date(Date.parse('2026-11-02T02:00:00Z')+number++*1000).toISOString()});
   async function handleChat(url,body,headers,respond,method){
-    requests.push({path:url.pathname,headers,method});
+    requests.push({path:url.pathname,headers,method,body});
     if(url.pathname==='/api/support/chats'&&method==='POST'){
       assert.equal(body.consent,true);assert.deepEqual(Object.keys(body).sort(),['consent','email','name']);
       if(holdCreate)await new Promise(resolve=>{releaseCreate=resolve;});
@@ -25,6 +25,8 @@ const root=path.resolve(__dirname,'..');let server,browser;
       const id=crypto.createHash('sha256').update(body.clientId).digest('hex'),message={id,sender:'visitor',text:body.text,name:'Synthetic Visitor',time:new Date(Date.parse('2026-11-02T02:01:00Z')+number++*1000).toISOString()};
       if(!chat.conversation.messages.some(row=>row.id===id))chat.conversation.messages.push(message);
       return respond({message});
+    }else if(action==='typing'){
+      assert.equal(body.cycle,1);assert.equal(typeof body.isTyping,'boolean');assert.equal(Object.hasOwn(body,'text'),false);return respond({ok:true});
     }else if(action==='end'){
       assert.equal(body.rating,'up');assert.equal(body.comment,'Synthetic helpful support');chat.feedback=body;chat.conversation.status='ended';add(chat,'system','This conversation has ended.');
     }else if(action==='exit'){chat.conversation.status='ended';}
@@ -78,7 +80,21 @@ const root=path.resolve(__dirname,'..');let server,browser;
   chat.conversation.status='connected';add(chat,'staff','Synthetic staff answer','Synthetic <Staff>');
   await page.getByText('Synthetic staff answer',{exact:true}).waitFor({timeout:7000});
   assert.equal(await page.locator('.native-chat-composer textarea').inputValue(),'Draft remains while staff connect');
-  assert.equal(await page.locator('.native-chat-log strong').getByText('Synthetic <Staff>',{exact:true}).count(),1);
+  assert.equal(await page.locator('.native-chat-log strong').getByText('Synthetic',{exact:true}).count(),3);
+  assert.ok(await page.locator('.native-chat-message.is-mine .native-chat-avatar').getByText('Me',{exact:true}).count()>=1);
+  chat.conversation.connectedName='Fredilito';chat.conversation.connectedAvatar='initials';chat.conversation.connectedInitials='FS';chat.conversation.typing={staff:{expiresAt:Date.now()+8000}};
+  await page.getByText('Fredilito is typing…',{exact:true}).waitFor({timeout:7000});
+  const inputNode=await page.locator('.native-chat-composer textarea').evaluate(field=>{window.__savedComposer=field;return true;});assert.equal(inputNode,true);
+  chat.conversation.typing={};await page.waitForFunction(()=>document.querySelector('.native-chat-typing').hidden);
+  assert.equal(await page.locator('.native-chat-composer textarea').evaluate(field=>field===window.__savedComposer),true);
+  chat.conversation.messages.push({id:crypto.randomBytes(32).toString('hex'),sender:'staff',name:'Fredilito',initials:'FS',avatar:'initials',text:'Account identity reply',time:new Date().toISOString()});
+  await page.getByText('Account identity reply',{exact:true}).waitFor({timeout:7000});assert.equal(await page.getByText('Just now',{exact:true}).count(),1);
+  assert.equal(await page.locator('.native-chat-avatar').getByText('FS',{exact:true}).count(),1);
+  chat.conversation.messages.push({id:crypto.randomBytes(32).toString('hex'),sender:'staff',name:'Alphastar Staff',avatar:'clinic',text:'Clinic identity reply',time:new Date(Date.now()-61000).toISOString()});
+  await page.getByText('Clinic identity reply',{exact:true}).waitFor({timeout:7000});assert.equal(await page.getByText('1 minute ago',{exact:true}).count(),1);
+  assert.equal(await page.locator('.native-chat-avatar img').count(),1);
+  assert.ok(await page.locator('time[title][datetime]').count()>=1);
+  assert.ok(requests.some(row=>row.path.endsWith('/typing')&&row.body.isTyping===true));assert.ok(requests.some(row=>row.path.endsWith('/typing')&&row.body.isTyping===false));
   assert.equal(await page.locator('.native-chat-log strong img').count(),0);
   await fs.mkdir(path.join(root,'test-results/native-chat'),{recursive:true});
   for(const [width,height]of [[320,740],[393,900],[768,900],[1366,768]]){

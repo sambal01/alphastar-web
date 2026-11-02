@@ -1,5 +1,11 @@
 # Chat with Us — local lifecycle update
 
+## Release follow-up — 1.0.67 / build 68
+
+Chat now shows first-name message labels, **Me** for the visitor's avatar, staff full-name initials or the clinic logo according to the assigned assistant's saved identity, and relative message times with full Philippine timestamp tooltips. Two-second polling shows staff typing without replacing the textarea or draft. Visitor typing is throttled and stops on idle, blur, send, close and backgrounding; no typed draft content is transmitted. Server-side indicators expire after eight seconds and do not create notifications or unread events. Desktop receives one alert per conversation, with subsequent messages represented by a per-patient unread dot.
+
+Synthetic browser tests verify both indicator directions, initials/logo identities, relative/absolute times and stable drafts at four widths. This release accompanies Android 1.0.67/build 68 and the matching backend/desktop source. See the shared native-chat document for final live rollout verification; no real conversation is sent during testing.
+
 Visitors share their name/email with consent, see the System welcome, and explicitly choose **Yes, connect me to support**. This creates the desktop Human Chat alert. Staff choose Anonymous or their verified first name and accept the chat before replying.
 
 **End conversation** offers Helpful/Not helpful and a comment field. A rating is required; a comment is not. Ended conversations are read-only in desktop **Chats history**. Website Back, close, refresh and page exit end the guest thread; reopening creates a fresh private capability, never an email-based history lookup. An exit beacon is best effort, with a 15-second heartbeat and 90-second lease expired on backend reads/mutations as fallback.

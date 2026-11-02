@@ -13,6 +13,9 @@ async function post(route, body = {}) { return get(backend + route, { method: "P
     ["/api/support/chats/invalid/heartbeat", 400],
     ["/api/patient-support/chats/open", 401],
     ["/api/staff/human-chats/invalid/connect", 401],
+    ["/api/support/chats/invalid/typing", 400],
+    ["/api/patient-support/chats/invalid/typing", 400],
+    ["/api/staff/human-chats/invalid/typing", 401],
   ];
   for (const [route, expected] of checks) assert.equal((await post(route)).status, expected, route);
   const cors = await get(backend + "/api/support/chats/invalid/request", { method: "OPTIONS", headers: {
@@ -23,7 +26,7 @@ async function post(route, body = {}) { return get(backend + route, { method: "P
   if (process.argv.includes("--backend-only")) return;
   const hash = text => crypto.createHash("sha256").update(text.replace(/\r\n/g, "\n").trim()).digest("hex");
   for (const name of ["index.html", "assets/js/site-config.js", "assets/js/human-chat.js", "assets/js/floating-btn.js", "assets/css/clinic-assistant.css"]) {
-    const response = await get(site + "/" + name + "?support_release=1.0.66", { headers: { "Cache-Control": "no-cache" } });
+    const response = await get(site + "/" + name + "?support_release=1.0.67", { headers: { "Cache-Control": "no-cache" } });
     assert.equal(response.status, 200, name); assert.equal(hash(await response.text()), hash(fs.readFileSync(path.join(root, name), "utf8")), name + " source differs");
   }
   const release = JSON.parse(fs.readFileSync(path.join(root, "downloads/release.json"), "utf8"));
