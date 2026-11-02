@@ -1,5 +1,13 @@
 # Chat with Us — local lifecycle update
 
+## Release follow-up — 1.0.68 / build 69
+
+Messages use compact reference-style bubbles with outside avatars, sender labels and bottom-right timestamps; System has an **S** avatar. The opening conversation and support-request acknowledgement have a one-second minimum presentation delay. Animated avatar/dots indicators show temporary typing without exposing draft text or claiming an assistant is connected.
+
+**Back** and minimize preserve the conversation and draft in page memory. **Continue conversation** resumes that pane without creating another guest session or requesting identity again. Minimize/reopen shows only the loading state before revealing the conversation, never the old transcript behind loading. Refresh/page exit still sends the private-capability exit request and forgets the session; explicit ending still archives it. No guest capability or transcript is restored from browser storage. Heartbeats continue while the same page remains open, with the existing lease fallback for disconnected visitors.
+
+Synthetic browser checks cover both one-second gates, Back/minimize resume, refresh ending, stable drafts, loading-only presentation and responsive widths. The underlying landing page stays scroll-locked/inert while the chat is open. Android 1.0.68/build 69 accompanies this update; publication evidence is recorded after live verification. The older Back/close behavior below remains historical release evidence, not the current client behavior.
+
 ## Release follow-up — 1.0.67 / build 68
 
 Chat now shows first-name message labels, **Me** for the visitor's avatar, staff full-name initials or the clinic logo according to the assigned assistant's saved identity, and relative message times with full Philippine timestamp tooltips. Two-second polling shows staff typing without replacing the textarea or draft. Visitor typing is throttled and stops on idle, blur, send, close and backgrounding; no typed draft content is transmitted. Server-side indicators expire after eight seconds and do not create notifications or unread events. Desktop receives one alert per conversation, with subsequent messages represented by a per-patient unread dot.

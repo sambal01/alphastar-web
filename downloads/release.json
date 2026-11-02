@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.67",
-  "versionCode": 68,
-  "filename": "Alphastar-1.0.67-build68.apk",
-  "url": "Alphastar-1.0.67-build68.apk",
-  "sizeBytes": 96872677,
-  "sha256": "7720a1fec20843257ec736cf42516340740834cfeebce8590ed5d7d4c21daf08",
+  "version": "1.0.68",
+  "versionCode": 69,
+  "filename": "Alphastar-1.0.68-build69.apk",
+  "url": "Alphastar-1.0.68-build69.apk",
+  "sizeBytes": 96873401,
+  "sha256": "97a3ab492769386bac9e56842945086710576601ea55a5a4908d2267b8d04b66",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.67 / build 68 adds bidirectional typing indicators, first-name message labels, initials or clinic-logo avatars and relative message times. Matching desktop/backend sources use one alert per conversation with per-patient unread dots and the Your account / Alphastar Staff connection dropdown. Typing expires automatically and does not transmit draft text or create notifications. Historical authors and mobile conversations remain saved; website exit still ends the guest session. The Help Bot transcript and booking details are not automatically shared. Physical-phone installation and actual notification delivery are not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
+  "note": "Version 1.0.68 / build 69 refines chat bubbles, System avatars and animated typing, with a one-second introduction and support acknowledgement. Matching desktop/backend sources add workspace/history unread indicators, immediate observed-message read feedback, a stable sliding identity menu and a top-right End confirmation. Website Back/minimize preserves the guest conversation in page memory; refresh/page exit ends it. Registered mobile conversations remain saved across exit/logout. Typing never transmits drafts or creates notifications. The Help Bot transcript and booking details are not automatically shared. Physical-phone installation and actual notification delivery are not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
 }

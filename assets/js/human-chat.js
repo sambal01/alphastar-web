@@ -5,6 +5,8 @@
   let timer, heartbeatTimer, epoch = 0, reading = false, busy = false, pending = null, rows = [], before = "";
   let presentationTimer, typingIdle, typingClient = "", typingSequence = 0, typingOn = false, lastTyping = 0;
   let feedback = false, rating = "", comment = "", rated = false, controlMode = "";
+  let opening = false, requestLoading = false;
+  const transitionDelay = () => new Promise(resolve => setTimeout(resolve, 1000));
   const localized = (english, tagalog) => window.alphastarChat?.getLanguage() === "tl" ? tagalog : english;
   const merge = next => { rows = [...new Map([...rows, ...next].map(row => [row.id, row])).values()].sort((a, b) => a.time.localeCompare(b.time) || a.id.localeCompare(b.id)); };
   const firstName = value => ["Alphastar Staff", "Support assistant"].includes(value) ? value : String(value || "Support assistant").trim().split(/\s+/u)[0];
@@ -20,12 +22,20 @@
   function stopTyping() { clearTimeout(typingIdle); reportTyping(false); }
   function changedDraft(value) { clearTimeout(typingIdle); reportTyping(Boolean(value.trim())); typingIdle = setTimeout(stopTyping, 1800); }
   function updatePresentation() {
-    if (!view || !conversation) return;
+    if (!view || view.hidden || !conversation) return;
     for (const stamp of log.querySelectorAll("time[data-sent]")) { const label = relative(stamp.dataset.sent); if (stamp.textContent !== label) stamp.textContent = label; }
-    const visible = ["waiting", "connected"].includes(conversation.status) && conversation.typing?.staff?.expiresAt > Date.now();
+    const visible = requestLoading || ["waiting", "connected"].includes(conversation.status) && conversation.typing?.staff?.expiresAt > Date.now();
     typingIndicator.hidden = !visible;
-    const label = visible ? firstName(conversation.connectedName) + " is typing…" : "";
-    if (typingIndicator.lastChild.textContent !== label) typingIndicator.lastChild.textContent = label;
+    const label = visible ? (requestLoading ? "Alphastar" : firstName(conversation.connectedName)) + " is typing…" : "";
+    const caption = typingIndicator.querySelector("[data-typing-label]");
+    if (caption.textContent !== label) caption.textContent = label;
+    const picture = typingIndicator.querySelector(".native-chat-avatar"), key = requestLoading ? "clinic" : `${conversation.connectedAvatar}:${conversation.connectedInitials}`;
+    if (picture.dataset.key !== key) {
+      picture.replaceChildren();
+      if (requestLoading || conversation.connectedAvatar !== "initials") { const logo = node("img"); logo.src = "assets/images/alphastarlogo.png"; logo.alt = ""; picture.append(logo); }
+      else picture.textContent = conversation.connectedInitials || initials(conversation.connectedName);
+      picture.dataset.key = key;
+    }
   }
   function node(tag, className, text) {
     const element = document.createElement(tag);
@@ -60,11 +70,29 @@
     epoch++; clearInterval(timer); clearInterval(heartbeatTimer); clearInterval(presentationTimer); timer = heartbeatTimer = presentationTimer = null;
     typingClient = ""; typingSequence = 0; typingOn = false; lastTyping = 0;
     session = conversation = null; rows = []; before = ""; pending = null; busy = reading = false;
+    opening = requestLoading = false;
     view?.remove(); view = log = controls = status = typingIndicator = null;
     for (const [element, display] of hidden) element.style.display = display;
     hidden = [];
     // Old guest capabilities must not recover a prior visit after refresh.
     try { sessionStorage.removeItem("alphastar-staff-chat-v1"); } catch {}
+  }
+  function back() {
+    stopTyping();
+    if (!view) return;
+    view.hidden = true; view.inert = true; view.dataset.backHidden = "true";
+    for (const [element, display] of hidden) element.style.display = display;
+    hidden = [];
+    const submit = document.querySelector('.clinic-chat-support button[type="submit"]');
+    if (submit) submit.textContent = conversation?.status === "ended" ? localized("Open staff chat", "Buksan ang staff chat") : localized("Continue conversation", "Ituloy ang usapan");
+  }
+  function minimize() { stopTyping(); }
+  function hasSession() { return Boolean(view && (opening || session && conversation?.status !== "ended")); }
+  function resume() {
+    if (!hasSession()) return false;
+    for (const id of ["clinic-chat-body", "clinic-chat-form", "clinic-chat-status"]) { const element = document.getElementById(id); if (element && !hidden.some(([saved]) => saved === element)) { hidden.push([element, element.style.display]); element.style.display = "none"; } }
+    delete view.dataset.backHidden; view.hidden = false; view.inert = false; paint(); void read();
+    controls.querySelector("textarea, button")?.focus({ preventScroll: true }); return true;
   }
   function renderMessages() {
     const bottom = log.scrollHeight - log.scrollTop - log.clientHeight < 80, top = log.scrollTop, height = log.scrollHeight;
@@ -78,22 +106,24 @@
       const bubble = node("div", "native-chat-message" + (row.sender === "visitor" ? " is-mine" : ""));
       bubble.dataset.message = row.id;
       const name = row.sender === "system" ? "System" : firstName(row.sender === "staff" ? row.name : row.name || conversation.visitorName || session.name);
-      if (row.sender !== "system") {
+      {
         const profile = node("span", "native-chat-avatar"); profile.setAttribute("aria-hidden", "true");
-        if (row.sender === "staff" && (row.avatar === "clinic" || !row.avatar && ["Alphastar Staff", "Support assistant"].includes(row.name || "Support assistant"))) { const logo = node("img"); logo.src = "assets/images/alphastarlogo.png"; logo.alt = ""; profile.append(logo); }
+        if (row.sender === "system") profile.textContent = "S";
+        else if (row.sender === "staff" && (row.avatar === "clinic" || !row.avatar && ["Alphastar Staff", "Support assistant"].includes(row.name || "Support assistant"))) { const logo = node("img"); logo.src = "assets/images/alphastarlogo.png"; logo.alt = ""; profile.append(logo); }
         else profile.textContent = row.sender === "visitor" ? "Me" : row.initials || initials(row.name);
         bubble.append(profile);
       }
       const content = node("div", "native-chat-message-body"), timestamp = node("time", "", relative(row.time));
       timestamp.dataset.sent = row.time; timestamp.dateTime = row.time; timestamp.title = absolute(row.time); timestamp.setAttribute("aria-label", absolute(row.time));
-      content.append(node("strong", "", name), node("p", "", row.text), timestamp); bubble.append(content);
+      const surface = node("div", "native-chat-message-bubble"); surface.append(node("p", "", row.text), timestamp);
+      content.append(node("strong", "", name), surface); bubble.append(content);
       const next = [...log.children].find(element => element.dataset.message && rows.findIndex(item => item.id === element.dataset.message) > rows.indexOf(row));
       log.insertBefore(bubble, next || null);
     }
     log.scrollTop = bottom ? log.scrollHeight : before && log.scrollHeight > height ? top + log.scrollHeight - height : top;
   }
   function paint() {
-    if (!view || !conversation) return;
+    if (!view || view.hidden || !conversation || opening) return;
     view.querySelector(".native-chat-loading")?.remove();
     log.hidden = false; renderMessages(); updatePresentation();
     endButton.hidden = conversation.status === "welcome" || rated;
@@ -130,7 +160,7 @@
       controls.append(button(localized("Yes, connect me to support", "Oo, ikonekta ako sa support"), () => void action("request")));
     } else if (mode === "ended") {
       controls.className = "native-chat-actions";
-      controls.append(node("p", "", "Conversation ended"), button("Back", close, "native-chat-back"));
+      controls.append(node("p", "", "Conversation ended"), button("Back", back, "native-chat-back"));
     } else {
       controls.className = "native-chat-composer";
       const form = node("form"), input = node("textarea"), send = node("button", "", "Send");
@@ -149,23 +179,23 @@
     paint();
   }
   async function read(older = "") {
-    if (reading || !session || !view || document.hidden || document.querySelector("#fab-menu")?.hidden) return;
+    if (reading || requestLoading || !session || !view || view.hidden || document.hidden || document.querySelector("#fab-menu")?.hidden || document.querySelector("#fab-menu")?.inert) return;
     const current = epoch, identity = session; reading = true;
-    try { const data = await request("/" + identity.id + (older ? "?before=" + encodeURIComponent(older) : ""), undefined, identity); if (current === epoch) { accept(data, Boolean(older)); status.textContent = ""; } }
+    try { const data = await request("/" + identity.id + (older ? "?before=" + encodeURIComponent(older) : ""), undefined, identity); if (current === epoch && !requestLoading) { accept(data, Boolean(older)); status.textContent = ""; } }
     catch (error) { if (current === epoch) status.textContent = error.message; }
     finally { if (current === epoch) reading = false; }
   }
   async function action(kind, body = {}) {
     if (busy || !session || !conversation) return;
-    const current = epoch, identity = session; busy = true; status.textContent = ""; paint();
+    const current = epoch, identity = session; busy = true; requestLoading = kind === "request"; status.textContent = ""; paint();
     if (kind === "end") stopTyping();
     try {
-      const data = await request("/" + identity.id + "/" + kind, { cycle: conversation.cycle, ...body }, identity);
+      const [data] = await Promise.all([request("/" + identity.id + "/" + kind, { cycle: conversation.cycle, ...body }, identity), kind === "request" ? transitionDelay() : Promise.resolve()]);
       if (current !== epoch) return;
       if (kind === "end") { feedback = false; rated = true; }
       accept(data);
     } catch (error) { if (current === epoch) { status.textContent = error.message; void read(); } }
-    finally { if (current === epoch) { busy = false; paint(); } }
+    finally { if (current === epoch) { busy = false; requestLoading = false; paint(); } }
   }
   async function sendMessage(input) {
     const text = input.value.trim(); if (!text || busy || !session || !["waiting", "connected"].includes(conversation?.status)) return;
@@ -181,12 +211,13 @@
     finally { if (current === epoch) { busy = false; paint(); input.focus(); } }
   }
   async function open({ name, email, consent }) {
+    if (resume()) return;
     name = String(name || "").trim(); email = String(email || "").trim().toLowerCase();
     if (!consent || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw Error("Enter your name and email and agree to staff chat.");
-    close(); const current = epoch;
+    close(); const current = epoch; opening = true;
     const panel = document.getElementById("fab-menu"); if (!panel) throw Error("Chat panel unavailable.");
     view = node("section", "native-staff-chat"); view.setAttribute("aria-label", "Support conversation");
-    const header = node("header"); header.append(button("Back", close, "native-chat-back"));
+    const header = node("header"); header.append(button("Back", back, "native-chat-back"));
     endButton = button("End conversation", () => { stopTyping(); feedback = true; paint(); }, "native-chat-back"); endButton.hidden = true; header.append(endButton);
     const loading = node("div", "native-chat-loading"); loading.setAttribute("role", "status"); loading.setAttribute("aria-label", "Loading conversation");
     const spinner = node("span", "clinic-chat-intro-spinner"); loading.append(spinner);
@@ -194,17 +225,18 @@
     status = node("p", "native-chat-status"); status.setAttribute("role", "status"); controls = node("div", "native-chat-actions");
     typingIndicator = node("div", "native-chat-typing"); typingIndicator.setAttribute("role", "status"); typingIndicator.setAttribute("aria-live", "polite"); typingIndicator.hidden = true;
     const dots = node("span", "native-chat-typing-dots"); dots.setAttribute("aria-hidden", "true"); for (let i = 0; i < 3; i++) dots.append(node("i"));
-    typingIndicator.append(dots, node("span", "", ""));
+    const typingProfile = node("span", "native-chat-avatar"), typingContent = node("div", "native-chat-typing-content"), typingCaption = node("span", "", ""); typingCaption.dataset.typingLabel = "true";
+    typingProfile.setAttribute("aria-hidden", "true"); typingContent.append(dots, typingCaption); typingIndicator.append(typingProfile, typingContent);
     view.append(header, loading, log, typingIndicator, status, controls);
     for (const id of ["clinic-chat-body", "clinic-chat-form", "clinic-chat-status"]) { const element = document.getElementById(id); if (element) { hidden.push([element, element.style.display]); element.style.display = "none"; } }
     panel.append(view); header.querySelector("button")?.focus({ preventScroll: true });
     feedback = false; rating = comment = controlMode = ""; rated = false;
     try {
-      const data = await request("", { name, email, consent: true }, null);
+      const [data] = await Promise.all([request("", { name, email, consent: true }, null), transitionDelay()]);
       const identity = { id: data.id, token: data.token, name, email };
       if (current !== epoch) { exit(identity, data.conversation?.cycle); return; }
       if (!/^[a-f0-9]{64}$/.test(identity.id || "") || !/^[a-f0-9]{64}$/.test(identity.token || "")) throw Error("Staff chat needs a clinic server update.");
-      session = identity; before = data.conversation.before || ""; accept(data);
+      opening = false; session = identity; before = data.conversation.before || ""; accept(data);
       controls.querySelector("button")?.focus({ preventScroll: true });
       timer = setInterval(() => void read(), 2000);
       presentationTimer = setInterval(updatePresentation, 1000);
@@ -213,8 +245,9 @@
       }, 15000);
     } catch (error) {
       if (current === epoch) {
+        opening = false;
         view.querySelector(".native-chat-loading")?.remove(); status.textContent = error.message;
-        controls.append(button("Retry", () => void open({ name, email, consent }).catch(() => {})), button("Back", close, "native-chat-back"));
+        controls.append(button("Retry", () => void open({ name, email, consent }).catch(() => {})), button("Back", back, "native-chat-back"));
       }
       throw error;
     }
@@ -222,5 +255,5 @@
   window.addEventListener?.("pagehide", close);
   document.addEventListener("visibilitychange", () => { if (document.hidden) stopTyping(); else void read(); });
   window.addEventListener?.("pageshow", event => { if (event.persisted) close(); });
-  window.AlphastarHumanChat = Object.freeze({ open, close });
+  window.AlphastarHumanChat = Object.freeze({ open, close, back, minimize, resume, hasSession });
 })();

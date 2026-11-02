@@ -4,13 +4,15 @@ let fabIntroTimer;
 let fabPromptHideTimer;
 let fabTransitionRevision = 0;
 const FAB_TRANSITION_MS = 280;
-const FAB_INTRO_MS = 2000;
+const FAB_INTRO_MS = 1000;
 
 function setFabIntro(connecting) {
   const intro = document.getElementById('clinic-chat-intro');
   if (!intro) return; // Cached markup can still open without the intro.
   intro.hidden = !connecting;
   document.getElementById('fab-menu')?.classList.toggle('is-connecting', connecting);
+  const nativeChat = document.querySelector('.native-staff-chat');
+  if (nativeChat && !nativeChat.dataset.backHidden) { nativeChat.hidden = connecting; nativeChat.inert = connecting; }
   for (const id of ['clinic-chat-body', 'clinic-chat-status', 'clinic-chat-form']) {
     const element = document.getElementById(id);
     if (element) {
@@ -134,7 +136,7 @@ function syncFabState() {
       });
     });
   } else {
-    window.AlphastarHumanChat?.close();
+    window.AlphastarHumanChat?.minimize();
     window.alphastarChat?.pauseTimestamps?.();
     const wasVisible = fab.classList.contains('is-open');
     const closingBottom = wasVisible ? window.getComputedStyle?.(fab)?.bottom : '';

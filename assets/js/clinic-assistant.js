@@ -479,6 +479,7 @@
       }
     }
     function renderHumanForm() {
+      if (window.AlphastarHumanChat?.resume?.()) return;
       const support = document.createElement('form'); support.className = 'clinic-chat-support';
       const heading = document.createElement('h3'); heading.textContent = localized('Chat with staff', 'Makipag-chat sa staff');
       const inputs = {};

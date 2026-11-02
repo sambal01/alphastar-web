@@ -7,6 +7,7 @@ async function get(url, options = {}) { return fetch(url, { ...options, signal: 
 async function post(route, body = {}) { return get(backend + route, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }); }
 (async () => {
   const health = await get(backend + "/api/health"); assert.equal(health.status, 200); assert.equal((await health.json()).ok, true);
+  assert.equal((await get(backend + "/api/staff/human-chats/unread")).status, 401);
   const checks = [
     ["/api/support/chats", 400],
     ["/api/support/chats/invalid/request", 400],
@@ -25,11 +26,11 @@ async function post(route, body = {}) { return get(backend + route, { method: "P
   console.log("PASS: Live backend health, new support routes, anonymous-access rejection and website CORS. No conversations or patient records created.");
   if (process.argv.includes("--backend-only")) return;
   const hash = text => crypto.createHash("sha256").update(text.replace(/\r\n/g, "\n").trim()).digest("hex");
-  for (const name of ["index.html", "assets/js/site-config.js", "assets/js/human-chat.js", "assets/js/floating-btn.js", "assets/css/clinic-assistant.css"]) {
-    const response = await get(site + "/" + name + "?support_release=1.0.67", { headers: { "Cache-Control": "no-cache" } });
+  const release = JSON.parse(fs.readFileSync(path.join(root, "downloads/release.json"), "utf8"));
+  for (const name of ["index.html", "assets/js/site-config.js", "assets/js/human-chat.js", "assets/js/clinic-assistant.js", "assets/js/floating-btn.js", "assets/css/clinic-assistant.css"]) {
+    const response = await get(site + "/" + name + "?support_release=" + release.version, { headers: { "Cache-Control": "no-cache" } });
     assert.equal(response.status, 200, name); assert.equal(hash(await response.text()), hash(fs.readFileSync(path.join(root, name), "utf8")), name + " source differs");
   }
-  const release = JSON.parse(fs.readFileSync(path.join(root, "downloads/release.json"), "utf8"));
   const sidecar = await get(site + "/downloads/" + release.filename + ".sha256");
   assert.equal(sidecar.status, 200); assert.equal((await sidecar.text()).trim(), release.sha256 + "  " + release.filename);
   console.log("PASS: Live website HTML, support-chat assets, download configuration and checksum sidecar match the tested release.");
