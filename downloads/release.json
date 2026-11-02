@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.64",
-  "versionCode": 65,
-  "filename": "Alphastar-1.0.64-build65.apk",
-  "url": "Alphastar-1.0.64-build65.apk",
-  "sizeBytes": 96879333,
-  "sha256": "7b097c537fe52b2022b5fc5ce8d0ae1d64cbe76d7a165adc6cc8a0e50873423b",
+  "version": "1.0.65",
+  "versionCode": 66,
+  "filename": "Alphastar-1.0.65-build66.apk",
+  "url": "Alphastar-1.0.65-build66.apk",
+  "sizeBytes": 96862469,
+  "sha256": "f91c6a0df0bef59d5085bc64a341b66029400db87206cea71a1d4d4c0cd4007f",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.64 / build 65 adds the Chat with staff handoff and shares only the signed-in patient's account name, email and patient ID with Tawk.to after the patient chooses staff chat. The Help Bot conversation and booking details are not automatically shared. Staff reply through their own Tawk.to agent login; chat-start alerts and completed transcripts can be saved for authorized clinic staff. Updated privacy notices are included. Existing booking, encrypted Help Bot history and appointment-update features remain. The matching signed webhook receiver is configured separately on the backend. Phone push delivery and physical-device installation are not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
+  "note": "Version 1.0.65 / build 66 adds built-in Alphastar staff messaging inside Chat with Us, without a Tawk widget or redirect. Clinic staff reply directly from desktop Human Chat. Messages are saved privately, with account-scoped patient access, stable retry references and paged history. Website guests use separate private chat sessions, not email-based patient lookup. The Help Bot transcript and booking details are not automatically shared. Existing Tawk records remain separate and read-only. Updated privacy notices are included. The matching backend and private chat index are required. Physical-phone installation and notification delivery are not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
 }

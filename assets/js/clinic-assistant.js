@@ -489,7 +489,7 @@
       }
       const consentLabel = document.createElement('label'); consentLabel.className = 'clinic-chat-consent';
       const consent = document.createElement('input'); consent.type = 'checkbox'; consent.required = true;
-      consentLabel.append(consent, document.createTextNode(localized('Share my name and email with Tawk.to and clinic staff for this chat. Staff may be offline.', 'Ibahagi ang pangalan at email ko sa Tawk.to at clinic staff para sa chat na ito. Maaaring offline ang staff.')));
+      consentLabel.append(consent, document.createTextNode(localized('Share my name and email with clinic staff and save this conversation in Alphastar. Staff may reply later.', 'Ibahagi ang pangalan at email ko sa clinic staff at i-save ang usapan sa Alphastar. Maaaring mamaya pa sumagot ang staff.')));
       const status = document.createElement('p'); status.className = 'clinic-chat-support-error'; status.setAttribute('role','alert');
       const open = document.createElement('button'); open.type = 'submit'; open.className = 'clinic-chat-topic'; open.textContent = localized('Open staff chat', 'Buksan ang staff chat');
       const back = document.createElement('button'); back.type = 'button'; back.className = 'clinic-chat-topic'; back.textContent = localized('Back', 'Bumalik'); back.addEventListener('click', () => renderTopics(['human-chat','messenger','email','main-menu']));
