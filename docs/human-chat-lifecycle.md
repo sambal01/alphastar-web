@@ -1,4 +1,14 @@
-# Chat with Us — local lifecycle update
+# Chat with Us — lifecycle and release record
+
+## Version 1.0.70/build 71 — scrolling typing row
+
+The human-chat typing row is now the final child of the message log, instead of a fixed sibling below it. New messages are inserted before it. The transparent row scrolls away when reading earlier messages and only follows the bottom when the visitor is already there. System **S**, saved staff initials and the clinic logo keep the same 30 px bordered circle as message avatars. Existing rule-based chatbot styling is unchanged.
+
+The synthetic native-chat browser fixture verifies circle geometry, message ordering, long-conversation scrolling, no forced jump while reading, clinic/account identities and the existing lifecycle/draft/responsive checks. The earlier complete website run passed 14/15 tests under concurrent mobile-suite CPU load; its existing timing-sensitive rule-based typing test failed a visibility-window check and passed when run on its own. The native-chat fixture passed again for the 1.0.70 release. No live chat or backend writes were sent. Publication evidence will be added after live verification.
+
+## Local follow-up — draft typing presence
+
+A visible, nonempty message draft renews its existing Boolean typing marker rather than stopping after a 1.8-second pause or input blur. Clearing/sending, feedback, Back/minimize, page hiding and exit stop it; returning to the visible draft renews it. Server expiry still clears lost/disconnected clients, without storing or sending any draft text. The synthetic browser fixture checks renewal for nine seconds and immediate clearing, alongside the existing lifecycle/layout tests. Client renewal is included in the 1.0.70 mobile/website release. A separate server-side connection-identity-lock follow-up remains local and is excluded from this deployment.
 
 ## Release follow-up — 1.0.69 / build 70
 

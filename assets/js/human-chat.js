@@ -3,7 +3,7 @@
   const base = "https://alphastar-mobile.onrender.com/api/support/chats";
   let session = null, conversation = null, view, log, status, controls, endButton, typingIndicator, hidden = [];
   let timer, heartbeatTimer, epoch = 0, reading = false, busy = false, pending = null, rows = [], before = "";
-  let presentationTimer, typingIdle, typingClient = "", typingSequence = 0, typingOn = false, lastTyping = 0;
+  let presentationTimer, typingClient = "", typingSequence = 0, typingOn = false, lastTyping = 0;
   let feedback = false, rating = "", comment = "", rated = false, controlMode = "";
   let opening = false, requestLoading = false;
   const transitionDelay = () => new Promise(resolve => setTimeout(resolve, 1000));
@@ -20,12 +20,17 @@
     typingOn = isTyping; lastTyping = Date.now(); typingClient ||= crypto.randomUUID();
     void request("/" + session.id + "/typing", { cycle: conversation.cycle, isTyping, clientId: typingClient, sequence: ++typingSequence }).catch(() => {});
   }
-  function stopTyping() { clearTimeout(typingIdle); reportTyping(false); }
-  function changedDraft(value) { clearTimeout(typingIdle); reportTyping(Boolean(value.trim())); typingIdle = setTimeout(stopTyping, 1800); }
+  function stopTyping() { reportTyping(false); }
+  function refreshTyping() {
+    const panel = document.querySelector("#fab-menu"), input = controls?.querySelector("form textarea");
+    reportTyping(Boolean(view && !view.hidden && !document.hidden && panel && !panel.hidden && !panel.inert && !busy && !feedback && input?.value.trim()));
+  }
+  function changedDraft(value) { reportTyping(Boolean(!document.hidden && !busy && value.trim())); }
   function updatePresentation() {
     if (!view || view.hidden || !conversation) return;
     for (const stamp of log.querySelectorAll("time[data-sent]")) { const label = relative(stamp.dataset.sent); if (stamp.textContent !== label) stamp.textContent = label; }
     const visible = requestLoading || ["waiting", "connected"].includes(conversation.status) && conversation.typing?.staff?.expiresAt > Date.now();
+    const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 80;
     typingIndicator.hidden = !visible;
     const label = visible ? (requestLoading ? "Alphastar Support" : firstName(conversation.connectedName)) + " is typing…" : "";
     const caption = typingIndicator.querySelector("[data-typing-label]");
@@ -38,6 +43,7 @@
       else picture.textContent = conversation.connectedInitials || initials(conversation.connectedName);
       picture.dataset.key = key;
     }
+    if (visible && atBottom && !log.hidden) log.scrollTop = log.scrollHeight;
   }
   function node(tag, className, text) {
     const element = document.createElement(tag);
@@ -94,6 +100,7 @@
     if (!hasSession()) return false;
     for (const id of ["clinic-chat-body", "clinic-chat-form", "clinic-chat-status"]) { const element = document.getElementById(id); if (element && !hidden.some(([saved]) => saved === element)) { hidden.push([element, element.style.display]); element.style.display = "none"; } }
     delete view.dataset.backHidden; view.hidden = false; view.inert = false; paint(); void read();
+    refreshTyping();
     controls.querySelector("textarea, button")?.focus({ preventScroll: true }); return true;
   }
   function renderMessages() {
@@ -120,7 +127,7 @@
       const surface = node("div", "native-chat-message-bubble"); surface.append(node("p", "", row.text), timestamp);
       content.append(node("strong", "", name), surface); bubble.append(content);
       const next = [...log.children].find(element => element.dataset.message && rows.findIndex(item => item.id === element.dataset.message) > rows.indexOf(row));
-      log.insertBefore(bubble, next || null);
+      log.insertBefore(bubble, next || typingIndicator);
     }
     log.scrollTop = bottom ? log.scrollHeight : before && log.scrollHeight > height ? top + log.scrollHeight - height : top;
   }
@@ -173,7 +180,6 @@
       input.maxLength = 2000; input.rows = 1; input.placeholder = "Type your message…"; input.setAttribute("aria-label", "Message for clinic staff");
       send.type = "submit"; send.dataset.send = "true"; send.disabled = true;
       input.addEventListener("input", () => { send.disabled = busy || !input.value.trim(); changedDraft(input.value); });
-      input.addEventListener("blur", stopTyping);
       input.addEventListener("keydown", event => { if (event.key === "Enter" && !event.shiftKey && !event.isComposing) { event.preventDefault(); form.requestSubmit(); } });
       form.addEventListener("submit", event => { event.preventDefault(); void sendMessage(input); });
       form.append(input, send); controls.append(form);
@@ -233,7 +239,8 @@
     const dots = node("span", "native-chat-typing-dots"); dots.setAttribute("aria-hidden", "true"); for (let i = 0; i < 3; i++) dots.append(node("i"));
     const typingProfile = node("span", "native-chat-avatar"), typingContent = node("div", "native-chat-typing-content"), typingCaption = node("span", "", ""); typingCaption.dataset.typingLabel = "true";
     typingProfile.setAttribute("aria-hidden", "true"); typingContent.append(dots, typingCaption); typingIndicator.append(typingProfile, typingContent);
-    view.append(header, loading, log, typingIndicator, status, controls);
+    log.append(typingIndicator);
+    view.append(header, loading, log, status, controls);
     for (const id of ["clinic-chat-body", "clinic-chat-form", "clinic-chat-status"]) { const element = document.getElementById(id); if (element) { hidden.push([element, element.style.display]); element.style.display = "none"; } }
     panel.append(view); header.querySelector("button")?.focus({ preventScroll: true });
     feedback = false; rating = comment = controlMode = ""; rated = false;
@@ -245,7 +252,7 @@
       opening = false; session = identity; before = data.conversation.before || ""; accept(data);
       controls.querySelector("button")?.focus({ preventScroll: true });
       timer = setInterval(() => void read(), 2000);
-      presentationTimer = setInterval(updatePresentation, 1000);
+      presentationTimer = setInterval(() => { refreshTyping(); updatePresentation(); }, 1000);
       heartbeatTimer = setInterval(() => {
         if (session && conversation?.status !== "ended") void request("/" + session.id + "/heartbeat", { cycle: conversation.cycle }).catch(() => {});
       }, 15000);
@@ -259,7 +266,7 @@
     }
   }
   window.addEventListener?.("pagehide", close);
-  document.addEventListener("visibilitychange", () => { if (document.hidden) stopTyping(); else void read(); });
+  document.addEventListener("visibilitychange", () => { if (document.hidden) stopTyping(); else { refreshTyping(); void read(); } });
   window.addEventListener?.("pageshow", event => { if (event.persisted) close(); });
   window.AlphastarHumanChat = Object.freeze({ open, close, back, minimize, resume, hasSession });
 })();

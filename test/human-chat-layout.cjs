@@ -1,6 +1,6 @@
 const fs=require('node:fs/promises'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {chromium}=require('../.tmp/chat-browser-tools/node_modules/playwright-core');
-const root=path.resolve(__dirname,'..');let server,browser;
+const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirname,'..'));let server,browser;
 (async()=>{
 
   const chats=new Map(),requests=[],unexpected=[];
@@ -74,6 +74,10 @@ const root=path.resolve(__dirname,'..');let server,browser;
   await page.locator('.native-staff-chat').getByText('Alphastar Support is typing…',{exact:true}).waitFor();
   assert.equal(await page.locator('.native-chat-typing .native-chat-avatar').textContent(),'S');
   assert.equal(await page.locator('.native-chat-typing .native-chat-avatar img').count(),0);
+  assert.equal(await page.evaluate(()=>{
+    const row=document.querySelector('.native-chat-typing'),avatar=row.querySelector('.native-chat-avatar'),style=getComputedStyle(avatar),box=avatar.getBoundingClientRect();
+    return row.parentElement===document.querySelector('.native-chat-log')&&style.borderRadius==='50%'&&parseFloat(style.borderTopWidth)>0&&box.width===30&&box.height===30&&getComputedStyle(row).backgroundColor==='rgba(0, 0, 0, 0)';
+  }),true,'System typing uses the same circular avatar inside the scrollable conversation');
   assert.ok(await page.getByText('Alphastar Support (System Message)',{exact:true}).count()>=1);
   await fs.mkdir(path.join(root,'test-results/native-chat'),{recursive:true});
   await page.screenshot({path:path.join(root,'test-results/native-chat','system-typing.png')});
@@ -84,6 +88,14 @@ const root=path.resolve(__dirname,'..');let server,browser;
   await page.locator('.native-chat-composer textarea').fill('<script>Synthetic question</script>');await page.locator('.native-chat-composer button').click();
   await page.getByText('<script>Synthetic question</script>',{exact:true}).waitFor();assert.equal(await page.locator('.native-chat-log script').count(),0);
   const firstId=[...chats.keys()][0],chat=chats.get(firstId);
+  await page.locator('.native-chat-composer textarea').fill('Draft remains while staff connect');
+  const typingBefore=requests.filter(row=>row.path.endsWith('/typing')).length;
+  await page.locator('.native-chat-composer textarea').evaluate(field=>field.blur());
+  await page.waitForTimeout(9000);
+  const renewed=requests.filter(row=>row.path.endsWith('/typing')).slice(typingBefore);
+  assert.ok(renewed.length>=3);assert.ok(renewed.every(row=>row.body.isTyping===true),'Nonempty foreground drafts retain typing through pauses and field blur');
+  await page.locator('.native-chat-composer textarea').fill('');
+  await page.waitForTimeout(100);assert.equal(requests.filter(row=>row.path.endsWith('/typing')).at(-1).body.isTyping,false);
   await page.locator('.native-chat-composer textarea').fill('Draft remains while staff connect');
   chat.conversation.status='connected';add(chat,'staff','Synthetic staff answer','Synthetic <Staff>');
   await page.getByText('Synthetic staff answer',{exact:true}).waitFor({timeout:7000});
@@ -97,14 +109,39 @@ const root=path.resolve(__dirname,'..');let server,browser;
   assert.equal(await page.locator('.native-chat-composer textarea').evaluate(field=>field===window.__savedComposer),true);
   chat.conversation.messages.push({id:crypto.randomBytes(32).toString('hex'),sender:'staff',name:'Fredilito',initials:'FS',avatar:'initials',text:'Account identity reply',time:new Date().toISOString()});
   await page.getByText('Account identity reply',{exact:true}).waitFor({timeout:7000});assert.equal(await page.getByText('Just now',{exact:true}).count(),1);
-  assert.equal(await page.locator('.native-chat-log .native-chat-avatar').getByText('FS',{exact:true}).count(),1);
+  assert.equal(await page.locator('.native-chat-message .native-chat-avatar').getByText('FS',{exact:true}).count(),1);
   chat.conversation.messages.push({id:crypto.randomBytes(32).toString('hex'),sender:'staff',name:'Alphastar Staff',avatar:'clinic',text:'Clinic identity reply',time:new Date(Date.now()-61000).toISOString()});
   await page.getByText('Clinic identity reply',{exact:true}).waitFor({timeout:7000});assert.equal(await page.getByText('1 minute ago',{exact:true}).count(),1);
-  assert.equal(await page.locator('.native-chat-log .native-chat-avatar img').count(),1);
+  assert.equal(await page.locator('.native-chat-message .native-chat-avatar img').count(),1);
   assert.ok(await page.locator('.native-chat-log .native-chat-avatar').getByText('S',{exact:true}).count()>=1);
   assert.ok(await page.locator('time[title][datetime]').count()>=1);
   assert.ok(requests.some(row=>row.path.endsWith('/typing')&&row.body.isTyping===true));assert.ok(requests.some(row=>row.path.endsWith('/typing')&&row.body.isTyping===false));
   assert.equal(await page.locator('.native-chat-log strong img').count(),0);
+  for(let i=0;i<24;i++)add(chat,'staff','Synthetic earlier message '+i+' for scrolling through a longer conversation.','Synthetic Staff');
+  chat.conversation.connectedName='Fredilito';chat.conversation.connectedAvatar='initials';chat.conversation.connectedInitials='FS';chat.conversation.typing={staff:{expiresAt:Date.now()+60000}};
+  await page.getByText('Fredilito is typing…',{exact:true}).waitFor({timeout:7000});
+  await page.waitForFunction(()=>document.querySelectorAll('.native-chat-message').length>24);
+  assert.equal(await page.evaluate(()=>{
+    const log=document.querySelector('.native-chat-log'),row=document.querySelector('.native-chat-typing');log.scrollTop=log.scrollHeight;
+    return log.lastElementChild===row&&row.querySelector('.native-chat-avatar').textContent==='FS'&&getComputedStyle(row).position==='static';
+  }),true,'Staff typing remains the final scrollable row after new messages');
+  await page.screenshot({path:path.join(root,'test-results/native-chat','staff-typing-in-conversation.png')});
+  await page.evaluate(()=>{document.querySelector('.native-chat-log').scrollTop=0;});
+  add(chat,'staff','Synthetic new reply while the patient reads earlier messages.','Synthetic Staff');
+  await page.waitForFunction(()=>document.querySelector('.native-chat-log').textContent.includes('Synthetic new reply while'));
+  await page.waitForTimeout(1200);
+  assert.equal(await page.evaluate(()=>{
+    const log=document.querySelector('.native-chat-log'),row=document.querySelector('.native-chat-typing');
+    return log.scrollTop===0&&row.getBoundingClientRect().top>=log.getBoundingClientRect().bottom&&row.parentElement===log;
+  }),true,'Scrolling up hides the indicator naturally instead of retaining a sticky white strip');
+  await page.screenshot({path:path.join(root,'test-results/native-chat','reading-earlier-no-sticky-indicator.png')});
+  chat.conversation.connectedName='Alphastar Staff';chat.conversation.connectedAvatar='clinic';chat.conversation.connectedInitials='';
+  await page.getByText('Alphastar Staff is typing…',{exact:true}).waitFor({timeout:7000});
+  assert.equal(await page.evaluate(()=>{
+    const avatar=document.querySelector('.native-chat-typing .native-chat-avatar'),style=getComputedStyle(avatar);
+    return !!avatar.querySelector('img')&&style.borderRadius==='50%'&&parseFloat(style.borderTopWidth)>0;
+  }),true,'Clinic-logo typing has a visible circle too');
+  chat.conversation.typing={};await page.waitForFunction(()=>document.querySelector('.native-chat-typing').hidden);
   await fs.mkdir(path.join(root,'test-results/native-chat'),{recursive:true});
   for(const [width,height]of [[320,740],[393,900],[768,900],[1366,768]]){
     await page.setViewportSize({width,height});
@@ -138,5 +175,5 @@ const root=path.resolve(__dirname,'..');let server,browser;
   await page.reload({waitUntil:'networkidle'});await page.waitForTimeout(150);assert.equal(second.conversation.status,'ended');
   assert.equal(await page.locator('.native-staff-chat').count(),0);assert.equal(await page.evaluate(()=>sessionStorage.getItem('alphastar-staff-chat-v1')),null);
   assert.deepEqual(unexpected,[]);assert.deepEqual(errors,[]);assert.ok(requests.every(request=>![...chats.values()].some(chat=>request.path.includes(chat.token))));
-  console.log('PASS: One-second welcome/request, reference-style bubbles and System avatar, typing indicators, stable drafts, Back/minimize resume without ending, explicit ending, refresh ending, loading-only state, landing-page lock and four responsive widths. No external chat requests.');
+  console.log('PASS: Circular system/staff/clinic typing avatars inside the message scroller, no sticky strip or forced jump while reading earlier messages, stable message ordering/drafts, one-second transitions, lifecycle actions and four responsive widths. No external chat requests.');
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{await browser?.close();if(server)await new Promise(resolve=>server.close(resolve));});
