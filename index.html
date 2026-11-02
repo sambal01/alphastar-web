@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="assets/css/section-layout.css?v=20261024-2" />
   <link rel="stylesheet" href="assets/css/clinic-assistant.css?v=20261102-7" />
   <link rel="stylesheet" href="assets/css/site-language.css?v=20261012-6" />
+  <link rel="stylesheet" href="assets/css/mobile-chrome.css?v=20261102-1" />
 </head>
 <body>
   <nav id="navbar">
@@ -81,6 +82,8 @@
       </div>
     </div>
     <div class="mobile-menu" id="mobile-menu" hidden inert>
+      <div class="mobile-menu-header"><h2 id="mobile-menu-title">Menu</h2><button type="button" class="mobile-menu-close" id="mobile-menu-close" aria-label="Close menu" data-i18n-aria-label="menu.close">&times;</button></div>
+      <div class="mobile-menu-links">
       <a href="#home" class="mobile-link" data-i18n="nav.home">Home</a>
       <a href="#about" class="mobile-link" data-i18n="nav.about">About</a>
       <a href="#services" class="mobile-link" data-i18n="nav.services">Services</a>
@@ -88,8 +91,10 @@
       <a href="#hours" class="mobile-link" data-i18n="nav.hours">Hours</a>
       <a href="#faq" class="mobile-link" data-i18n="nav.faq">FAQ</a>
       <a href="#contact" class="mobile-link" data-i18n="nav.contact">Contact</a>
+      </div>
     </div>
   </nav>
+  <div class="mobile-menu-backdrop" id="mobile-menu-backdrop" hidden aria-hidden="true"></div>
   <main>
     <section id="home" class="hero-section">
       <div class="hero-bg-decor" aria-hidden="true">
@@ -438,7 +443,7 @@
   <script src="assets/js/site-config.js?v=20261102-71"></script>
   <script src="assets/js/site-language.js?v=20261024-2"></script>
   <script src="assets/js/main.js?v=20261024-2"></script>
-  <script src="assets/js/navbar.js?v=20261011-2"></script>
+  <script src="assets/js/navbar.js?v=20261102-1"></script>
   <script src="assets/js/services.js?v=20261011-1"></script>
   <script src="assets/js/why-us.js?v=20261011-2"></script>
   <script src="assets/js/faq.js?v=20261011-2"></script>

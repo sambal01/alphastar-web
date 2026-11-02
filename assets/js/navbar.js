@@ -1,15 +1,26 @@
+let mobileMenuCloseTimer;
+let restoreMenuBackground = () => {};
+
 function closeMenu({ restoreFocus = false } = {}) {
   const menu = document.getElementById('mobile-menu');
   const button = document.getElementById('hamburger-btn');
+  const backdrop = document.getElementById('mobile-menu-backdrop');
+  window.clearTimeout(mobileMenuCloseTimer);
+  restoreMenuBackground();
+  restoreMenuBackground = () => {};
+  backdrop?.classList.remove('open');
 
   if (menu) {
     menu.inert = true;
     menu.classList.remove('open');
-    window.setTimeout(() => {
+    menu.removeAttribute('aria-modal');
+    menu.removeAttribute('role');
+    mobileMenuCloseTimer = window.setTimeout(() => {
       if (!menu.classList.contains('open')) {
         menu.hidden = true;
+        if (backdrop) backdrop.hidden = true;
       }
-    }, 360);
+    }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 360);
   }
 
   if (button) {
@@ -56,6 +67,25 @@ window.addEventListener('DOMContentLoaded', () => {
   const topbar = navbar?.querySelector('.navbar-topbar');
   const button = document.getElementById('hamburger-btn');
   const menu = document.getElementById('mobile-menu');
+  const backdrop = document.getElementById('mobile-menu-backdrop');
+  const closeButton = document.getElementById('mobile-menu-close');
+  const phoneNavigation = window.matchMedia('(max-width: 767px)');
+  const menuSlot = document.createComment('Mobile navigation position');
+  menu?.before(menuSlot);
+  const syncMenuPlacement = () => {
+    closeMenu();
+    if (!menu) return;
+    menu.hidden = true;
+    if (backdrop) backdrop.hidden = true;
+    if (phoneNavigation.matches) document.body.append(menu);
+    else menuSlot.after(menu);
+  };
+  syncMenuPlacement();
+  phoneNavigation.addEventListener('change', syncMenuPlacement);
+  closeButton?.addEventListener('click', () => closeMenu({ restoreFocus: true }));
+  backdrop?.addEventListener('click', () => closeMenu({ restoreFocus: true }));
+  backdrop?.addEventListener('wheel', event => event.preventDefault(), { passive: false });
+  backdrop?.addEventListener('touchmove', event => event.preventDefault(), { passive: false });
   const sections = Array.from(document.querySelectorAll('section[id]'));
   let topbarHidden = null;
 
@@ -104,13 +134,26 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
       }
       window.closeFab?.();
+      window.clearTimeout(mobileMenuCloseTimer);
       menu.hidden = false;
       menu.inert = false;
+      if (phoneNavigation.matches && backdrop) {
+        backdrop.hidden = false;
+        void menu.offsetWidth;
+        menu.setAttribute('role', 'dialog');
+        menu.setAttribute('aria-modal', 'true');
+        menu.setAttribute('aria-labelledby', 'mobile-menu-title');
+        const surfaces = [...document.body.children].filter(element => element !== menu && element !== backdrop && !['SCRIPT', 'STYLE', 'LINK'].includes(element.tagName)).map(element => [element, element.inert]);
+        restoreMenuBackground = () => { for (const [element, inert] of surfaces) element.inert = inert; };
+        for (const [element] of surfaces) element.inert = true;
+        backdrop.classList.add('open');
+      }
       menu.classList.add('open');
       button.classList.add('active');
       button.setAttribute('aria-expanded', 'true');
       button.setAttribute('aria-label', window.AlphastarSiteLanguage?.text('menu.close', 'Close menu') || 'Close menu');
       document.body.classList.add('menu-open');
+      if (phoneNavigation.matches) closeButton?.focus({ preventScroll: true });
     });
   }
 
@@ -135,7 +178,7 @@ window.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       closeMenu({ restoreFocus: true });
     } else if (event.key === 'Tab') {
-      const controls = [document.getElementById('site-language-toggle'), button, ...menu.querySelectorAll('a[href], button:not([disabled])')].filter(Boolean);
+      const controls = (phoneNavigation.matches ? [...menu.querySelectorAll('a[href], button:not([disabled])')] : [document.getElementById('site-language-toggle'), button, ...menu.querySelectorAll('a[href], button:not([disabled])')]).filter(element => element && !element.closest('[hidden]') && element.getClientRects().length);
       const first = controls[0];
       const last = controls[controls.length - 1];
       const active = document.activeElement;
