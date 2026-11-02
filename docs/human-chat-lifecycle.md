@@ -1,5 +1,11 @@
 # Chat with Us — local lifecycle update
 
+## Release follow-up — 1.0.69 / build 70
+
+System labels display **Alphastar Support (System Message)** with an **S** avatar. The one-second support-request typing indicator uses **S**, not the clinic logo. Actual staff messages/typing keep their saved account or clinic identity. Feedback uses equal Helpful/Not helpful cards, a Comment field and balanced Keep chatting/End actions; the header End action is hidden while feedback is open. Back/minimize/refresh behavior from 1.0.68 is unchanged.
+
+The matching backend emits protected chat path invalidations so desktop unread badges update from Dashboard without first visiting Human Chat. Bodies, identities and drafts are never sent through that stream. Synthetic browser checks verify the System identity, feedback dimensions, existing lifecycle and responsive layouts. Android 1.0.69/build 70 and final publication evidence accompany this release; real patient chat and physical installation are not used for verification.
+
 ## Release follow-up — 1.0.68 / build 69
 
 Messages use compact reference-style bubbles with outside avatars, sender labels and bottom-right timestamps; System has an **S** avatar. The opening conversation and support-request acknowledgement have a one-second minimum presentation delay. Animated avatar/dots indicators show temporary typing without exposing draft text or claiming an assistant is connected.

@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.68",
-  "versionCode": 69,
-  "filename": "Alphastar-1.0.68-build69.apk",
-  "url": "Alphastar-1.0.68-build69.apk",
-  "sizeBytes": 96873401,
-  "sha256": "97a3ab492769386bac9e56842945086710576601ea55a5a4908d2267b8d04b66",
+  "version": "1.0.69",
+  "versionCode": 70,
+  "filename": "Alphastar-1.0.69-build70.apk",
+  "url": "Alphastar-1.0.69-build70.apk",
+  "sizeBytes": 96873421,
+  "sha256": "f5814049e5b28836102a663aa5b79f3b987c2d6b51ea669fff400a8a40146cc6",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.68 / build 69 refines chat bubbles, System avatars and animated typing, with a one-second introduction and support acknowledgement. Matching desktop/backend sources add workspace/history unread indicators, immediate observed-message read feedback, a stable sliding identity menu and a top-right End confirmation. Website Back/minimize preserves the guest conversation in page memory; refresh/page exit ends it. Registered mobile conversations remain saved across exit/logout. Typing never transmits drafts or creates notifications. The Help Bot transcript and booking details are not automatically shared. Physical-phone installation and actual notification delivery are not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
+  "note": "Version 1.0.69 / build 70 adds the Alphastar Support (System Message) label and S acknowledgement-typing avatar, with balanced patient feedback cards and actions. Matching desktop/backend sources deliver protected live chat invalidations for Dashboard badges, retain a polling/older-backend fallback, add separate loaded current/history search and improve dropdown keyboard controls and confirmation layout. Private message bodies are not sent through the clinic event stream. Website Back/minimize preserves the page's guest conversation; refresh/page exit ends it. Registered mobile conversations remain saved across exit/logout. The Help Bot transcript and booking details are not automatically shared. Physical-phone installation and actual notification delivery are not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
 }

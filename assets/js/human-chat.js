@@ -7,6 +7,7 @@
   let feedback = false, rating = "", comment = "", rated = false, controlMode = "";
   let opening = false, requestLoading = false;
   const transitionDelay = () => new Promise(resolve => setTimeout(resolve, 1000));
+  const systemLabel = "Alphastar Support (System Message)";
   const localized = (english, tagalog) => window.alphastarChat?.getLanguage() === "tl" ? tagalog : english;
   const merge = next => { rows = [...new Map([...rows, ...next].map(row => [row.id, row])).values()].sort((a, b) => a.time.localeCompare(b.time) || a.id.localeCompare(b.id)); };
   const firstName = value => ["Alphastar Staff", "Support assistant"].includes(value) ? value : String(value || "Support assistant").trim().split(/\s+/u)[0];
@@ -26,13 +27,14 @@
     for (const stamp of log.querySelectorAll("time[data-sent]")) { const label = relative(stamp.dataset.sent); if (stamp.textContent !== label) stamp.textContent = label; }
     const visible = requestLoading || ["waiting", "connected"].includes(conversation.status) && conversation.typing?.staff?.expiresAt > Date.now();
     typingIndicator.hidden = !visible;
-    const label = visible ? (requestLoading ? "Alphastar" : firstName(conversation.connectedName)) + " is typing…" : "";
+    const label = visible ? (requestLoading ? "Alphastar Support" : firstName(conversation.connectedName)) + " is typing…" : "";
     const caption = typingIndicator.querySelector("[data-typing-label]");
     if (caption.textContent !== label) caption.textContent = label;
-    const picture = typingIndicator.querySelector(".native-chat-avatar"), key = requestLoading ? "clinic" : `${conversation.connectedAvatar}:${conversation.connectedInitials}`;
+    const picture = typingIndicator.querySelector(".native-chat-avatar"), key = requestLoading ? "system" : `${conversation.connectedAvatar}:${conversation.connectedInitials}`;
     if (picture.dataset.key !== key) {
       picture.replaceChildren();
-      if (requestLoading || conversation.connectedAvatar !== "initials") { const logo = node("img"); logo.src = "assets/images/alphastarlogo.png"; logo.alt = ""; picture.append(logo); }
+      if (requestLoading) picture.textContent = "S";
+      else if (conversation.connectedAvatar !== "initials") { const logo = node("img"); logo.src = "assets/images/alphastarlogo.png"; logo.alt = ""; picture.append(logo); }
       else picture.textContent = conversation.connectedInitials || initials(conversation.connectedName);
       picture.dataset.key = key;
     }
@@ -105,7 +107,7 @@
       if (existing.has(row.id)) continue;
       const bubble = node("div", "native-chat-message" + (row.sender === "visitor" ? " is-mine" : ""));
       bubble.dataset.message = row.id;
-      const name = row.sender === "system" ? "System" : firstName(row.sender === "staff" ? row.name : row.name || conversation.visitorName || session.name);
+      const name = row.sender === "system" ? systemLabel : firstName(row.sender === "staff" ? row.name : row.name || conversation.visitorName || session.name);
       {
         const profile = node("span", "native-chat-avatar"); profile.setAttribute("aria-hidden", "true");
         if (row.sender === "system") profile.textContent = "S";
@@ -126,7 +128,7 @@
     if (!view || view.hidden || !conversation || opening) return;
     view.querySelector(".native-chat-loading")?.remove();
     log.hidden = false; renderMessages(); updatePresentation();
-    endButton.hidden = conversation.status === "welcome" || rated;
+    endButton.hidden = conversation.status === "welcome" || rated || feedback;
     endButton.disabled = busy;
     const mode = feedback ? "feedback" : ["waiting", "connected"].includes(conversation.status) ? "compose" : conversation.status;
     if (mode === controlMode) {
@@ -143,18 +145,22 @@
       controls.append(node("strong", "", "Was this conversation helpful?"));
       const choices = node("div", "native-chat-rating");
       for (const [value, label] of [["up", "👍"], ["down", "👎"]]) {
-        const choice = button(label, () => {
+        const choice = button("", () => {
           rating = value;
           for (const option of choices.children) option.setAttribute("aria-pressed", String(option === choice));
           controls.querySelector("[data-finish]").disabled = busy;
         });
+        const caption = value === "up" ? "Helpful" : "Not helpful", icon = node("span", "native-chat-rating-icon", label); icon.setAttribute("aria-hidden", "true");
+        choice.append(icon, node("span", "", caption));
         choice.setAttribute("aria-label", value === "up" ? "Helpful" : "Not helpful"); choice.setAttribute("aria-pressed", String(rating === value)); choices.append(choice);
       }
       const field = node("textarea"); field.maxLength = 1000; field.rows = 2; field.value = comment;
-      field.placeholder = "Add a comment"; field.setAttribute("aria-label", "Feedback comment");
+      field.placeholder = "Share your feedback"; field.setAttribute("aria-label", "Feedback comment");
       field.addEventListener("input", () => { comment = field.value; });
       const finish = button("End conversation", () => void action("end", { rating, comment })); finish.dataset.finish = "true"; finish.disabled = !rating || busy;
-      controls.append(choices, field, finish, button("Keep chatting", () => { feedback = false; paint(); }, "native-chat-back"));
+      const commentLabel = node("label", "native-chat-feedback-label", "Comment"); field.id = "nativeChatFeedbackComment"; commentLabel.htmlFor = field.id;
+      const actions = node("div", "native-chat-feedback-actions"); actions.append(button("Keep chatting", () => { feedback = false; paint(); }, "native-chat-back"), finish);
+      controls.append(choices, commentLabel, field, actions);
     } else if (mode === "welcome") {
       controls.className = "native-chat-actions";
       controls.append(button(localized("Yes, connect me to support", "Oo, ikonekta ako sa support"), () => void action("request")));

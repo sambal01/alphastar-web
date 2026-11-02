@@ -8,6 +8,7 @@ async function post(route, body = {}) { return get(backend + route, { method: "P
 (async () => {
   const health = await get(backend + "/api/health"); assert.equal(health.status, 200); assert.equal((await health.json()).ok, true);
   assert.equal((await get(backend + "/api/staff/human-chats/unread")).status, 401);
+  assert.equal((await get(backend + "/api/staff/sync/stream")).status, 401);
   const checks = [
     ["/api/support/chats", 400],
     ["/api/support/chats/invalid/request", 400],

@@ -71,7 +71,10 @@ const root=path.resolve(__dirname,'..');let server,browser;
   holdCreate=false;releaseCreate();
   await page.getByRole('button',{name:'Yes, connect me to support',exact:true}).waitFor();assert.ok(Date.now()-openedAt>=950);
   const requestedAt=Date.now();await page.getByRole('button',{name:'Yes, connect me to support',exact:true}).click();
-  await page.locator('.native-staff-chat').getByText('Alphastar is typing…',{exact:true}).waitFor();
+  await page.locator('.native-staff-chat').getByText('Alphastar Support is typing…',{exact:true}).waitFor();
+  assert.equal(await page.locator('.native-chat-typing .native-chat-avatar').textContent(),'S');
+  assert.equal(await page.locator('.native-chat-typing .native-chat-avatar img').count(),0);
+  assert.ok(await page.getByText('Alphastar Support (System Message)',{exact:true}).count()>=1);
   await fs.mkdir(path.join(root,'test-results/native-chat'),{recursive:true});
   await page.screenshot({path:path.join(root,'test-results/native-chat','system-typing.png')});
   await page.locator('.native-chat-composer textarea').waitFor();
@@ -119,7 +122,7 @@ const root=path.resolve(__dirname,'..');let server,browser;
   await page.getByRole('button',{name:'End conversation',exact:true}).click();
   const finish=page.locator('.native-chat-feedback').getByRole('button',{name:'End conversation',exact:true});assert.equal(await finish.isDisabled(),true);
   await page.getByRole('button',{name:'Helpful',exact:true}).click();await page.getByRole('textbox',{name:'Feedback comment',exact:true}).fill('Synthetic helpful support');
-  for(const width of [320,393,1366]){await page.setViewportSize({width,height:width===1366?768:740});assert.equal(await page.evaluate(()=>{const box=document.querySelector('#fab-menu');return box.scrollWidth<=box.clientWidth+1;}),true);await page.screenshot({path:path.join(root,'test-results/native-chat','feedback-'+width+'.png')});}
+  for(const width of [320,393,1366]){await page.setViewportSize({width,height:width===1366?768:740});assert.equal(await page.evaluate(()=>{const box=document.querySelector('#fab-menu'),equal=selector=>{const[a,b]=[...document.querySelectorAll(selector)].map(node=>node.getBoundingClientRect());return a.width>80&&Math.abs(a.width-b.width)<1&&Math.abs(a.height-b.height)<1;};return box.scrollWidth<=box.clientWidth+1&&equal('.native-chat-rating button')&&equal('.native-chat-feedback-actions button');}),true);await page.screenshot({path:path.join(root,'test-results/native-chat','feedback-'+width+'.png')});}
   await finish.click();await page.getByText('Conversation ended',{exact:true}).waitFor();
   assert.equal(chat.conversation.status,'ended');assert.equal(await page.locator('.native-chat-composer textarea').count(),0);
   await page.locator('.native-staff-chat > header').getByRole('button',{name:'Back',exact:true}).click();
