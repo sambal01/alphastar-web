@@ -57,6 +57,35 @@ function showFabPrompt() {
   fabPromptHideTimer = window.setTimeout(hideFabPrompt, 5000);
 }
 
+let chatPageShield, chatPageInert = [];
+function lockChatPage(locked) {
+  if (locked && !chatPageShield) {
+    chatPageShield = document.createElement('div');
+    chatPageShield.className = 'chat-page-shield';
+    chatPageShield.setAttribute('aria-hidden', 'true');
+    chatPageShield.addEventListener('click', event => event.stopPropagation());
+    chatPageShield.addEventListener('wheel', event => event.preventDefault(), { passive: false });
+    chatPageShield.addEventListener('touchmove', event => event.preventDefault(), { passive: false });
+    document.body.append(chatPageShield);
+    document.body.classList.add('chat-page-locked');
+    let branch = document.getElementById('fab-container');
+    while (branch && branch !== document.body) {
+      for (const sibling of branch.parentElement.children) {
+        if (sibling !== branch && sibling !== chatPageShield && !['SCRIPT', 'STYLE', 'LINK'].includes(sibling.tagName)) {
+          chatPageInert.push([sibling, sibling.inert]);
+          sibling.inert = true;
+        }
+      }
+      branch = branch.parentElement;
+    }
+  } else if (!locked && chatPageShield) {
+    chatPageShield.remove(); chatPageShield = null;
+    for (const [element, inert] of chatPageInert) element.inert = inert;
+    chatPageInert = [];
+    document.body.classList.remove('chat-page-locked');
+  }
+}
+
 function syncFabState() {
   const fab = document.getElementById('fab-container');
   const menu = document.getElementById('fab-menu');
@@ -70,6 +99,7 @@ function syncFabState() {
   window.clearTimeout(fabIntroTimer);
   fabIntroTimer = undefined;
   const revision = ++fabTransitionRevision;
+  lockChatPage(fabExpanded);
   button.inert = fabExpanded;
   button.tabIndex = fabExpanded ? -1 : 0;
 
@@ -104,6 +134,7 @@ function syncFabState() {
       });
     });
   } else {
+    window.AlphastarHumanChat?.close();
     window.alphastarChat?.pauseTimestamps?.();
     const wasVisible = fab.classList.contains('is-open');
     const closingBottom = wasVisible ? window.getComputedStyle?.(fab)?.bottom : '';
@@ -186,6 +217,17 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   document.addEventListener('keydown', (event) => {
+    if (fabExpanded && event.key === 'Tab') {
+      const menu = document.getElementById('fab-menu');
+      const items = [...menu.querySelectorAll('button, a[href], input, textarea, select, [tabindex="0"]')].filter(element => !element.disabled && element.getClientRects().length && !element.closest('[hidden]'));
+      const first = items[0], last = items[items.length - 1];
+      if (first && !menu.contains(document.activeElement)) {
+        event.preventDefault(); (event.shiftKey ? last : first).focus(); return;
+      }
+      if (first && (event.shiftKey && document.activeElement === first || !event.shiftKey && document.activeElement === last)) {
+        event.preventDefault(); (event.shiftKey ? last : first).focus();
+      }
+    }
     if (event.key === 'Escape') {
       hideFabPrompt();
       closeFab();

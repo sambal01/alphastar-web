@@ -1,79 +1,187 @@
-(function(){
+(function () {
   "use strict";
-  const base="https://alphastar-mobile.onrender.com/api/support/chats",storageKey="alphastar-staff-chat-v1";
-  let session=null,timer,epoch=0,busy=false,reading=false,pending=null,rows=[],before="",view,log,status,input,send,hidden=[];
-  const valid=value=>/^[a-f0-9]{64}$/.test(value||"");
-  const localized=(english,tagalog)=>window.alphastarChat?.getLanguage()==="tl"?tagalog:english;
-  const merge=next=>{rows=[...new Map([...rows,...next].map(row=>[row.id,row])).values()].sort((a,b)=>a.time.localeCompare(b.time)||a.id.localeCompare(b.id));};
-  async function request(path,body,credentials=session){
-    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);
-    try{
-      const response=await fetch(base+path,{method:body===undefined?"GET":"POST",headers:{"Content-Type":"application/json",...(credentials?{"X-Alphastar-Chat-Token":credentials.token}:{})},credentials:"omit",signal:controller.signal,...(body===undefined?{}:{body:JSON.stringify(body)})});
-      const data=await response.json();if(!response.ok)throw Object.assign(Error(response.status===401?"This chat session expired. Go back and open a new staff chat.":"Unable to connect. Please retry."),{status:response.status});return data;
-    }finally{clearTimeout(timeout);}
+  const base = "https://alphastar-mobile.onrender.com/api/support/chats";
+  let session = null, conversation = null, view, log, status, controls, endButton, hidden = [];
+  let timer, heartbeatTimer, epoch = 0, reading = false, busy = false, pending = null, rows = [], before = "";
+  let feedback = false, rating = "", comment = "", rated = false, controlMode = "";
+  const localized = (english, tagalog) => window.alphastarChat?.getLanguage() === "tl" ? tagalog : english;
+  const merge = next => { rows = [...new Map([...rows, ...next].map(row => [row.id, row])).values()].sort((a, b) => a.time.localeCompare(b.time) || a.id.localeCompare(b.id)); };
+  function node(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text !== undefined) element.textContent = text;
+    return element;
   }
-  function close(){
-    epoch++;clearInterval(timer);timer=null;view?.remove();view=null;busy=false;reading=false;
-    for(const [node,display]of hidden)node.style.display=display;hidden=[];
+  function button(text, action, className = "clinic-chat-topic") {
+    const element = node("button", className, text); element.type = "button";
+    element.addEventListener("click", action); return element;
   }
-  function paint(){
-    if(!log)return;const bottom=log.scrollHeight-log.scrollTop-log.clientHeight<80,top=log.scrollTop;
-    log.replaceChildren();
-    if(before){const button=document.createElement("button");button.type="button";button.className="clinic-chat-topic";button.textContent=localized("Earlier messages","Mga naunang mensahe");button.addEventListener("click",()=>void read(before));log.appendChild(button);}
-    if(!rows.length){const empty=document.createElement("p");empty.className="native-chat-empty";empty.textContent=localized("Send a message to clinic staff.","Magpadala ng mensahe sa clinic staff.");log.appendChild(empty);}
-    for(const row of rows){
-      const bubble=document.createElement("div");bubble.className="native-chat-message"+(row.sender==="visitor"?" is-mine":"");
-      const name=document.createElement("strong");name.textContent=row.sender==="staff"?localized("Clinic staff","Clinic staff"):localized("You","Ikaw");
-      const text=document.createElement("p");text.textContent=row.text;
-      const time=document.createElement("time");time.textContent=new Date(row.time).toLocaleString("en-PH",{timeZone:"Asia/Manila",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
-      bubble.append(name,text,time);log.appendChild(bubble);
+  async function request(path, body, credentials = session) {
+    const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const response = await fetch(base + path, { method: body === undefined ? "GET" : "POST",
+        headers: { "Content-Type": "application/json", ...(credentials ? { "X-Alphastar-Chat-Token": credentials.token } : {}) },
+        credentials: "omit", signal: controller.signal, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+      const data = await response.json();
+      if (!response.ok) throw Error(data.error || "Unable to connect. Please retry.");
+      return data;
+    } finally { clearTimeout(timeout); }
+  }
+  function exit(identity, cycle) {
+    if (!identity || !cycle) return;
+    const url = base + "/" + identity.id + "/exit", body = JSON.stringify({ token: identity.token, cycle });
+    try { if (navigator.sendBeacon?.(url, new Blob([body], { type: "text/plain;charset=UTF-8" }))) return; } catch {}
+    void fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body, keepalive: true, credentials: "omit" }).catch(() => {});
+  }
+  function close() {
+    exit(session, conversation?.cycle);
+    epoch++; clearInterval(timer); clearInterval(heartbeatTimer); timer = heartbeatTimer = null;
+    session = conversation = null; rows = []; before = ""; pending = null; busy = reading = false;
+    view?.remove(); view = log = controls = status = null;
+    for (const [element, display] of hidden) element.style.display = display;
+    hidden = [];
+    // Old guest capabilities must not recover a prior visit after refresh.
+    try { sessionStorage.removeItem("alphastar-staff-chat-v1"); } catch {}
+  }
+  function renderMessages() {
+    const bottom = log.scrollHeight - log.scrollTop - log.clientHeight < 80, top = log.scrollTop, height = log.scrollHeight;
+    const existing = new Map([...log.children].filter(element => element.dataset.message).map(element => [element.dataset.message, element]));
+    log.querySelector("[data-earlier]")?.remove();
+    if (before) {
+      const earlier = button("Earlier messages", () => void read(before)); earlier.dataset.earlier = "true"; log.prepend(earlier);
     }
-    log.scrollTop=bottom?log.scrollHeight:top;
-  }
-  async function read(older=""){
-    if(reading||!view||document.hidden||document.querySelector("#fab-menu")?.hidden)return;
-    const current=epoch,identity=session;reading=true;
-    try{const data=await request("/"+identity.id+(older?"?before="+encodeURIComponent(older):""),undefined,identity);if(current!==epoch)return;merge(data.conversation.messages||[]);if(older)before=data.conversation.before||"";status.textContent="";paint();}
-    catch(error){if(current===epoch)status.textContent=error.message;}
-    finally{if(current===epoch)reading=false;}
-  }
-  async function sendMessage(event){
-    event.preventDefault();const text=input.value.trim();if(!text||busy||!session)return;
-    const current=epoch,identity=session;
-    const attempt=pending?.text===text&&pending?.chat===identity.id?pending:{text,chat:identity.id,id:crypto.randomUUID()};
-    pending=attempt;busy=true;send.disabled=true;input.disabled=true;status.textContent="";
-    try{const data=await request("/"+identity.id+"/messages",{text,clientId:attempt.id},identity);if(current!==epoch)return;merge([data.message]);input.value="";pending=null;paint();}
-    catch{if(current===epoch)status.textContent=localized("Message not confirmed. Tap Send to retry.","Hindi pa nakumpirma. Pindutin ang Send para subukan muli.");}
-    finally{if(current===epoch){busy=false;input.disabled=false;send.disabled=!input.value.trim();input.focus();}}
-  }
-  async function open({name,email,consent}){
-    name=String(name||"").trim();email=String(email||"").trim().toLowerCase();
-    if(!consent||!name||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw Error("Enter your name and email and agree to staff chat.");
-    close();const current=epoch;
-    let candidate=session;
-    try{const saved=JSON.parse(sessionStorage.getItem(storageKey)||"null");candidate=valid(saved?.id)&&valid(saved?.token)&&saved.expiresAt>Date.now()&&saved.name===name&&saved.email===email?saved:null;}catch{if(candidate?.name!==name||candidate?.email!==email||candidate?.expiresAt<=Date.now())candidate=null;}
-    let data;
-    if(candidate){
-      try{data=await request("/"+candidate.id,undefined,candidate);}catch(error){if(![401,404].includes(error.status))throw error;candidate=null;}
+    for (const row of rows) {
+      if (existing.has(row.id)) continue;
+      const bubble = node("div", "native-chat-message" + (row.sender === "visitor" ? " is-mine" : ""));
+      bubble.dataset.message = row.id;
+      const name = row.sender === "system" ? "System" : row.sender === "staff" ? row.name || "Support assistant" : conversation.visitorName || session.name;
+      bubble.append(node("strong", "", name), node("p", "", row.text), node("time", "", new Date(row.time).toLocaleString("en-PH", { timeZone: "Asia/Manila", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })));
+      const next = [...log.children].find(element => element.dataset.message && rows.findIndex(item => item.id === element.dataset.message) > rows.indexOf(row));
+      log.insertBefore(bubble, next || null);
     }
-    if(!candidate){data=await request("",{name,email,consent:true},null);candidate={id:data.id,token:data.token,expiresAt:data.expiresAt,name,email};if(!valid(candidate.id)||!valid(candidate.token))throw Error("Staff chat needs a clinic server update.");}
-    if(current!==epoch)return;
-    session=candidate;try{sessionStorage.setItem(storageKey,JSON.stringify(session));}catch{}
-    const panel=document.getElementById("fab-menu");if(!panel)throw Error("Chat panel unavailable.");
-    rows=data.conversation.messages||[];before=data.conversation.before||"";pending=null;
-    view=document.createElement("section");view.className="native-staff-chat";view.setAttribute("aria-label","Clinic staff conversation");
-    const header=document.createElement("header"),title=document.createElement("strong"),back=document.createElement("button");
-    title.textContent=localized("Clinic staff","Clinic staff");back.type="button";back.className="native-chat-back";back.textContent=localized("Back","Bumalik");back.addEventListener("click",close);header.append(title,back);
-    log=document.createElement("div");log.className="native-chat-log";log.setAttribute("role","log");log.setAttribute("aria-label","Staff messages");
-    status=document.createElement("p");status.className="native-chat-status";status.setAttribute("role","status");
-    const form=document.createElement("form");form.className="native-chat-composer";
-    input=document.createElement("textarea");input.maxLength=2000;input.rows=1;input.placeholder=localized("Type your message…","I-type ang mensahe…");input.setAttribute("aria-label","Message for clinic staff");
-    send=document.createElement("button");send.type="submit";send.textContent=localized("Send","Ipadala");send.disabled=true;
-    input.addEventListener("input",()=>{send.disabled=busy||!input.value.trim();});
-    input.addEventListener("keydown",event=>{if(event.key==="Enter"&&!event.shiftKey&&!event.isComposing){event.preventDefault();form.requestSubmit();}});
-    form.append(input,send);form.addEventListener("submit",event=>void sendMessage(event));view.append(header,log,status,form);
-    for(const id of ["clinic-chat-body","clinic-chat-form","clinic-chat-status"]){const node=document.getElementById(id);if(node){hidden.push([node,node.style.display]);node.style.display="none";}}
-    panel.appendChild(view);paint();input.focus();timer=setInterval(()=>void read(),3000);
+    log.scrollTop = bottom ? log.scrollHeight : before && log.scrollHeight > height ? top + log.scrollHeight - height : top;
   }
-  window.AlphastarHumanChat=Object.freeze({open,close});
+  function paint() {
+    if (!view || !conversation) return;
+    view.querySelector(".native-chat-loading")?.remove();
+    log.hidden = false; renderMessages();
+    endButton.hidden = conversation.status === "welcome" || rated;
+    endButton.disabled = busy;
+    const mode = feedback ? "feedback" : ["waiting", "connected"].includes(conversation.status) ? "compose" : conversation.status;
+    if (mode === controlMode) {
+      for (const element of controls.querySelectorAll("button")) {
+        if (element.dataset.send) element.disabled = busy || !controls.querySelector("textarea").value.trim();
+        else if (element.dataset.finish) element.disabled = busy || !rating;
+        else element.disabled = busy;
+      }
+      return;
+    }
+    controlMode = mode; controls.replaceChildren();
+    if (feedback) {
+      controls.className = "native-chat-feedback";
+      controls.append(node("strong", "", "Was this conversation helpful?"));
+      const choices = node("div", "native-chat-rating");
+      for (const [value, label] of [["up", "👍"], ["down", "👎"]]) {
+        const choice = button(label, () => {
+          rating = value;
+          for (const option of choices.children) option.setAttribute("aria-pressed", String(option === choice));
+          controls.querySelector("[data-finish]").disabled = busy;
+        });
+        choice.setAttribute("aria-label", value === "up" ? "Helpful" : "Not helpful"); choice.setAttribute("aria-pressed", String(rating === value)); choices.append(choice);
+      }
+      const field = node("textarea"); field.maxLength = 1000; field.rows = 2; field.value = comment;
+      field.placeholder = "Add a comment"; field.setAttribute("aria-label", "Feedback comment");
+      field.addEventListener("input", () => { comment = field.value; });
+      const finish = button("End conversation", () => void action("end", { rating, comment })); finish.dataset.finish = "true"; finish.disabled = !rating || busy;
+      controls.append(choices, field, finish, button("Keep chatting", () => { feedback = false; paint(); }, "native-chat-back"));
+    } else if (mode === "welcome") {
+      controls.className = "native-chat-actions";
+      controls.append(button(localized("Yes, connect me to support", "Oo, ikonekta ako sa support"), () => void action("request")));
+    } else if (mode === "ended") {
+      controls.className = "native-chat-actions";
+      controls.append(node("p", "", "Conversation ended"), button("Back", close, "native-chat-back"));
+    } else {
+      controls.className = "native-chat-composer";
+      const form = node("form"), input = node("textarea"), send = node("button", "", "Send");
+      input.maxLength = 2000; input.rows = 1; input.placeholder = "Type your message…"; input.setAttribute("aria-label", "Message for clinic staff");
+      send.type = "submit"; send.dataset.send = "true"; send.disabled = true;
+      input.addEventListener("input", () => { send.disabled = busy || !input.value.trim(); });
+      input.addEventListener("keydown", event => { if (event.key === "Enter" && !event.shiftKey && !event.isComposing) { event.preventDefault(); form.requestSubmit(); } });
+      form.addEventListener("submit", event => { event.preventDefault(); void sendMessage(input); });
+      form.append(input, send); controls.append(form);
+    }
+  }
+  function accept(data, older = false) {
+    conversation = data.conversation; merge(conversation.messages || []);
+    if (older) before = conversation.before || "";
+    paint();
+  }
+  async function read(older = "") {
+    if (reading || !session || !view || document.hidden || document.querySelector("#fab-menu")?.hidden) return;
+    const current = epoch, identity = session; reading = true;
+    try { const data = await request("/" + identity.id + (older ? "?before=" + encodeURIComponent(older) : ""), undefined, identity); if (current === epoch) { accept(data, Boolean(older)); status.textContent = ""; } }
+    catch (error) { if (current === epoch) status.textContent = error.message; }
+    finally { if (current === epoch) reading = false; }
+  }
+  async function action(kind, body = {}) {
+    if (busy || !session || !conversation) return;
+    const current = epoch, identity = session; busy = true; status.textContent = ""; paint();
+    try {
+      const data = await request("/" + identity.id + "/" + kind, { cycle: conversation.cycle, ...body }, identity);
+      if (current !== epoch) return;
+      if (kind === "end") { feedback = false; rated = true; }
+      accept(data);
+    } catch (error) { if (current === epoch) { status.textContent = error.message; void read(); } }
+    finally { if (current === epoch) { busy = false; paint(); } }
+  }
+  async function sendMessage(input) {
+    const text = input.value.trim(); if (!text || busy || !session || !["waiting", "connected"].includes(conversation?.status)) return;
+    const current = epoch, identity = session, cycle = conversation.cycle;
+    const attempt = pending?.text === text && pending.cycle === cycle ? pending : { text, cycle, id: crypto.randomUUID() };
+    pending = attempt; busy = true; status.textContent = ""; paint();
+    try {
+      const data = await request("/" + identity.id + "/messages", { text, clientId: attempt.id, cycle }, identity);
+      if (current !== epoch) return;
+      merge([data.message]); if (input.value.trim() === text) input.value = ""; pending = null; renderMessages();
+    } catch (error) { if (current === epoch) { status.textContent = error.message; void read(); } }
+    finally { if (current === epoch) { busy = false; paint(); input.focus(); } }
+  }
+  async function open({ name, email, consent }) {
+    name = String(name || "").trim(); email = String(email || "").trim().toLowerCase();
+    if (!consent || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw Error("Enter your name and email and agree to staff chat.");
+    close(); const current = epoch;
+    const panel = document.getElementById("fab-menu"); if (!panel) throw Error("Chat panel unavailable.");
+    view = node("section", "native-staff-chat"); view.setAttribute("aria-label", "Support conversation");
+    const header = node("header"); header.append(button("Back", close, "native-chat-back"));
+    endButton = button("End conversation", () => { feedback = true; paint(); }, "native-chat-back"); endButton.hidden = true; header.append(endButton);
+    const loading = node("div", "native-chat-loading"); loading.setAttribute("role", "status"); loading.setAttribute("aria-label", "Loading conversation");
+    const spinner = node("span", "clinic-chat-intro-spinner"); loading.append(spinner);
+    log = node("div", "native-chat-log"); log.setAttribute("role", "log"); log.setAttribute("aria-label", "Staff messages"); log.hidden = true;
+    status = node("p", "native-chat-status"); status.setAttribute("role", "status"); controls = node("div", "native-chat-actions");
+    view.append(header, loading, log, status, controls);
+    for (const id of ["clinic-chat-body", "clinic-chat-form", "clinic-chat-status"]) { const element = document.getElementById(id); if (element) { hidden.push([element, element.style.display]); element.style.display = "none"; } }
+    panel.append(view); header.querySelector("button")?.focus({ preventScroll: true });
+    feedback = false; rating = comment = controlMode = ""; rated = false;
+    try {
+      const data = await request("", { name, email, consent: true }, null);
+      const identity = { id: data.id, token: data.token, name, email };
+      if (current !== epoch) { exit(identity, data.conversation?.cycle); return; }
+      if (!/^[a-f0-9]{64}$/.test(identity.id || "") || !/^[a-f0-9]{64}$/.test(identity.token || "")) throw Error("Staff chat needs a clinic server update.");
+      session = identity; before = data.conversation.before || ""; accept(data);
+      controls.querySelector("button")?.focus({ preventScroll: true });
+      timer = setInterval(() => void read(), 3000);
+      heartbeatTimer = setInterval(() => {
+        if (session && conversation?.status !== "ended") void request("/" + session.id + "/heartbeat", { cycle: conversation.cycle }).catch(() => {});
+      }, 15000);
+    } catch (error) {
+      if (current === epoch) {
+        view.querySelector(".native-chat-loading")?.remove(); status.textContent = error.message;
+        controls.append(button("Retry", () => void open({ name, email, consent }).catch(() => {})), button("Back", close, "native-chat-back"));
+      }
+      throw error;
+    }
+  }
+  window.addEventListener?.("pagehide", close);
+  window.addEventListener?.("pageshow", event => { if (event.persisted) close(); });
+  window.AlphastarHumanChat = Object.freeze({ open, close });
 })();

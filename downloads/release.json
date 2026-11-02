@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.65",
-  "versionCode": 66,
-  "filename": "Alphastar-1.0.65-build66.apk",
-  "url": "Alphastar-1.0.65-build66.apk",
-  "sizeBytes": 96862469,
-  "sha256": "f91c6a0df0bef59d5085bc64a341b66029400db87206cea71a1d4d4c0cd4007f",
+  "version": "1.0.66",
+  "versionCode": 67,
+  "filename": "Alphastar-1.0.66-build67.apk",
+  "url": "Alphastar-1.0.66-build67.apk",
+  "sizeBytes": 96867981,
+  "sha256": "3e8f58e801fc874232f719a2932c7909113f437c64030367c71edf190fa00362",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.65 / build 66 adds built-in Alphastar staff messaging inside Chat with Us, without a Tawk widget or redirect. Clinic staff reply directly from desktop Human Chat. Messages are saved privately, with account-scoped patient access, stable retry references and paged history. Website guests use separate private chat sessions, not email-based patient lookup. The Help Bot transcript and booking details are not automatically shared. Existing Tawk records remain separate and read-only. Updated privacy notices are included. The matching backend and private chat index are required. Physical-phone installation and notification delivery are not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
+  "note": "Version 1.0.66 / build 67 adds the support welcome/request flow, verified first-name or anonymous staff connection, Helpful/Not helpful feedback, explicit ending, read-only Chats history and mobile continuation. Mobile conversations remain saved across logout/app exit. Website close/refresh ends its guest session with a heartbeat timeout fallback; the loading-only pane locks the page behind Chat with Us. Per-patient unread indicators and Human Chat notification routing are included. Matching desktop/backend sources include limited first-session compatibility for earlier clients without reopening ended chats. The Help Bot transcript and booking details are not automatically shared. Physical-phone installation and notification delivery are not verified. Existing development signing certificate retained; not Play Store or production-signing approval."
 }
