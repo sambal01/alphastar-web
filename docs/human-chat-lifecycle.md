@@ -4,7 +4,13 @@
 
 The human-chat typing row is now the final child of the message log, instead of a fixed sibling below it. New messages are inserted before it. The transparent row scrolls away when reading earlier messages and only follows the bottom when the visitor is already there. System **S**, saved staff initials and the clinic logo keep the same 30 px bordered circle as message avatars. Existing rule-based chatbot styling is unchanged.
 
-The synthetic native-chat browser fixture verifies circle geometry, message ordering, long-conversation scrolling, no forced jump while reading, clinic/account identities and the existing lifecycle/draft/responsive checks. The earlier complete website run passed 14/15 tests under concurrent mobile-suite CPU load; its existing timing-sensitive rule-based typing test failed a visibility-window check and passed when run on its own. The native-chat fixture passed again for the 1.0.70 release. No live chat or backend writes were sent. Publication evidence will be added after live verification.
+The synthetic native-chat browser fixture verifies circle geometry, message ordering, long-conversation scrolling, no forced jump while reading, clinic/account identities and the existing lifecycle/draft/responsive checks. The earlier complete website run passed 14/15 tests under concurrent mobile-suite CPU load; its existing timing-sensitive rule-based typing test failed a visibility-window check and passed when run on its own. The native-chat fixture passed again for the isolated 1.0.70 release payload. No live chat or backend writes were sent.
+
+### Published checkpoint — November 3, 2026
+
+Website/download commit `812f21ce28539b484c58f890d5e8e2b88c167d7e` is live on Render deploy `dep-dbkgsfgu01pc73agihb0`, completed at 6:27 AM Asia/Manila. Mobile source `a09cb291387b4d2f07a56c049166a5e18a258abf` is pushed; no backend, desktop, Firebase or service-configuration changes are included. One manual API deployment was used after no automatic deploy appeared following the earlier push.
+
+The complete 6:34 AM custom-domain Android-emulated touch download matched Android 1.0.70/build 71, 96,874,785 bytes and SHA-256 `ebff398d70b8074757e9f9795b22b4bf4eb1edbe1b0e57f129b5dae5b8d299c9`. Filename/type, byte ranges, Android logo and English/Tagalog labels passed without browser errors. HTML, chat assets, download configuration, metadata and sidecar fingerprints match the tested source on both hostnames. An initial stale custom-domain configuration expired normally after its 300-second shared-cache lifetime; the final check passed without another deploy. Unrelated footer/menu/Firebase/image edits remain local. No actual conversation, patient/account operation or phone installation was performed. Install over a compatible app without uninstalling or clearing data.
 
 ## Local follow-up — draft typing presence
 
