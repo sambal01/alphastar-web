@@ -1,5 +1,13 @@
 # Chat with Us — lifecycle and release record
 
+## Local follow-up — Back, ending and feedback, November 3, 2026
+
+Back in an active staff chat now offers Continue conversation or End conversation. Continue restores the same private guest session and unsent draft without reconnecting. End opens the S-avatar Help Bot question **Was our staff helpful?** with balanced Like / Dislike choices (also localized in Tagalog). Either choice saves its explicit up/down rating and ends the chat through the existing endpoint, then reveals the chatbot's main menu. Feedback errors remain visible and retryable instead of being cleared by polling. Duplicate taps are disabled; stale pre-mutation polls cannot reopen an ended guest session. The earlier transcript is not inserted into the bot or exposed behind feedback.
+
+Minimize/reopen still preserves the active page-memory chat; refresh/page exit still ends website guest sessions. No name/email lookup, browser transcript persistence or backend change was added. This is a local implementation, not a published website or mobile APK. Synthetic browser/component verification covers Back/Continue, both ratings, failed saves, duplicate taps, saved mobile history and responsive/keyboard-height layouts.
+
+Verification: 10 selected website tests and the full synthetic staff-chat browser lifecycle fixture passed, alongside 1,069 mobile/backend tests, TypeScript and 20 real-component mobile layout cases. No real patient conversation or production write was used.
+
 ## Version 1.0.70/build 71 — scrolling typing row
 
 The human-chat typing row is now the final child of the message log, instead of a fixed sibling below it. New messages are inserted before it. The transparent row scrolls away when reading earlier messages and only follows the bottom when the visitor is already there. System **S**, saved staff initials and the clinic logo keep the same 30 px bordered circle as message avatars. Existing rule-based chatbot styling is unchanged.

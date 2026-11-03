@@ -717,6 +717,15 @@
     window.alphastarChat = Object.freeze({
       setLanguage(value) { setLanguage(value === 'tl' ? 'filipino' : 'english', true); },
       getLanguage: () => language === 'filipino' ? 'tl' : 'en',
+      showMainMenu() {
+        window.clearTimeout(pendingTimer); busy = false; pendingMenuSelection = false;
+        previousTopic = activePrompt = undefined; unknownCount = 0;
+        input.value = ''; status.textContent = ''; status.classList.remove('is-typing');
+        log.setAttribute('aria-busy', 'false'); syncTypingIndicator();
+        const reply = appendMessage('assistant', localized('Thank you for your feedback. What would you like help with?', 'Salamat sa iyong feedback. Saan mo kailangan ng tulong?'));
+        renderTopics(mainTopics); syncComposer(); revealMessage(reply); refreshTimestamps();
+        topics.querySelector('button, a')?.focus({ preventScroll: true });
+      },
       prepareOpen() {
         refreshTimestamps();
         if (pendingOpenMessage) revealMessage(pendingOpenMessage, false);

@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.71",
-  "versionCode": 72,
-  "filename": "Alphastar-1.0.71-build72.apk",
-  "url": "Alphastar-1.0.71-build72.apk",
-  "sizeBytes": 96878009,
-  "sha256": "75ed0d7efbceec241b235ee5acb331f2485df8ab308678f39ac8f37160cfb7ff",
+  "version": "1.0.72",
+  "versionCode": 73,
+  "filename": "Alphastar-1.0.72-build73.apk",
+  "url": "Alphastar-1.0.72-build73.apk",
+  "sizeBytes": 96879945,
+  "sha256": "827459bfe5e78282b05a28e11e4f10ce9e6700008d022d877a9b96e1fbc7b2c3",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.71 / build 72 packages the mobile chat-opening, composer, feedback and support-menu improvements. Normal Chat with Us opening shows only a spinner for a minimum of one second and still waits for saved history. Staff chat shows Type your message..., follows the latest messages while composing, and keeps the typing row in the message scroller. End conversation opens feedback and reports a missing rating. Prepared replies offer Chat with staff; relevant topics offer Back to Main Menu. Cancelling a support draft clears that draft, adds the patient's Cancel bubble and restores topics. Older topic controls are hidden and stale actions are rejected without deleting messages. Existing encrypted patient-scoped Help Bot history and server-saved native staff conversations are retained. No backend, desktop, database, Firebase or signing-key deployment is included. Existing development certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation, recovery and push delivery are not verified."
+  "note": "Version 1.0.72 / build 73 packages the mobile staff-chat Back / End conversation toolbar and divider, Continue / End choice and Help Bot feedback flow. Continue keeps the conversation and unsent draft. End asks Was our staff helpful?; Like or Dislike explicitly saves its rating and ends the cycle before returning to the main menu. Failed feedback saves remain retryable and duplicate taps are blocked. Existing encrypted patient-scoped Help Bot history, server-saved staff conversations, later continuation, one-second opening and scrolling typing indicators are retained. The website has the matching chat flow. No backend, desktop, database, Firebase, SDK or signing-key deployment is included. Existing development certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation, recovery and push delivery are not verified."
 }

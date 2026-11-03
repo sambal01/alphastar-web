@@ -4,7 +4,7 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
 (async()=>{
 
   const chats=new Map(),requests=[],unexpected=[];
-  let releaseCreate,holdCreate=true,number=0;
+  let releaseCreate,holdCreate=true,number=0,failEnd=false,holdEnd=false,releaseEnd;
   const add=(chat,sender,text,name)=>chat.conversation.messages.push({id:crypto.randomBytes(32).toString('hex'),sender,text,name:name|| (sender==='system'?'System':'Synthetic Visitor'),time:new Date(Date.parse('2026-11-02T02:00:00Z')+number++*1000).toISOString()});
   async function handleChat(url,body,headers,respond,method){
     requests.push({path:url.pathname,headers,method,body});
@@ -28,7 +28,10 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
     }else if(action==='typing'){
       assert.equal(body.cycle,1);assert.equal(typeof body.isTyping,'boolean');assert.equal(Object.hasOwn(body,'text'),false);return respond({ok:true});
     }else if(action==='end'){
-      assert.equal(body.rating,'up');assert.equal(body.comment,'Synthetic helpful support');chat.feedback=body;chat.conversation.status='ended';add(chat,'system','This conversation has ended.');
+      assert.ok(['up','down'].includes(body.rating));assert.equal(body.comment,'');
+      if(failEnd){failEnd=false;return respond({error:'Synthetic save unavailable'},503);}
+      if(holdEnd)await new Promise(resolve=>{releaseEnd=resolve;});
+      chat.feedback=body;chat.conversation.status='ended';add(chat,'system','This conversation has ended.');
     }else if(action==='exit'){chat.conversation.status='ended';}
     return respond(action==='heartbeat'||action==='exit'?{ok:true}:{conversation:chat.conversation});
   }
@@ -36,7 +39,7 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
     const url=new URL(req.url,'http://localhost');
     if(url.pathname.startsWith('/api/support/chats')){
       let raw='';for await(const chunk of req)raw+=chunk;
-      return await handleChat(url,raw?JSON.parse(raw):undefined,req.headers,data=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(data));},req.method);
+      return await handleChat(url,raw?JSON.parse(raw):undefined,req.headers,(data,status=200)=>{res.statusCode=status;res.setHeader('Content-Type','application/json');res.end(JSON.stringify(data));},req.method);
     }
     const relative=decodeURIComponent(url.pathname).slice(1)||'index.html',file=path.resolve(root,relative);
     if(!file.startsWith(root+path.sep))throw Error();
@@ -149,30 +152,49 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
     await page.screenshot({path:path.join(root,'test-results/native-chat',width+'.png')});
   }
   await page.locator('.native-staff-chat > header').getByRole('button',{name:'Back',exact:true}).click();
-  assert.equal(chat.conversation.status,'connected');assert.equal(await page.locator('.native-staff-chat').isVisible(),false);
-  await page.locator('.clinic-chat-support').getByRole('button',{name:'Continue conversation',exact:true}).click();
+  assert.equal(chat.conversation.status,'connected');assert.equal(await page.locator('.native-staff-chat').isVisible(),true);
+  assert.equal(await page.getByText('Continue this conversation?',{exact:true}).isVisible(),true);
+  for(const width of [320,393,1366]){await page.setViewportSize({width,height:width===1366?768:740});assert.equal(await page.evaluate(()=>{const[a,b]=[...document.querySelectorAll('.native-chat-feedback-actions button')].map(node=>node.getBoundingClientRect());return a.width>80&&Math.abs(a.width-b.width)<1&&Math.abs(a.height-b.height)<1&&b.right<=innerWidth;}),true);await page.screenshot({path:path.join(root,'test-results/native-chat','leave-'+width+'.png')});}
+  await page.getByRole('button',{name:'Continue conversation',exact:true}).click();
   assert.equal(chats.size,1);assert.equal(await page.locator('.native-chat-composer textarea').inputValue(),'Draft remains while staff connect');
   await page.locator('#clinic-chat-close').click();await page.waitForTimeout(150);assert.equal(chat.conversation.status,'connected');
   await page.locator('#fab-main').click();await page.waitForFunction(()=>!document.querySelector('#fab-menu').classList.contains('is-connecting'));
   assert.equal(await page.locator('.native-staff-chat').isVisible(),true);assert.equal(chats.size,1);
   assert.equal(await page.locator('.native-chat-composer textarea').inputValue(),'Draft remains while staff connect');
   await page.getByRole('button',{name:'End conversation',exact:true}).click();
-  const finish=page.locator('.native-chat-feedback').getByRole('button',{name:'End conversation',exact:true});assert.equal(await finish.isDisabled(),true);
-  await page.getByRole('button',{name:'Helpful',exact:true}).click();await page.getByRole('textbox',{name:'Feedback comment',exact:true}).fill('Synthetic helpful support');
-  for(const width of [320,393,1366]){await page.setViewportSize({width,height:width===1366?768:740});assert.equal(await page.evaluate(()=>{const box=document.querySelector('#fab-menu'),equal=selector=>{const[a,b]=[...document.querySelectorAll(selector)].map(node=>node.getBoundingClientRect());return a.width>80&&Math.abs(a.width-b.width)<1&&Math.abs(a.height-b.height)<1;};return box.scrollWidth<=box.clientWidth+1&&equal('.native-chat-rating button')&&equal('.native-chat-feedback-actions button');}),true);await page.screenshot({path:path.join(root,'test-results/native-chat','feedback-'+width+'.png')});}
-  await finish.click();await page.getByText('Conversation ended',{exact:true}).waitFor();
+  assert.equal(await page.getByText('Was our staff helpful?',{exact:true}).isVisible(),true);
+  assert.equal(await page.locator('.native-chat-log').isVisible(),false);
+  for(const width of [320,393,1366]){await page.setViewportSize({width,height:width===1366?768:740});assert.equal(await page.evaluate(()=>{const box=document.querySelector('#fab-menu'),[a,b]=[...document.querySelectorAll('.native-chat-rating button')].map(node=>node.getBoundingClientRect());return box.scrollWidth<=box.clientWidth+1&&a.width>80&&Math.abs(a.width-b.width)<1&&Math.abs(a.height-b.height)<1&&b.right<=innerWidth;}),true);await page.screenshot({path:path.join(root,'test-results/native-chat','feedback-'+width+'.png')});}
+  failEnd=true;await page.getByRole('button',{name:'Like',exact:true}).click();await page.getByText('Synthetic save unavailable',{exact:true}).waitFor();
+  assert.equal(chat.conversation.status,'connected');assert.equal(await page.getByRole('button',{name:'Like',exact:true}).isEnabled(),true);
+  const endCount=requests.filter(row=>row.path.endsWith('/end')).length;holdEnd=true;
+  await page.getByRole('button',{name:'Like',exact:true}).evaluate(button=>{button.click();button.click();});
+  await page.waitForFunction(()=>document.querySelectorAll('.native-chat-rating button:disabled').length===2);
+  while(!releaseEnd)await new Promise(resolve=>setTimeout(resolve,20));assert.equal(requests.filter(row=>row.path.endsWith('/end')).length,endCount+1);
+  holdEnd=false;releaseEnd();await page.getByText('Thank you for your feedback. What would you like help with?',{exact:true}).waitFor();
   assert.equal(chat.conversation.status,'ended');assert.equal(await page.locator('.native-chat-composer textarea').count(),0);
-  await page.locator('.native-staff-chat > header').getByRole('button',{name:'Back',exact:true}).click();
-  await page.locator('.clinic-chat-support').getByRole('button',{name:'Open staff chat',exact:true}).click();
+  assert.equal(chat.feedback.rating,'up');assert.equal(await page.locator('.native-staff-chat').isVisible(),false);assert.equal(await page.locator('#clinic-chat-topics > button').count(),7);
+  async function openNewGuest(){
+    await page.locator('#clinic-chat-topics').getByRole('button',{name:'Talk to Agent Support',exact:true}).click();
+    await page.locator('#clinic-chat-topics').getByRole('button',{name:'Chat with staff',exact:true}).click();
+    await page.locator('[name="name"]').fill('Synthetic Visitor');await page.locator('[name="email"]').fill('synthetic@example.test');await page.locator('.clinic-chat-support input[type="checkbox"]').check();
+    await page.locator('.clinic-chat-support').getByRole('button',{name:'Open staff chat',exact:true}).click();
+  }
+  await openNewGuest();
   await page.getByRole('button',{name:'Yes, connect me to support',exact:true}).waitFor();
   assert.equal(chats.size,2);assert.equal(await page.getByText('Synthetic staff answer',{exact:true}).count(),0);
   await page.getByRole('button',{name:'Yes, connect me to support',exact:true}).click();await page.locator('.native-chat-composer').waitFor();
   const second=[...chats.values()][1];
+  await page.locator('.native-staff-chat > header').getByRole('button',{name:'Back',exact:true}).click();
+  await page.getByRole('button',{name:'End conversation',exact:true}).click();await page.getByRole('button',{name:'Dislike',exact:true}).click();
+  await page.locator('#clinic-chat-topics').getByRole('button',{name:'Talk to Agent Support',exact:true}).waitFor();assert.equal(second.feedback.rating,'down');assert.equal(second.conversation.status,'ended');
+  await openNewGuest();await page.getByRole('button',{name:'Yes, connect me to support',exact:true}).click();await page.locator('.native-chat-composer').waitFor();
+  const third=[...chats.values()][2];
   await page.locator('#clinic-chat-close').click();await page.waitForTimeout(150);
-  assert.equal(second.conversation.status,'waiting');assert.equal(await page.evaluate(()=>document.body.classList.contains('chat-page-locked')),false);
+  assert.equal(third.conversation.status,'waiting');assert.equal(await page.evaluate(()=>document.body.classList.contains('chat-page-locked')),false);
   await page.locator('#fab-main').click();await page.waitForFunction(()=>!document.querySelector('#fab-menu').classList.contains('is-connecting'));
-  assert.equal(chats.size,2);assert.equal(await page.locator('.native-chat-composer').isVisible(),true);
-  await page.reload({waitUntil:'networkidle'});await page.waitForTimeout(150);assert.equal(second.conversation.status,'ended');
+  assert.equal(chats.size,3);assert.equal(await page.locator('.native-chat-composer').isVisible(),true);
+  await page.reload({waitUntil:'networkidle'});await page.waitForTimeout(150);assert.equal(third.conversation.status,'ended');
   assert.equal(await page.locator('.native-staff-chat').count(),0);assert.equal(await page.evaluate(()=>sessionStorage.getItem('alphastar-staff-chat-v1')),null);
   assert.deepEqual(unexpected,[]);assert.deepEqual(errors,[]);assert.ok(requests.every(request=>![...chats.values()].some(chat=>request.path.includes(chat.token))));
   console.log('PASS: Circular system/staff/clinic typing avatars inside the message scroller, no sticky strip or forced jump while reading earlier messages, stable message ordering/drafts, one-second transitions, lifecycle actions and four responsive widths. No external chat requests.');
