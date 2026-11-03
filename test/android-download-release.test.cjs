@@ -3,7 +3,7 @@ const test = require('node:test'), assert = require('node:assert/strict'), fs = 
 const root = path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT || path.join(__dirname, '..'));
 const release = JSON.parse(fs.readFileSync(path.join(root, 'downloads/release.json'), 'utf8'));
 test('published download payload matches its verified SHA-256 and declared testing version', () => {
-  assert.equal(release.version, '1.0.70'); assert.equal(release.versionCode, 71); assert.equal(release.testingBuild, true);
+  assert.equal(release.version, '1.0.71'); assert.equal(release.versionCode, 72); assert.equal(release.testingBuild, true);
   const apk = fs.readFileSync(path.join(root, 'downloads', release.filename));
   assert.equal(apk.length, release.sizeBytes); assert.equal(crypto.createHash('sha256').update(apk).digest('hex'), release.sha256);
   assert.match(fs.readFileSync(path.join(root, 'downloads', release.filename + '.sha256'), 'utf8'), new RegExp('^' + release.sha256));

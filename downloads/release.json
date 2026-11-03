@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.70",
-  "versionCode": 71,
-  "filename": "Alphastar-1.0.70-build71.apk",
-  "url": "Alphastar-1.0.70-build71.apk",
-  "sizeBytes": 96874785,
-  "sha256": "ebff398d70b8074757e9f9795b22b4bf4eb1edbe1b0e57f129b5dae5b8d299c9",
+  "version": "1.0.71",
+  "versionCode": 72,
+  "filename": "Alphastar-1.0.71-build72.apk",
+  "url": "Alphastar-1.0.71-build72.apk",
+  "sizeBytes": 96878009,
+  "sha256": "75ed0d7efbceec241b235ee5acb331f2485df8ab308678f39ac8f37160cfb7ff",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.70 / build 71 corrects Android encrypted Help Bot history reopening without clearing or migrating existing records. New messages begin saving immediately; closing/backgrounding flushes unfinished drafts. Clear Chat is removed, including legacy saved menu actions. History remains patient-scoped on this device after logout, without automatic expiry or message-count truncation. A lost original encryption key cannot be reconstructed. Mobile and website human-chat typing rows use circular avatars and scroll with messages without a sticky strip or forced jump when reading earlier messages. Nonempty visible drafts renew the existing private typing marker. Website Back/minimize keeps the guest conversation; refresh/page exit still ends it. No backend, desktop or database deployment is included. Physical-phone recovery, installation and push delivery are not verified. Existing development signing certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data."
+  "note": "Version 1.0.71 / build 72 packages the mobile chat-opening, composer, feedback and support-menu improvements. Normal Chat with Us opening shows only a spinner for a minimum of one second and still waits for saved history. Staff chat shows Type your message..., follows the latest messages while composing, and keeps the typing row in the message scroller. End conversation opens feedback and reports a missing rating. Prepared replies offer Chat with staff; relevant topics offer Back to Main Menu. Cancelling a support draft clears that draft, adds the patient's Cancel bubble and restores topics. Older topic controls are hidden and stale actions are rejected without deleting messages. Existing encrypted patient-scoped Help Bot history and server-saved native staff conversations are retained. No backend, desktop, database, Firebase or signing-key deployment is included. Existing development certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation, recovery and push delivery are not verified."
 }
