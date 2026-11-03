@@ -9,3 +9,11 @@ Verification: all 1,070 mobile/backend Node tests, TypeScript, 20 real-component
 The existing development certificate remains a clinic/testing certificate, not production-signing approval. Install over a compatible app without uninstalling or clearing data; physical installation, recovery and push delivery are not verified by these automated checks.
 
 Verified artifact: `Alphastar-1.0.73-build74.apk`, 96,880,409 bytes, SHA-256 `729be27ec740527ec479ecfbf3e0a96348c080fe2c1fbeedfec0bea79c61d35f`. The actual manifest, signature, existing certificate, required native modules, packaged bundle/source map and all 103 unchanged build inputs passed. Twenty-one earlier named APKs were preserved. Live publication evidence follows after verification.
+
+## Published checkpoint — November 3, 2026
+
+Website/download source `b1d80c637b978efb8f06efaf7e0e5cefb9c72bfa` is live on Render deploy `dep-dbkohuui0phs73asfgq0`, completed at 3:11 PM Asia/Manila (`2026-11-03T07:11:26.668Z`). Mobile source `c5e403e71cfc1ebf931d6fdf41cfa73b73793663` is pushed to GitHub master. No automatic deployment/event appeared after the successful website push, so one explicit existing-site deployment was used. Service settings and backend/Firebase configuration were not changed.
+
+The isolated payload verified 60 prior public assets and passed three download-integrity tests, four-width English/Tagalog checks and the synthetic staff-chat lifecycle fixture. Existing mobile footer/drawer checks passed. At `2026-11-03T07:11:57.625Z` (3:11 PM Asia/Manila), a complete custom-domain Android-emulated touch download matched all 96,880,409 bytes and the SHA-256 above. Filename/type/ranges, Android logo, bilingual version labels and runtime-error checks passed. Published HTML/chat/download/checksum files and preserved footer/menu fingerprints match tested source on both hostnames. Read-only backend health/access/CORS checks passed and recent website error logs were empty. No valid conversation, account/patient operation, physical installation or actual push delivery was performed. Unrelated local configuration/assets remain excluded.
+
+[Download Android 1.0.73 / build 74](https://alphastarkasiglahan.com/downloads/Alphastar-1.0.73-build74.apk).

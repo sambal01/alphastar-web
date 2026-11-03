@@ -6,6 +6,8 @@ The end-conversation Help Bot question retains equal Like / Dislike choices and 
 
 Current staff guidance describes the built-in chat without obsolete provider wording. Saved conversations, compatibility code and historical privacy disclosures remain intact. No backend or storage change is included. See [the release record](android-release-1.0.73.md) for verification/publication evidence. Earlier version sections below are historical records.
 
+Published November 3, 2026: website/download `b1d80c6` is live on Render `dep-dbkohuui0phs73asfgq0` at 3:11 PM Asia/Manila; mobile source `c5e403e` is pushed. The complete custom-domain Android touch download matched 1.0.73/build 74, 96,880,409 bytes and its verified SHA-256. Synthetic lifecycle, 11 selected website tests, 1,070 mobile/backend tests, TypeScript, 20 mobile layouts, isolated download, preserved footer/menu and read-only live checks passed. No real conversation or account/patient operation was used.
+
 ## Version 1.0.72/build 73 — Back, ending and feedback, November 3, 2026
 
 Back in an active staff chat now offers Continue conversation or End conversation. Continue restores the same private guest session and unsent draft without reconnecting. End opens the S-avatar Help Bot question **Was our staff helpful?** with balanced Like / Dislike choices (also localized in Tagalog). Either choice saves its explicit up/down rating and ends the chat through the existing endpoint, then reveals the chatbot's main menu. Feedback errors remain visible and retryable instead of being cleared by polling. Duplicate taps are disabled; stale pre-mutation polls cannot reopen an ended guest session. The earlier transcript is not inserted into the bot or exposed behind feedback.
