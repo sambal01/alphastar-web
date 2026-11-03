@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.73",
-  "versionCode": 74,
-  "filename": "Alphastar-1.0.73-build74.apk",
-  "url": "Alphastar-1.0.73-build74.apk",
-  "sizeBytes": 96880409,
-  "sha256": "729be27ec740527ec479ecfbf3e0a96348c080fe2c1fbeedfec0bea79c61d35f",
+  "version": "1.0.74",
+  "versionCode": 75,
+  "filename": "Alphastar-1.0.74-build75.apk",
+  "url": "Alphastar-1.0.74-build75.apk",
+  "sizeBytes": 97323417,
+  "sha256": "6d649ecebeef6f44a746109d5a98ea853b522fc33e77a6f0aad88e4f47fd009d",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.73 / build 74 restores the optional feedback comment below equal Like / Dislike choices. Selecting a rating does not send it; Submit feedback saves the rating and comment, ends the current cycle and returns to the unchanged chatbot main menu after confirmation. Continue conversation does not submit feedback. Failed saves preserve feedback for retry and duplicate taps are blocked. The website has the matching English/Tagalog flow and removes obsolete provider wording from current chat guidance. Saved patient conversations, Back/End navigation, later continuation and typing indicators remain intact. No backend, desktop, database, Firebase, SDK or signing-key deployment is included. Existing development certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation, recovery and push delivery are not verified."
+  "note": "Version 1.0.74 / build 75 renames the student form to SMAPE and adds MAPE with separate company and emergency-contact fields, drafts and saved records. Both use their matching supplied images, review histories, staff notifications and approved PDF export. Legacy SMPE records and drafts retain their identifiers and history. The matching backend supports both examination types; desktop approval screens contain separate nested histories. Website guidance covers both forms. Existing chat and booking features are unchanged. No database migration, Firebase rule, SDK or signing-key change. Existing development certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation and push delivery are not verified."
 }

@@ -9,7 +9,7 @@
     .replace(/\b(?:passowrd|pasword)\b/g, 'password')
     .replace(/\b(?:verfication|verifcation)\b/g, 'verification')
     .replace(/\bpano\b/g, 'paano')
-    .replace(/\bsmep\b/g, 'smpe').replace(/\s+/g, ' ').trim();
+    .replace(/\b(?:smep|smape|mape)\b/g, 'smpe').replace(/\s+/g, ' ').trim();
   const labels = {
     'technical-help': ['App / Technical Help', 'Tulong sa App'],
     'password-recovery': ['Forgot Password', 'Nakalimutang Password'],
@@ -21,9 +21,9 @@
     'change-pin-help': ['Change PIN', 'Palitan ang PIN'],
     'authenticator-help': ['Authenticator Setup and Sign-in', 'Pag-setup at Sign-in sa Authenticator'],
     'authenticator-recovery': ['Lost Authenticator / Recovery Codes', 'Nawalang Authenticator / Recovery Codes'],
-    'smpe-fill-help': ['Fill Up an SMPE Form', 'Sagutan ang SMPE Form'],
-    'smpe-view-help': ['View Submitted SMPE Forms', 'Tingnan ang Na-submit na SMPE'],
-    'smpe-review-help': ['Pending Review / Form Status', 'Status ng SMPE Form'],
+    'smpe-fill-help': ['Fill Up an SMAPE Form', 'Sagutan ang SMAPE Form'],
+    'smpe-view-help': ['View Submitted SMAPE Forms', 'Tingnan ang Na-submit na SMAPE'],
+    'smpe-review-help': ['Pending Review / Form Status', 'Status ng SMAPE Form'],
     'laboratory-services': ['Laboratory Tests', 'Laboratory Tests'],
     'imaging-services': ['X-ray / Ultrasound / ECG', 'X-ray / Ultrasound / ECG'],
     'consultation-services': ['Consultations / Check-ups', 'Konsulta / Check-up'],
@@ -40,7 +40,7 @@
   };
   const supportTopics = Object.freeze([
     ['booking', 'Home-service request', 'Pag-book ng home service'], ['app', 'App / sign-in problem', 'Problema sa app / login'],
-    ['smpe', 'SMPE form / review status', 'SMPE form / status'], ['services', 'Service availability / fees', 'Serbisyo / presyo'],
+    ['smpe', 'SMAPE / MAPE form / review status', 'SMAPE / MAPE form / status'], ['services', 'Service availability / fees', 'Serbisyo / presyo'],
     ['results', 'Result-release enquiry', 'Pagkuha ng resulta'], ['other', 'Other clinic question', 'Ibang tanong sa clinic'],
   ].map(([id, label, tagalog]) => Object.freeze({ id, label, tagalog })));
   const technicalTopics = ['password-recovery', 'pin-recovery', 'authenticator-help', 'authenticator-recovery', 'email-code-help', 'google-signin-help', 'mobile-data', 'main-menu'];
@@ -119,14 +119,14 @@
       'create-account-help': pair('Open Alphastar and choose Create account or Google. Follow the email-code steps, fill in your details, and set a 6-digit PIN. Already have an account? Sign in to that one instead of making another.', 'Buksan ang Alphastar at piliin ang Create account o Google. Sundin ang code sa email, sagutan ang details, at gumawa ng 6-digit PIN. May account ka na? Doon mag-login para hindi ka magkaroon ng dalawang account.'),
       'change-password-help': pair('In Alphastar Mobile, open Profile > Security Settings > Change password. Enter your current and new password, confirm it, then follow the email-code steps. For Google accounts, change the password through Google.', 'Sa Alphastar Mobile, buksan ang Profile > Security Settings > Change password. Ilagay ang dating password at bagong password, ulitin ito, at sundin ang code sa email. Kung Google account ang gamit mo, sa Google magpalit ng password.'),
       'change-pin-help': pair('In Alphastar Mobile, open Profile > Security Settings > Change PIN. Enter your current PIN, set a new 6-digit PIN, and confirm it. Wait for the success message. Forgot your PIN? Use Forgot PIN on the PIN login screen.', 'Sa Alphastar Mobile, buksan ang Profile > Security Settings > Change PIN. Ilagay ang dating PIN, gumawa ng bagong 6-digit PIN, at ulitin ito. Hintayin ang success message. Nakalimutan ang PIN? Gamitin ang Forgot PIN sa PIN login.'),
-      'smpe-fill-help': pair('Open Medical Records > SMPE in the app. Fill in your details, tap Next, check your answers, and submit. A draft is not submitted yet. Check Profile > Medical History afterward.', 'Buksan ang Medical Records > SMPE sa app. Sagutan ang details, pindutin ang Next, tingnan ang mga sagot, at i-submit. Hindi pa na-submit ang draft. Pagkatapos, tingnan ang Profile > Medical History.'),
-      'smpe-view-help': pair('In Alphastar Mobile, open Profile > Medical History and tap View SMPE Record. Use mobile data or Wi-Fi. No form there? Check that you used the same account and submitted it, not just saved a draft.', 'Sa Alphastar Mobile, buksan ang Profile > Medical History at pindutin ang View SMPE Record. Puwede ang mobile data o Wi-Fi. Walang form? Tingnan kung parehong account ang gamit mo at na-submit ang form, hindi draft lang.'),
-      'smpe-review-help': pair('Pending Review means staff have not finished checking your SMPE form. In Alphastar Mobile, check Medical History and notifications. Only clinic staff can confirm progress. This status does not mean your lab result is ready.', 'Ang Pending Review ay hindi pa tapos suriin ng staff ang SMPE form mo. Sa Alphastar Mobile, tingnan ang Medical History at mga abiso. Staff ang makakapagsabi ng update. Hindi ibig sabihin nito na ready na ang lab result.'),
+      'smpe-fill-help': pair('Open Medical Records > SMAPE in the app. Fill in your details, tap Next, check your answers, and submit. A draft is not submitted yet. Check Profile > Medical History afterward.', 'Buksan ang Medical Records > SMAPE sa app. Sagutan ang details, pindutin ang Next, tingnan ang mga sagot, at i-submit. Hindi pa na-submit ang draft. Pagkatapos, tingnan ang Profile > Medical History.'),
+      'smpe-view-help': pair('In Alphastar Mobile, open Profile > Medical History and tap View SMAPE Record. Use mobile data or Wi-Fi. No form there? Check that you used the same account and submitted it, not just saved a draft.', 'Sa Alphastar Mobile, buksan ang Profile > Medical History at pindutin ang View SMAPE Record. Puwede ang mobile data o Wi-Fi. Walang form? Tingnan kung parehong account ang gamit mo at na-submit ang form, hindi draft lang.'),
+      'smpe-review-help': pair('Pending Review means staff have not finished checking your SMAPE / MAPE form. In Alphastar Mobile, check Medical History and notifications. Only clinic staff can confirm progress. This status does not mean your lab result is ready.', 'Ang Pending Review ay hindi pa tapos suriin ng staff ang SMAPE / MAPE form mo. Sa Alphastar Mobile, tingnan ang Medical History at mga abiso. Staff ang makakapagsabi ng update. Hindi ibig sabihin nito na ready na ang lab result.'),
       'laboratory-services': pair('We offer lab tests and drug testing. Ask staff about your test’s price and preparation. For home collection, check the app and confirm whether your test and area are covered.', 'May lab tests at drug testing. Itanong sa staff ang presyo at paghahanda para sa test mo. Para sa pagkuha ng sample sa bahay, tingnan ang app at itanong kung puwede ang test sa lugar mo.'),
       'imaging-services': pair('We offer digital X-ray, ultrasound, and ECG. Ask staff about the schedule, price, and requirements before visiting. These are not automatically available at home.', 'May digital X-ray, ultrasound, at ECG. Itanong sa staff ang schedule, presyo, at kailangan bago pumunta. Hindi ibig sabihin na puwede agad ang mga ito sa bahay.'),
       'consultation-services': pair('We offer consultations and check-ups. Ask staff about the doctor’s schedule before visiting. Clinic consultations are not booked in Alphastar Mobile.', 'May konsulta at check-up. Itanong muna sa staff ang schedule ng doktor bago pumunta. Hindi sa Alphastar Mobile bina-book ang konsulta sa clinic.'),
       'vaccination-services': pair('We offer vaccinations. Ask a doctor which vaccine is right for you, and ask staff about stock, schedule, and price. This chat cannot recommend a vaccine or dose.', 'May bakuna sa Alphastar. Sa doktor itanong kung anong bakuna ang para sa iyo. Sa staff naman itanong kung may stock, ang schedule, at presyo. Hindi nagrerekomenda ng bakuna o dose ang chat.'),
-      'examination-services': pair('We offer APE and employment-related services. Ask staff what tests and documents are included and how much the package costs. An SMPE form is not automatically an APE package.', 'May APE at serbisyo para sa trabaho. Itanong sa staff ang kasamang tests, dokumento, at presyo ng package. Hindi awtomatikong APE package ang SMPE form.'),
+      'examination-services': pair('We offer APE and employment-related services. Ask staff what tests and documents are included and how much the package costs. An SMAPE / MAPE form is not automatically an APE package.', 'May APE at serbisyo para sa trabaho. Itanong sa staff ang kasamang tests, dokumento, at presyo ng package. Hindi awtomatikong APE package ang SMAPE / MAPE form.'),
       'onsite-services': pair('For company on-site services, contact staff about the location, schedule, tests, and price quote. Company bookings are not made through this chat.', 'Para sa serbisyo sa lugar ng kumpanya, kausapin ang staff tungkol sa lugar, schedule, tests, at presyo. Hindi dito sa chat ginagawa ang company booking.'),
       'feedback-helpful': pair('Glad that helped! Your feedback stays in this chat only. What else do you need?', 'Mabuti at nakatulong! Dito lang sa chat ang feedback mo. Ano pa ang kailangan mo?'),
       'feedback-unhelpful': pair('Sorry that did not help. Want help writing a message to staff?', 'Pasensya kung hindi nakatulong. Gusto mo bang gumawa ng message para sa staff?'),
@@ -141,7 +141,7 @@
     if (details[topic]) result.text = details[topic];
     const security = window.AlphastarSecurityGuides?.[topic === 'pin-recovery' || topic === 'change-pin-help' ? 'pin-help' : topic];
     if (security) result.text = fil ? security.tagalog : security.english;
-    if (topic === 'terms') result.text = pair('The Terms and Conditions explain responsible use of Alphastar, account security, home-service requests, SMPE forms and the limits of automated chat. A request is not a confirmed visit. Read them together with Privacy Policy using the links below. The legal pages open separately so you can keep this conversation.', 'Ipinaliliwanag ng Terms and Conditions ang tamang paggamit ng Alphastar, account security, home-service requests, SMPE forms at limitasyon ng chatbot. Hindi pa confirmed na visit ang isang request. Basahin ito kasama ng Privacy Policy sa mga link sa ibaba. Bubukas nang hiwalay ang legal page para manatili ang usapan.');
+    if (topic === 'terms') result.text = pair('The Terms and Conditions explain responsible use of Alphastar, account security, home-service requests, SMAPE / MAPE forms and the limits of automated chat. A request is not a confirmed visit. Read them together with Privacy Policy using the links below. The legal pages open separately so you can keep this conversation.', 'Ipinaliliwanag ng Terms and Conditions ang tamang paggamit ng Alphastar, account security, home-service requests, SMAPE / MAPE forms at limitasyon ng chatbot. Hindi pa confirmed na visit ang isang request. Basahin ito kasama ng Privacy Policy sa mga link sa ibaba. Bubukas nang hiwalay ang legal page para manatili ang usapan.');
     let topics = result.topics;
     let prompt;
     if (topic === 'app') topics = ['booking-guide', 'records-guide', 'technical-help', 'profile-help', 'security', 'install-guide', 'main-menu'];

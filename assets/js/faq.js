@@ -1,7 +1,7 @@
 const FAQ_DATA = [
   {
     q: 'What is the Alphastar mobile application?',
-    a: 'Alphastar Mobile is our Android patient app for requesting home services and managing your patient information. You can update your profile, submit a Student Medical & Physical Examination (SMPE) form, view submitted forms and their review status, check Appointment Schedule and Appointment History, receive clinic notifications, and manage your PIN in Security Settings. It also provides clinic information and access to Agent Support. In-person clinic appointments are not booked through the app.'
+    a: 'Alphastar Mobile is our Android patient app for requesting home services and managing your patient information. You can update your profile, submit a Student Medical & Physical Examination (SMAPE) form, view submitted forms and their review status, check Appointment Schedule and Appointment History, receive clinic notifications, and manage your PIN in Security Settings. It also provides clinic information and access to Agent Support. In-person clinic appointments are not booked through the app.'
   },
   {
     q: 'How do I start using Alphastar Mobile?',
@@ -13,11 +13,11 @@ const FAQ_DATA = [
   },
   {
     q: 'Which medical forms can I complete in the app?',
-    a: 'The Student Medical & Physical Examination (SMPE) form is currently available in Medical Records. Complete the required information, review your answers, and submit the form. Open Profile > Medical History to view your submitted SMPE records and their review status. A submitted form is not the same as a laboratory test result; ask clinic staff about test results and any examination requirements.'
+    a: 'Medical Records offers Student Medical & Physical Examination (SMAPE) and Medical & Physical Examination (MAPE). SMAPE has school and guardian information; MAPE has company/occupation and emergency-contact information. Complete the appropriate form, review your answers, and submit it. Profile > Medical History shows saved submissions and their review status. A submitted or approved form is not a laboratory result or signed medical clearance; ask clinic staff about examination requirements.'
   },
   {
     q: 'Will my information stay saved when I leave the app?',
-    a: 'Successfully saved profile details and submitted forms remain linked to your patient account. Sign in to the same account to retrieve them after logout or reinstalling the app. Unfinished SMPE, booking, and profile forms are kept as temporary drafts on your phone when you switch apps or minimize Alphastar. These drafts are not submitted to the clinic and can be lost when you log out, uninstall, or clear app data. Always use Save or Submit to keep information in your account.'
+    a: 'Successfully saved profile details and submitted forms remain linked to your patient account. Sign in to the same account to retrieve them after logout or reinstalling the app. Unfinished SMAPE, booking, and profile forms are kept as temporary drafts on your phone when you switch apps or minimize Alphastar. These drafts are not submitted to the clinic and can be lost when you log out, uninstall, or clear app data. Always use Save or Submit to keep information in your account.'
   },
   {
     q: 'How do I change my PIN or password?',
@@ -45,7 +45,7 @@ const FAQ_DATA = [
   },
   {
     q: 'How long does it take to get results?',
-    a: 'Release times depend on the test, package, and processing requirements. Ask clinic staff when and how your results will be released after specimen collection or your examination. Medical History in Alphastar Mobile shows your submitted SMPE forms and review status; it does not confirm that a laboratory result is ready.'
+    a: 'Release times depend on the test, package, and processing requirements. Ask clinic staff when and how your results will be released after specimen collection or your examination. Medical History in Alphastar Mobile shows your submitted SMAPE forms and review status; it does not confirm that a laboratory result is ready.'
   },
   {
     q: 'Do I need to fast or prepare before a test?',

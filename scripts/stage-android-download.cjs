@@ -10,6 +10,7 @@ const sha = data => crypto.createHash('sha256').update(data).digest('hex');
 const release = JSON.parse(fs.readFileSync(path.join(root, 'downloads/release.json'), 'utf8'));
 const overlays = ['index.html', 'assets/css/section-layout.css', 'assets/js/site-config.js', 'assets/js/site-language.js', 'assets/js/main.js',
   'assets/css/clinic-assistant.css', 'assets/js/human-chat.js', 'assets/js/clinic-assistant.js', 'assets/js/floating-btn.js',
+  'assets/js/clinic-assistant-flow.js', 'assets/js/faq.js', 'assets/js/legal-translations.js', 'privacy-policy.html', 'terms-and-conditions.html',
   'assets/images/android-logo.svg', 'assets/images/android-logo.LICENSE.txt', 'downloads/release.json',
   'downloads/' + release.filename, 'downloads/' + release.filename + '.sha256'];
 const baselineFiles = git(['ls-files', '-z']).toString().split('\0').filter(file => /^(?:index\.html|privacy-policy\.html|terms-and-conditions\.html|assets\/[^\0]+)$/.test(file));

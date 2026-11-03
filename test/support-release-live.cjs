@@ -7,6 +7,7 @@ async function get(url, options = {}) { return fetch(url, { ...options, signal: 
 async function post(route, body = {}) { return get(backend + route, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }); }
 (async () => {
   const health = await get(backend + "/api/health"); assert.equal(health.status, 200); assert.equal((await health.json()).ok, true);
+  const ready = await get(backend + '/api/ready'); assert.equal(ready.status, 200); assert.deepEqual((await ready.json()).medicalRecordTypes, ['smape','mape']);
   assert.equal((await get(backend + "/api/staff/human-chats/unread")).status, 401);
   assert.equal((await get(backend + "/api/staff/sync/stream")).status, 401);
   const checks = [
@@ -28,7 +29,7 @@ async function post(route, body = {}) { return get(backend + route, { method: "P
   if (process.argv.includes("--backend-only")) return;
   const hash = text => crypto.createHash("sha256").update(text.replace(/\r\n/g, "\n").trim()).digest("hex");
   const release = JSON.parse(fs.readFileSync(path.join(root, "downloads/release.json"), "utf8"));
-  for (const name of ["index.html", "assets/js/site-config.js", "assets/js/human-chat.js", "assets/js/clinic-assistant.js", "assets/js/floating-btn.js", "assets/css/clinic-assistant.css"]) {
+  for (const name of ["index.html", "assets/js/site-config.js", "assets/js/human-chat.js", "assets/js/clinic-assistant.js", "assets/js/floating-btn.js", "assets/css/clinic-assistant.css", "assets/js/clinic-assistant-flow.js", "assets/js/faq.js", "assets/js/legal-translations.js", "assets/js/site-language.js", "privacy-policy.html", "terms-and-conditions.html"]) {
     const response = await get(site + "/" + name + "?support_release=" + release.version, { headers: { "Cache-Control": "no-cache" } });
     assert.equal(response.status, 200, name); assert.equal(hash(await response.text()), hash(fs.readFileSync(path.join(root, name), "utf8")), name + " source differs");
   }
