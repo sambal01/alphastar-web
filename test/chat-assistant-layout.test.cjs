@@ -46,6 +46,14 @@ let browser, server;
   const topics = page.locator('#clinic-chat-topics');
   const labels = await topics.locator('button').allTextContents();
   assert.equal(labels[labels.indexOf('Privacy Policy') + 1], 'Terms and Conditions');
+  assert.ok(labels.includes('Talk to Agent Support'));
+  assert.equal(labels.includes('Talk to Clinic Staff'), false);
+  await topics.getByRole('button', { name: 'Talk to Agent Support', exact: true }).click(); await idle();
+  assert.equal(await topics.getByRole('button', { name: 'Chat with staff', exact: true }).count(), 1);
+  await send('main menu');
+  await page.locator('#clinic-chat-language').click();
+  assert.equal(await topics.getByRole('button', { name: 'Kausapin ang Agent Support', exact: true }).count(), 1);
+  await page.locator('#clinic-chat-language').click();
   await topics.getByRole('button', { name: 'Terms and Conditions', exact: true }).click(); await idle();
   for (const file of ['privacy-policy.html', 'terms-and-conditions.html']) {
     const link = topics.locator(`a[href="${file}"]`);

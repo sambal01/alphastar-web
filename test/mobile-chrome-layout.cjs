@@ -4,7 +4,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=r
 const {execFileSync}=require('node:child_process');
 const {chromium}=require('../.tmp/chat-browser-tools/node_modules/playwright-core');
 const root=path.resolve(__dirname,'..'),output=path.join(root,'test-results/mobile-chrome');
-const baseline=new Map(['index.html','assets/js/navbar.js'].map(file=>[file,execFileSync('git',['show','HEAD:'+file],{cwd:root})]));
+const baseline=new Map(['index.html','assets/js/navbar.js','assets/css/mobile-chrome.css'].map(file=>[file,execFileSync('git',['show','HEAD:'+file],{cwd:root})]));
 let browser,server;
 const wait=page=>page.waitForTimeout(420);
 async function snapshot(page){return page.evaluate(()=>{
@@ -41,9 +41,11 @@ async function snapshot(page){return page.evaluate(()=>{
       await page.evaluate(language=>window.AlphastarSiteLanguage.setLanguage(language),language);
       const geometry=await page.evaluate(()=>{
         const grid=document.querySelector('.footer-grid'),[brand,links,services,contact]=[...grid.children].map(node=>node.getBoundingClientRect());
-        return {twoColumns:Math.abs(links.top-services.top)<1&&services.left>links.left,brandFirst:brand.bottom<=links.top,contactBelow:contact.top>=Math.max(links.bottom,services.bottom)-1,brandFull:Math.abs(brand.width-grid.clientWidth+48)<1,contactFull:Math.abs(contact.width-brand.width)<1,noOverflow:document.documentElement.scrollWidth<=innerWidth&&[...grid.querySelectorAll('*')].every(node=>node.scrollWidth<=node.clientWidth+1||node.tagName==='SVG'),readable:parseFloat(getComputedStyle(document.querySelector('.footer-col a')).fontSize)>=14};
+        const bodies=[grid.children[2].querySelector('ul'),grid.querySelector('.footer-contact-list')].map(node=>node.getBoundingClientRect());
+        return {twoColumns:Math.abs(services.top-contact.top)<1&&contact.left>services.left,equalWidths:Math.abs(services.width-contact.width)<1,bodiesAligned:Math.abs(bodies[0].top-bodies[1].top)<1,brandFirst:brand.bottom<=links.top,linksAbove:links.bottom<=services.top,brandFull:Math.abs(brand.width-grid.clientWidth+48)<1,linksFull:Math.abs(links.width-brand.width)<1,noOverflow:document.documentElement.scrollWidth<=innerWidth&&[...grid.querySelectorAll('*')].every(node=>node.scrollWidth<=node.clientWidth+1||node.tagName==='SVG'),readable:parseFloat(getComputedStyle(document.querySelector('.footer-col a')).fontSize)>=14&&parseFloat(getComputedStyle(document.querySelector('.footer-contact-item small')).fontSize)>=14};
       });
-      assert.deepEqual(geometry,{twoColumns:true,brandFirst:true,contactBelow:true,brandFull:true,contactFull:true,noOverflow:true,readable:true},width+' '+language+' footer');
+      assert.deepEqual(geometry,{twoColumns:true,equalWidths:true,bodiesAligned:true,brandFirst:true,linksAbove:true,brandFull:true,linksFull:true,noOverflow:true,readable:true},width+' '+language+' footer');
+      if(width===390||width===320)await page.locator('.site-footer').screenshot({path:path.join(output,'footer-'+width+'-'+language+'.png'),style:'#navbar, #navbar *, #fab-container, #fab-container * { visibility: hidden !important; }'});
     }
     await page.evaluate(()=>window.AlphastarSiteLanguage.setLanguage('en'));
     if(width===390||width===320)await page.locator('.site-footer').screenshot({path:path.join(output,'footer-'+width+'.png'),style:'#navbar, #fab-container { visibility: hidden !important; }'});
@@ -72,5 +74,5 @@ async function snapshot(page){return page.evaluate(()=>{
   assert.equal(await page.locator('#mobile-menu').isVisible(),true,'Reopening cancels the old close timer');assert.equal(await page.locator('main').evaluate(node=>node.inert),true);
   await page.keyboard.press('Escape');await wait(page);
   await page.emulateMedia({reducedMotion:'reduce'});await page.locator('#hamburger-btn').click();assert.ok(await page.locator('#mobile-menu').evaluate(node=>parseFloat(getComputedStyle(node).transitionDuration))<=.001);await page.keyboard.press('Escape');await page.waitForTimeout(20);assert.equal(await page.locator('#mobile-menu').isVisible(),false);
-  assert.deepEqual(errors,[]);console.log('PASS: Mobile-only two-column footer, unchanged colors and desktop/tablet geometry, smooth right-side drawer, backdrop, scroll/focus containment, all close paths, anchor navigation, resize and reduced motion. English/Tagalog at six phone sizes; no external requests.');
+  assert.deepEqual(errors,[]);console.log('PASS: Mobile services/contact columns have equal widths and aligned headings, Quick Links above; unchanged colors and desktop/tablet geometry, smooth right-side drawer, backdrop, scroll/focus containment, all close paths, anchor navigation, resize and reduced motion. English/Tagalog at six phone sizes; no external requests.');
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(resolve=>server.close(resolve));});

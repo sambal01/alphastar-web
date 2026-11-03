@@ -10,7 +10,7 @@
     about: ['About Alphastar', 'Tungkol sa Alphastar'],
     app: ['About the App', 'Tungkol sa App'],
     'install-guide': ['Download Our App', 'I-download ang App'],
-    staff: ['Talk to Clinic Staff', 'Kausapin ang Clinic Staff'],
+    staff: ['Talk to Agent Support', 'Kausapin ang Agent Support'],
     hours: ['Clinic Schedule', 'Oras at Lokasyon'],
     services: ['All Services Offered', 'Mga Serbisyo'],
     parking: ['Vehicle Parking', 'Paradahan'],
