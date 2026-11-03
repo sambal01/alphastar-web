@@ -11,6 +11,15 @@ for (const name of ['clinic-assistant', 'clinic-assistant-security', 'clinic-ass
 }
 const base = window.AlphastarClinicAssistant, flow = window.AlphastarChatFlow;
 
+test('current staff guidance describes the built-in chat without legacy provider wording', () => {
+  for (const language of ['english', 'filipino']) {
+    const reply = flow.reply('staff', language);
+    assert.doesNotMatch(reply.text, /tawk/i);
+    assert.match(reply.text, /Chat with staff|Makipag-chat sa staff/);
+    assert.ok(reply.topics.includes('human-chat'));
+  }
+});
+
 test('Privacy Policy and Terms and Conditions are adjacent in the main menu and link to both legal pages', () => {
   const topics = Array.from(flow.reply('main-menu').topics);
   assert.equal(topics[topics.indexOf('privacy') + 1], 'terms');

@@ -4,7 +4,7 @@
   let session = null, conversation = null, view, log, status, controls, endButton, typingIndicator, hidden = [];
   let timer, heartbeatTimer, epoch = 0, reading = false, busy = false, pending = null, rows = [], before = "";
   let presentationTimer, typingClient = "", typingSequence = 0, typingOn = false, lastTyping = 0;
-  let feedback = false, rating = "", rated = false, controlMode = "", leavePrompt = false, draft = "";
+  let feedback = false, rating = "", comment = "", rated = false, controlMode = "", leavePrompt = false, draft = "";
   let opening = false, requestLoading = false;
   let operationError = "", mutation = 0;
   const transitionDelay = () => new Promise(resolve => setTimeout(resolve, 1000));
@@ -95,7 +95,7 @@
   }
   function openFeedback() {
     if (busy) return;
-    stopTyping(); leavePrompt = false; feedback = true; rating = ""; paint(); controls.querySelector("button")?.focus();
+    stopTyping(); leavePrompt = false; feedback = true; paint(); controls.querySelector("button")?.focus();
   }
   function continueConversation() {
     leavePrompt = feedback = false; paint(); refreshTyping(); controls.querySelector("textarea")?.focus();
@@ -157,8 +157,10 @@
     if (mode === controlMode) {
       for (const element of controls.querySelectorAll("button")) {
         if (element.dataset.send) element.disabled = busy || !controls.querySelector("textarea").value.trim();
+        else if (element.dataset.finish) element.disabled = busy || !rating;
         else element.disabled = busy;
       }
+      const commentField = controls.querySelector('[aria-label="Feedback comment"]'); if (commentField) commentField.disabled = busy;
       return;
     }
     controlMode = mode; controls.replaceChildren();
@@ -177,15 +179,22 @@
       const choices = node("div", "native-chat-rating");
       for (const [value, label] of [["up", "👍"], ["down", "👎"]]) {
         const choice = button("", () => {
+          if (busy) return;
           rating = value;
           for (const option of choices.children) option.setAttribute("aria-pressed", String(option === choice));
-          void action("end", { rating: value, comment: "" });
+          controls.querySelector("[data-finish]").disabled = false;
         });
         const caption = value === "up" ? localized("Like", "Nakatulong") : localized("Dislike", "Hindi nakatulong"), icon = node("span", "native-chat-rating-icon", label); icon.setAttribute("aria-hidden", "true");
         choice.append(icon, node("span", "", caption));
         choice.setAttribute("aria-label", caption); choice.setAttribute("aria-pressed", String(rating === value)); choice.disabled = busy; choices.append(choice);
       }
-      controls.append(choices);
+      const field = node("textarea"); field.id = "nativeChatFeedbackComment"; field.rows = 2; field.maxLength = 1000; field.value = comment;
+      field.placeholder = localized("Share your feedback", "Ibahagi ang iyong feedback"); field.setAttribute("aria-label", "Feedback comment"); field.disabled = busy;
+      field.addEventListener("input", () => { comment = field.value; });
+      const label = node("label", "native-chat-feedback-label", localized("Comment", "Komento")); label.htmlFor = field.id;
+      const finish = button(localized("Submit feedback", "Ipadala ang feedback"), () => void action("end", { rating, comment: comment.trim() })); finish.dataset.finish = "true"; finish.disabled = busy || !rating;
+      const actions = node("div", "native-chat-feedback-actions"); actions.append(button(localized("Continue conversation", "Ituloy ang usapan"), continueConversation, "native-chat-back"), finish);
+      controls.append(choices, label, field, actions);
     } else if (mode === "welcome") {
       controls.className = "native-chat-actions";
       controls.append(button(localized("Yes, connect me to support", "Oo, ikonekta ako sa support"), () => void action("request")));
@@ -226,7 +235,7 @@
       if (current !== epoch) return;
       if (kind === "end") {
         if (data.conversation?.status !== "ended") throw Error("Unable to end this conversation. Please retry.");
-        feedback = leavePrompt = false; rated = true; draft = "";
+        feedback = leavePrompt = false; rated = true; draft = comment = "";
       }
       accept(data);
       if (kind === "end") returnToBot(true);
@@ -267,7 +276,7 @@
     view.append(header, loading, log, status, controls);
     for (const id of ["clinic-chat-body", "clinic-chat-form", "clinic-chat-status"]) { const element = document.getElementById(id); if (element) { hidden.push([element, element.style.display]); element.style.display = "none"; } }
     panel.append(view); header.querySelector("button")?.focus({ preventScroll: true });
-    feedback = leavePrompt = false; rating = draft = controlMode = ""; rated = false;
+    feedback = leavePrompt = false; rating = comment = draft = controlMode = ""; rated = false;
     try {
       const [data] = await Promise.all([request("", { name, email, consent: true }, null), transitionDelay()]);
       const identity = { id: data.id, token: data.token, name, email };

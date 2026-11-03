@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.72",
-  "versionCode": 73,
-  "filename": "Alphastar-1.0.72-build73.apk",
-  "url": "Alphastar-1.0.72-build73.apk",
-  "sizeBytes": 96879945,
-  "sha256": "827459bfe5e78282b05a28e11e4f10ce9e6700008d022d877a9b96e1fbc7b2c3",
+  "version": "1.0.73",
+  "versionCode": 74,
+  "filename": "Alphastar-1.0.73-build74.apk",
+  "url": "Alphastar-1.0.73-build74.apk",
+  "sizeBytes": 96880409,
+  "sha256": "729be27ec740527ec479ecfbf3e0a96348c080fe2c1fbeedfec0bea79c61d35f",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.72 / build 73 packages the mobile staff-chat Back / End conversation toolbar and divider, Continue / End choice and Help Bot feedback flow. Continue keeps the conversation and unsent draft. End asks Was our staff helpful?; Like or Dislike explicitly saves its rating and ends the cycle before returning to the main menu. Failed feedback saves remain retryable and duplicate taps are blocked. Existing encrypted patient-scoped Help Bot history, server-saved staff conversations, later continuation, one-second opening and scrolling typing indicators are retained. The website has the matching chat flow. No backend, desktop, database, Firebase, SDK or signing-key deployment is included. Existing development certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation, recovery and push delivery are not verified."
+  "note": "Version 1.0.73 / build 74 restores the optional feedback comment below equal Like / Dislike choices. Selecting a rating does not send it; Submit feedback saves the rating and comment, ends the current cycle and returns to the unchanged chatbot main menu after confirmation. Continue conversation does not submit feedback. Failed saves preserve feedback for retry and duplicate taps are blocked. The website has the matching English/Tagalog flow and removes obsolete provider wording from current chat guidance. Saved patient conversations, Back/End navigation, later continuation and typing indicators remain intact. No backend, desktop, database, Firebase, SDK or signing-key deployment is included. Existing development certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation, recovery and push delivery are not verified."
 }

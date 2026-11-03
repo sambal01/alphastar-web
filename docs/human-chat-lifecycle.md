@@ -1,5 +1,11 @@
 # Chat with Us — lifecycle and release record
 
+## Version 1.0.73/build 74 — feedback comment restored, November 3, 2026
+
+The end-conversation Help Bot question retains equal Like / Dislike choices and restores a labeled Comment field. Selecting a rating does not send it. **Submit feedback** saves the rating and optional trimmed comment (up to 1,000 characters), ends the current cycle through the existing endpoint, and returns to the unchanged chatbot main menu after confirmation. **Continue conversation** preserves the active chat without submitting. Both action pairs have equal dimensions; feedback stays scrollable on short screens. Polling preserves the same comment input and selection, failed saves remain retryable, and duplicate taps are blocked. English and Tagalog labels are supported.
+
+Current staff guidance describes the built-in chat without obsolete provider wording. Saved conversations, compatibility code and historical privacy disclosures remain intact. No backend or storage change is included. See [the release record](android-release-1.0.73.md) for verification/publication evidence. Earlier version sections below are historical records.
+
 ## Version 1.0.72/build 73 — Back, ending and feedback, November 3, 2026
 
 Back in an active staff chat now offers Continue conversation or End conversation. Continue restores the same private guest session and unsent draft without reconnecting. End opens the S-avatar Help Bot question **Was our staff helpful?** with balanced Like / Dislike choices (also localized in Tagalog). Either choice saves its explicit up/down rating and ends the chat through the existing endpoint, then reveals the chatbot's main menu. Feedback errors remain visible and retryable instead of being cleared by polling. Duplicate taps are disabled; stale pre-mutation polls cannot reopen an ended guest session. The earlier transcript is not inserted into the bot or exposed behind feedback.
