@@ -11,3 +11,9 @@ The existing development/test signing certificate is retained; this is not Play 
 Website staging and live publication checks are recorded below after verification.
 
 Mobile source `b7623b1e5517af02c0cc1969a9d2b1ff6ffde81b` is pushed to GitHub master. Its skip-deploy marker deliberately leaves the existing compatible backend unchanged. The isolated website payload verified all 60 prior public assets and excluded unrelated local work. Three integrity/configuration assertions and the four-width English/Tagalog browser fixture passed. Its Android-emulated touch download retrieved all 97,329,021 bytes with matching checksum, filename, Android MIME type, attachment and range support.
+
+Website source `ae6d1b44b3c5315e0f6ffe09924f219b33a632c5` became live on Render deploy `dep-dbll65om7kps73bs86s0` on November 4, 2026 at 23:46:31 Asia/Manila (`2026-11-04T15:46:31.137Z`). No automatic deployment or event appeared after the successful GitHub push, so one explicit deployment of the existing website service was triggered; no service settings changed. The backend remains on the previously deployed compatible `d12dad49c378b4eb2b4864b36bdd30b1ca719b16`.
+
+The full public custom-domain Android-emulated touch download passed at 23:47:23 Asia/Manila (`2026-11-04T15:47:23.697Z`). It retrieved exactly 97,329,021 bytes with the expected SHA-256 and filename. Public release metadata, Android MIME type, range support, logo, English/Tagalog version labels, phone layout and runtime-error checks passed. Live website/chat/download source and checksum sidecar matched the tested release. Safe backend readiness, rejected-access and CORS checks passed without patient/account writes. No physical installation or actual push delivery was performed.
+
+Download: https://alphastarkasiglahan.com/downloads/Alphastar-1.0.77-build78.apk
