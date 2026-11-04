@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.75",
-  "versionCode": 76,
-  "filename": "Alphastar-1.0.75-build76.apk",
-  "url": "Alphastar-1.0.75-build76.apk",
-  "sizeBytes": 97323909,
-  "sha256": "0412c7ff8e7736ead0bf590e528ea437bf913de6b48ea014bace35d00b3ad5c3",
+  "version": "1.0.76",
+  "versionCode": 77,
+  "filename": "Alphastar-1.0.76-build77.apk",
+  "url": "Alphastar-1.0.76-build77.apk",
+  "sizeBytes": 97328301,
+  "sha256": "d3de4dca25b19159d81ebf203bc53c080cd0ef7832b5b7930cabd8e13ff0d2e6",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.75 / build 76 fixes medical form section scrolling. Next from Patient Information opens Medical History at the top with its heading visible for both SMAPE and MAPE. Next and Back preserve draft answers; editing answers does not reset scrolling. Stale keyboard measurements and the previous section offset cannot reposition the new section. Existing saved records, approved PDF export, chat and booking features remain intact. No backend, database, Firebase rule, desktop, SDK or signing-key changes. Existing development certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation and native on-device interaction were not verified."
+  "note": "Version 1.0.76 / build 77 updates the supplied SMAPE and MAPE forms, form-only PDF exports and flexible inline remarks. Saved vital signs are read-only for patients; authorized clinic staff can save versioned history corrections and notify the owning patient. Legacy SMPE references display as SMAPE without changing saved database keys. Existing booking, chat and medical-form scrolling are retained. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation, native on-device interaction and actual patient push delivery were not verified."
 }

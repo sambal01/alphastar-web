@@ -7,7 +7,9 @@ async function get(url, options = {}) { return fetch(url, { ...options, signal: 
 async function post(route, body = {}) { return get(backend + route, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }); }
 (async () => {
   const health = await get(backend + "/api/health"); assert.equal(health.status, 200); assert.equal((await health.json()).ok, true);
-  const ready = await get(backend + '/api/ready'); assert.equal(ready.status, 200); assert.deepEqual((await ready.json()).medicalRecordTypes, ['smape','mape']);
+  const ready = await get(backend + '/api/ready'); assert.equal(ready.status, 200); const capabilities = await ready.json();
+  assert.deepEqual(capabilities.medicalRecordTypes, ['smape','mape']);
+  assert.equal(capabilities.medicalRecordAssessmentCorrections, true); assert.equal(capabilities.patientSavedVitalsReadOnly, true);
   assert.equal((await get(backend + "/api/staff/human-chats/unread")).status, 401);
   assert.equal((await get(backend + "/api/staff/sync/stream")).status, 401);
   const checks = [
