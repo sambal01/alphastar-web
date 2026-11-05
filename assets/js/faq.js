@@ -1,7 +1,7 @@
 const FAQ_DATA = [
   {
     q: 'What is the Alphastar mobile application?',
-    a: 'Alphastar Mobile is our Android patient app for requesting home services and managing your patient information. You can update your profile, submit a Student Medical & Physical Examination (SMAPE) form, view submitted forms and their review status, check Appointment Schedule and Appointment History, receive clinic notifications, and manage your PIN in Security Settings. It also provides clinic information and access to Agent Support. In-person clinic appointments are not booked through the app.'
+    a: 'Alphastar Mobile is our Android patient app for requesting home services and managing your patient information. You can update your profile, submit a Student Medical & Physical Examination (SMAPE) form, view submitted forms and their review status, check Appointment Schedule and Appointment History, receive clinic notifications, and manage your PIN in Security Settings. It also provides clinic information and access to Staff Support. In-person clinic appointments are not booked through the app.'
   },
   {
     q: 'How do I start using Alphastar Mobile?',
@@ -25,7 +25,7 @@ const FAQ_DATA = [
   },
   {
     q: 'Can I use the app with mobile data?',
-    a: 'Yes. You can use mobile data or Wi-Fi. An internet connection is needed to sign in, submit home-service requests or forms, and refresh account information and clinic updates. If a screen cannot load, check your connection and retry. For help, use Agent Support in the app or message the clinic through Messenger.'
+    a: 'Yes. You can use mobile data or Wi-Fi. An internet connection is needed to sign in, submit home-service requests or forms, and refresh account information and clinic updates. If a screen cannot load, check your connection and retry. For help, use Staff Support in the app or message the clinic through Messenger.'
   },
   {
     q: 'What services do you offer?',
@@ -61,7 +61,7 @@ const FAQ_DATA = [
   },
   {
     q: 'How can I contact Alphastar?',
-    a: 'Use the Official Messenger link on this website, visit the Alphastar Laboratory Facebook page, or email info@alphastarlabclinic.com. Mobile app users can also open Profile > Agent Support. For booking confirmation, service availability, fees, test preparation, or result release, contact clinic staff. Never send passwords, PINs, or verification codes in a message.'
+    a: 'Use the Official Messenger link on this website, visit the Alphastar Laboratory Facebook page, or email info@alphastarlabclinic.com. Mobile app users can also open Profile > Staff Support. For booking confirmation, service availability, fees, test preparation, or result release, contact clinic staff. Never send passwords, PINs, or verification codes in a message.'
   }
 ];
 

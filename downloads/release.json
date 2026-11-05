@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.77",
-  "versionCode": 78,
-  "filename": "Alphastar-1.0.77-build78.apk",
-  "url": "Alphastar-1.0.77-build78.apk",
-  "sizeBytes": 97329021,
-  "sha256": "2df2a7c8a517c285fc4b1e03554852f823d895a2764d071a3835644a5eaf2c03",
+  "version": "1.0.78",
+  "versionCode": 79,
+  "filename": "Alphastar-1.0.78-build79.apk",
+  "url": "Alphastar-1.0.78-build79.apk",
+  "sizeBytes": 97329777,
+  "sha256": "9f2ec3c31442faa386e66bffb2886cd151a17870a18a56c8b2a23cda9f387152",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.77 / build 78 restores completed SMAPE and MAPE cards with Complete and View / edit. Reopening consistently enters the editor and preserves separate form drafts. Either medical-form notification opens all submitted forms in Medical History, with accurate clinic review statuses and explicit record viewing. Saved vital signs remain read-only. Existing form images, exports, booking, chat and section scrolling are retained. No backend or patient-data change is included. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation, native on-device interaction and actual patient push delivery were not verified."
+  "note": "Version 1.0.78 / build 79 makes staff-chat ratings and comments optional, allows conversations to end without feedback and keeps Back/Close available after failed or pending feedback. Optional feedback has balanced controls and comment-only feedback is not treated as a negative rating. Patient-facing support labels now read Staff Support and Talk to Staff Support. Existing saved conversations, booking and SMAPE/MAPE features are retained. Requires the matching optional-feedback backend update. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation, native on-device interaction and actual patient push delivery were not verified."
 }

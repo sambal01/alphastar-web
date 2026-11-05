@@ -10,7 +10,7 @@
     about: ['About Alphastar', 'Tungkol sa Alphastar'],
     app: ['About the App', 'Tungkol sa App'],
     'install-guide': ['Download Our App', 'I-download ang App'],
-    staff: ['Talk to Agent Support', 'Kausapin ang Agent Support'],
+    staff: ['Talk to Staff Support', 'Kausapin ang Staff Support'],
     hours: ['Clinic Schedule', 'Oras at Lokasyon'],
     services: ['All Services Offered', 'Mga Serbisyo'],
     parking: ['Vehicle Parking', 'Paradahan'],
@@ -66,7 +66,7 @@
     if (/\b(are you (?:an? )?(?:ai|bot|human|robot)|who are you|what are you|what can you do|sino ka|ano ka|bot ka|ai ka)\b/.test(text)) return 'identity';
     if (previousTopic === 'hours' && /^(?:(?:and|on|what about|how about|sa|kapag) )?(?:sunday|saturday|weekends?|holidays?|linggo|sabado)(?: po)?$/.test(short)) return 'hours';
     if (/^(?:how long|how many (?:hours|days)|gaano katagal|ilang (?:oras|araw))(?: po)?$/.test(short)) return previousTopic === 'results' ? 'results' : 'unknown';
-    if (/\b(talk|speak|connect|contact|chat|need|want)\b.*\b(staff|agent|human|support|clinic|someone)\b|\b(staff|agent|human|receptionist)\b.*\b(available|online)\b|\b(kausap|makakausap)\b|\b(?:phone number|contact number)\b.*\bclinic\b|\bclinic\b.*\b(?:phone number|contact number)\b/.test(text) || /^(staff|agent|support|human|agent support)(?: please| po)?$/.test(short)) return 'staff';
+    if (/\b(talk|speak|connect|contact|chat|need|want)\b.*\b(staff|agent|human|support|clinic|someone)\b|\b(staff|agent|human|receptionist)\b.*\b(available|online)\b|\b(kausap|makakausap)\b|\b(?:phone number|contact number)\b.*\bclinic\b|\bclinic\b.*\b(?:phone number|contact number)\b/.test(text) || /^(staff|agent|support|human|agent support|staff support)(?: please| po)?$/.test(short)) return 'staff';
     if (/\b(authenticator|authenticcator|authentecator|authentication app|2fa|two[- ](?:factor|step)|double authenticator|recovery codes?|backup codes?)\b/.test(text)) return /\b(lost|forgot|forgotten|missing|recover|recovery|backup|not saved|didn't save|did not save|haven't saved|cannot access|can't access|new phone|broken phone|nawala|nakalimutan|hindi na[- ]?save|di na[- ]?save|walang code)\b/.test(text) ? 'authenticator-recovery' : 'authenticator-help';
     if (['authenticator-help', 'authenticator-recovery'].includes(previousTopic) && /\bcodes?\b/.test(text) && /\b(lost|forgot|not saved|didn't save|did not save|nawala|hindi na[- ]?save)\b/.test(text)) return 'authenticator-recovery';
     if (/\bcodes?\b/.test(text) && /\b(lost|forgot|forgotten|not saved|didn't save|did not save|nawala|nakalimutan|hindi na[- ]?save)\b/.test(text) && !/\b(?:email|otp|verification|password|pin)\b/.test(text)) return 'security';
@@ -717,12 +717,14 @@
     window.alphastarChat = Object.freeze({
       setLanguage(value) { setLanguage(value === 'tl' ? 'filipino' : 'english', true); },
       getLanguage: () => language === 'filipino' ? 'tl' : 'en',
-      showMainMenu() {
+      showMainMenu({ feedback = true } = {}) {
         window.clearTimeout(pendingTimer); busy = false; pendingMenuSelection = false;
         previousTopic = activePrompt = undefined; unknownCount = 0;
         input.value = ''; status.textContent = ''; status.classList.remove('is-typing');
         log.setAttribute('aria-busy', 'false'); syncTypingIndicator();
-        const reply = appendMessage('assistant', localized('Thank you for your feedback. What would you like help with?', 'Salamat sa iyong feedback. Saan mo kailangan ng tulong?'));
+        const reply = appendMessage('assistant', feedback
+          ? localized('Thank you for your feedback. What would you like help with?', 'Salamat sa iyong feedback. Saan mo kailangan ng tulong?')
+          : localized('Conversation ended. What would you like help with?', 'Natapos na ang usapan. Saan mo kailangan ng tulong?'));
         renderTopics(mainTopics); syncComposer(); revealMessage(reply); refreshTimestamps();
         topics.querySelector('button, a')?.focus({ preventScroll: true });
       },

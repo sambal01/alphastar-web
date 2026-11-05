@@ -10,6 +10,7 @@ async function post(route, body = {}) { return get(backend + route, { method: "P
   const ready = await get(backend + '/api/ready'); assert.equal(ready.status, 200); const capabilities = await ready.json();
   assert.deepEqual(capabilities.medicalRecordTypes, ['smape','mape']);
   assert.equal(capabilities.medicalRecordAssessmentCorrections, true); assert.equal(capabilities.patientSavedVitalsReadOnly, true);
+  assert.equal(capabilities.patientChatOptionalFeedback, true);
   assert.equal((await get(backend + "/api/staff/human-chats/unread")).status, 401);
   assert.equal((await get(backend + "/api/staff/sync/stream")).status, 401);
   const checks = [

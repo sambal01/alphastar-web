@@ -28,7 +28,7 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
     }else if(action==='typing'){
       assert.equal(body.cycle,1);assert.equal(typeof body.isTyping,'boolean');assert.equal(Object.hasOwn(body,'text'),false);return respond({ok:true});
     }else if(action==='end'){
-      assert.ok(['up','down'].includes(body.rating));assert.equal(body.comment,body.rating==='up'?'Synthetic helpful support':'');
+      assert.ok(body.rating===null||['up','down'].includes(body.rating));assert.equal(body.comment,body.rating==='up'?'Synthetic helpful support':body.rating===null?(body.comment?'Synthetic comment only':''):'');
       if(failEnd){failEnd=false;return respond({error:'Synthetic save unavailable'},503);}
       if(holdEnd)await new Promise(resolve=>{releaseEnd=resolve;});
       chat.feedback=body;chat.conversation.status='ended';add(chat,'system','This conversation has ended.');
@@ -164,7 +164,7 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
   await page.getByRole('button',{name:'End conversation',exact:true}).click();
   assert.equal(await page.getByText('Was our staff helpful?',{exact:true}).isVisible(),true);
   assert.equal(await page.locator('.native-chat-log').isVisible(),false);
-  const submitFeedback=page.getByRole('button',{name:'Submit feedback',exact:true});assert.equal(await submitFeedback.isDisabled(),true);
+  const submitFeedback=page.getByRole('button',{name:'Submit feedback',exact:true});assert.equal(await page.getByRole('button',{name:'End conversation',exact:true}).isEnabled(),true);
   const beforeSelection=requests.filter(row=>row.path.endsWith('/end')).length;
   await page.getByRole('button',{name:'Like',exact:true}).click();
   await page.getByRole('textbox',{name:'Feedback comment',exact:true}).fill('  Synthetic helpful support  ');
@@ -185,7 +185,7 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
   assert.equal(chat.conversation.status,'ended');assert.equal(await page.locator('.native-chat-composer textarea').count(),0);
   assert.equal(chat.feedback.rating,'up');assert.equal(await page.locator('.native-staff-chat').isVisible(),false);assert.equal(await page.locator('#clinic-chat-topics > button').count(),7);
   async function openNewGuest(){
-    await page.locator('#clinic-chat-topics').getByRole('button',{name:'Talk to Agent Support',exact:true}).click();
+    await page.locator('#clinic-chat-topics').getByRole('button',{name:'Talk to Staff Support',exact:true}).click();
     await page.locator('#clinic-chat-topics').getByRole('button',{name:'Chat with staff',exact:true}).click();
     await page.locator('[name="name"]').fill('Synthetic Visitor');await page.locator('[name="email"]').fill('synthetic@example.test');await page.locator('.clinic-chat-support input[type="checkbox"]').check();
     await page.locator('.clinic-chat-support').getByRole('button',{name:'Open staff chat',exact:true}).click();
@@ -199,7 +199,7 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
   await page.getByRole('button',{name:'End conversation',exact:true}).click();await page.getByRole('button',{name:'Dislike',exact:true}).click();
   assert.equal(await page.getByRole('textbox',{name:'Feedback comment',exact:true}).inputValue(),'');assert.equal(second.conversation.status,'waiting');
   await page.getByRole('button',{name:'Submit feedback',exact:true}).click();
-  await page.locator('#clinic-chat-topics').getByRole('button',{name:'Talk to Agent Support',exact:true}).waitFor();assert.equal(second.feedback.rating,'down');assert.equal(second.conversation.status,'ended');
+  await page.locator('#clinic-chat-topics').getByRole('button',{name:'Talk to Staff Support',exact:true}).waitFor();assert.equal(second.feedback.rating,'down');assert.equal(second.conversation.status,'ended');
   await openNewGuest();await page.getByRole('button',{name:'Yes, connect me to support',exact:true}).click();await page.locator('.native-chat-composer').waitFor();
   const third=[...chats.values()][2];
   await page.locator('#clinic-chat-close').click();await page.waitForTimeout(150);
@@ -208,6 +208,26 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
   assert.equal(chats.size,3);assert.equal(await page.locator('.native-chat-composer').isVisible(),true);
   await page.reload({waitUntil:'networkidle'});await page.waitForTimeout(150);assert.equal(third.conversation.status,'ended');
   assert.equal(await page.locator('.native-staff-chat').count(),0);assert.equal(await page.evaluate(()=>sessionStorage.getItem('alphastar-staff-chat-v1')),null);
+  await page.locator('#fab-main').click();await page.waitForFunction(()=>!document.querySelector('#fab-menu').classList.contains('is-connecting'));
+  for(const commentOnly of [false,true]){
+    await openNewGuest();await page.getByRole('button',{name:'Yes, connect me to support',exact:true}).click();await page.locator('.native-chat-composer').waitFor();
+    const currentChat=[...chats.values()].at(-1);
+    await page.getByRole('button',{name:'End conversation',exact:true}).click();
+    assert.equal(await page.getByText('Feedback is optional.',{exact:true}).isVisible(),true);
+    await page.getByRole('button',{name:'Like',exact:true}).click();await page.getByRole('button',{name:'Like',exact:true}).click();
+    assert.equal(await page.getByRole('button',{name:'Like',exact:true}).getAttribute('aria-pressed'),'false');
+    if(commentOnly)await page.getByRole('textbox',{name:'Feedback comment',exact:true}).fill('  Synthetic comment only  ');
+    if(!commentOnly){
+      failEnd=true;await page.getByRole('button',{name:'End conversation',exact:true}).click();await page.getByText('Synthetic save unavailable',{exact:true}).waitFor();
+      await page.locator('.native-staff-chat > header').getByRole('button',{name:'Back',exact:true}).click();
+      assert.equal(currentChat.conversation.status,'waiting');assert.equal(await page.locator('.native-staff-chat').isVisible(),false);
+      assert.equal(await page.evaluate(()=>window.AlphastarHumanChat.resume()),true);
+    }
+    await page.getByRole('button',{name:commentOnly?'Submit feedback':'End conversation',exact:true}).click();
+    await page.locator('#clinic-chat-topics').getByRole('button',{name:'Talk to Staff Support',exact:true}).waitFor();
+    assert.equal(currentChat.conversation.status,'ended');assert.equal(currentChat.feedback.rating,null);assert.equal(currentChat.feedback.comment,commentOnly?'Synthetic comment only':'');
+    assert.equal(await page.getByText(commentOnly?'Thank you for your feedback. What would you like help with?':'Conversation ended. What would you like help with?',{exact:true}).count()>0,true);
+  }
   assert.deepEqual(unexpected,[]);assert.deepEqual(errors,[]);assert.ok(requests.every(request=>![...chats.values()].some(chat=>request.path.includes(chat.token))));
   console.log('PASS: Circular system/staff/clinic typing avatars inside the message scroller, no sticky strip or forced jump while reading earlier messages, stable message ordering/drafts, one-second transitions, lifecycle actions and four responsive widths. No external chat requests.');
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{await browser?.close();if(server)await new Promise(resolve=>server.close(resolve));});

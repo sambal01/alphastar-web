@@ -79,7 +79,7 @@
     'service.11.title': 'Painless Tuli', 'service.11.desc': 'May painless tuli na isinasagawa sa pangangalaga ng mga medical professional.',
     'service.12.title': 'Student Pack', 'service.12.desc': 'Health package para sa karaniwang medical at laboratory requirements ng paaralan.',
     'faq.1.q': 'Ano ang Alphastar Mobile?',
-    'faq.1.a': 'Ang Alphastar Mobile ay Android app para sa mga pasyente. Puwede kang mag-request ng home service, mag-update ng profile, sumagot ng SMAPE form, at makita ang na-submit na forms at status. May Appointment Schedule, Appointment History, clinic notifications, Security Settings para sa PIN, at Agent Support. Hindi sa app bina-book ang pagpunta sa clinic.',
+    'faq.1.a': 'Ang Alphastar Mobile ay Android app para sa mga pasyente. Puwede kang mag-request ng home service, mag-update ng profile, sumagot ng SMAPE form, at makita ang na-submit na forms at status. May Appointment Schedule, Appointment History, clinic notifications, Security Settings para sa PIN, at Staff Support. Hindi sa app bina-book ang pagpunta sa clinic.',
     'faq.2.q': 'Paano magsimula sa Alphastar Mobile?',
     'faq.2.a': 'Mag-login o gumawa ng account gamit ang email at password, o Google. Sundin ang verification, sagutan ang patient details, at gumawa ng pribadong 6-digit PIN. Bago mag-request ng home service, i-save ang buong pangalan, contact number, at kumpletong address sa Profile > Profile details.',
     'faq.3.q': 'May home service ba kayo?',
@@ -91,7 +91,7 @@
     'faq.6.q': 'Paano palitan ang PIN o password?',
     'faq.6.a': 'Buksan ang Profile > Security Settings. Sa Change PIN, ilagay ang kasalukuyang PIN, bagong 6-digit PIN, at ulitin ito. Sa email/password account, may Change password: ilagay ang kasalukuyang password, bagong password, at confirmation, tapos gamitin ang code sa email. Walang Change password sa app para sa Google account; sa Google ito palitan. Huwag ibigay ang PIN, password, o code sa iba.',
     'faq.7.q': 'Puwede ba ang mobile data?',
-    'faq.7.a': 'Oo, puwede ang mobile data o Wi-Fi. Kailangan ng internet para mag-login, mag-submit ng home-service request o form, at makita ang bagong account at clinic updates. Kung ayaw mag-load, tingnan ang internet at subukan ulit. Para sa tulong, gamitin ang Agent Support sa app o mag-message sa Messenger ng clinic.',
+    'faq.7.a': 'Oo, puwede ang mobile data o Wi-Fi. Kailangan ng internet para mag-login, mag-submit ng home-service request o form, at makita ang bagong account at clinic updates. Kung ayaw mag-load, tingnan ang internet at subukan ulit. Para sa tulong, gamitin ang Staff Support sa app o mag-message sa Messenger ng clinic.',
     'faq.8.q': 'Anong mga serbisyo ang mayroon?',
     'faq.8.a': 'May konsulta at check-up, annual physical examination (APE), medical exam para sa trabaho, bakuna, executive check-up, laboratory tests, digital X-ray, ultrasound, ECG, drug testing, at serbisyo sa lugar ng kumpanya. Puwedeng magbago ang availability, schedule, at package. Itanong muna sa staff ang serbisyo, presyo, at requirements. Para sa home service, piliin ang available sa app; hindi lahat ng serbisyo sa clinic ay puwede sa bahay.',
     'faq.9.q': 'Saan ang Kasiglahan branch?',
@@ -109,7 +109,7 @@
     'faq.15.q': 'May lisensya ba ang X-ray sa Kasiglahan?',
     'faq.15.a': 'Itanong sa Kasiglahan branch ang kasalukuyang DOH/FDA license ng X-ray at validity dates. Para sa partikular na lugar at serbisyo ang lisensya. Hindi sapat ang lumang notice para kumpirmahin ang kasalukuyang status ng lahat ng serbisyo.',
     'faq.16.q': 'Paano makakausap ang Alphastar?',
-    'faq.16.a': 'Gamitin ang Opisyal na Messenger sa website, ang Alphastar Laboratory Facebook page, o email sa info@alphastarlabclinic.com. Sa app, may Profile > Agent Support. Para sa booking confirmation, serbisyo, bayad, paghahanda, o pagkuha ng resulta, kausapin ang clinic staff. Huwag mag-send ng password, PIN, o verification code.',
+    'faq.16.a': 'Gamitin ang Opisyal na Messenger sa website, ang Alphastar Laboratory Facebook page, o email sa info@alphastarlabclinic.com. Sa app, may Profile > Staff Support. Para sa booking confirmation, serbisyo, bayad, paghahanda, o pagkuha ng resulta, kausapin ang clinic staff. Huwag mag-send ng password, PIN, o verification code.',
   });
   let language = 'en';
   try { if (window.localStorage.getItem(STORAGE_KEY) === 'tl') language = 'tl'; } catch { /* Storage may be blocked. The switch still works. */ }
