@@ -29,9 +29,24 @@ let browser;
   for (const file of ['index.html', ...Object.values(files)]) {
     const html = await fs.readFile(path.join(root, file), 'utf8');
     assert.doesNotMatch(html, /Terms of Service|Sitemap|data-coming-soon/);
+    if (file !== 'index.html') {
+      assert.doesNotMatch(html, /tawk\.?to|agent support|session storage to resume/i, `${file}: obsolete chat provider and guest recovery wording removed`);
+      assert.match(html, /datetime="2026-11-05"/);
+      assert.match(html, /legal-translations\.js\?v=20261105-legal/);
+    }
     if (file !== 'index.html') assert.doesNotMatch(html, /legal-eyebrow|legal\.eyebrow|Alphastar Mobile &amp; Website/, `${file}: extra label is removed`);
     for (const [, css] of html.matchAll(/href="(assets\/css\/[^"?]+)(?:\?[^\"]*)?"/g)) postcss.parse(await fs.readFile(path.join(root, css), 'utf8'), { from: css });
   }
+  const catalog = await fs.readFile(path.join(root, 'assets/js/legal-translations.js'), 'utf8');
+  assert.doesNotMatch(catalog, /tawk\.?to|agent support|Clear Chat/i, 'English/Tagalog notices must not reintroduce removed support or clear-chat wording');
+  const privacyHtml = await fs.readFile(path.join(root, files.privacy), 'utf8');
+  assert.match(privacyHtml, /id="staff-chat"/);
+  assert.match(privacyHtml, /id="website-staff-chat"/);
+  assert.match(privacyHtml, /Like\/Dislike ratings and comments are optional/);
+  assert.match(privacyHtml, /Refreshing or leaving the page requests/);
+  assert.match(privacyHtml, /not access to a mobile patient account/);
+  assert.match(catalog, /Opsyonal ang Like\/Dislike rating at komento/);
+  assert.doesNotMatch(catalog, /session storage ng tab.*24 oras/);
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
   browser = await chromium.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true });
@@ -134,6 +149,9 @@ let browser;
         if ([360, 1440].includes(width)) {
           await page.evaluate(() => scrollTo(0, 0));
           await page.screenshot({ path: path.join(screenshots, `${kind}-${width}-${language}.png`) });
+          const supportSection = kind === 'privacy' ? '#website-staff-chat' : '#website-support';
+          await page.locator(supportSection).scrollIntoViewIfNeeded();
+          await page.screenshot({ path: path.join(screenshots, `${kind}-support-${width}-${language}.png`) });
         }
       }
     }
