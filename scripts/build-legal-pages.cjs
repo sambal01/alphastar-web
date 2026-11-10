@@ -28,7 +28,7 @@ const ui = {
   legalNavigation: 'Legal information', privacy: 'Privacy Policy', terms: 'Terms and Conditions',
   privacyPageTitle: 'Privacy Policy | Alphastar', termsPageTitle: 'Terms and Conditions | Alphastar',
   privacyDescription: 'Read how Alphastar Mobile and this website handle information, and how to ask about your privacy.',
-  termsDescription: 'Read the terms for Alphastar Mobile, home-service requests, SMAPE and MAPE forms, and this website.',
+  termsDescription: 'Read the terms for Alphastar Mobile, SMAPE and MAPE forms, and this website.',
 };
 for (const key of Object.keys(ui)) catalog[`legal.${key}`] = translated.ui[key];
 const website = {
@@ -76,9 +76,9 @@ const website = {
   terms: [
     {
       id: 'website-use', title: 'Using this website',
-      body: 'The website provides public clinic information, an automated guide, Staff Support, contact links, and app-download information. It is not a patient-account portal, booking confirmation, medical consultation, or emergency service. Use the Alphastar Android app for its available home-service and patient-form features. Download only through the clinic’s official link when available. Ask staff if the download link or a clinic detail needs confirmation. Do not impersonate others, misuse the chat, or attempt unauthorized access.',
+      body: 'The website provides public clinic information, an automated guide, Staff Support, contact links, and app-download information. It is not a patient-account portal, booking confirmation, medical consultation, or emergency service. Use the Alphastar Android app for its medical forms, patient profile, and Staff Support features. Download only through the clinic’s official link when available. Ask staff if the download link or a clinic detail needs confirmation. Do not impersonate others, misuse the chat, or attempt unauthorized access.',
       tlTitle: 'Paggamit ng website',
-      tlBody: 'May public clinic information, automated guide, Staff Support, contact links, at app-download information ang website. Hindi ito patient-account portal, booking confirmation, medical consultation, o emergency service. Sa Alphastar Android app gamitin ang available na home-service at patient-form features. Sa official link lang ng clinic mag-download kapag available ito. Magtanong sa staff kung kailangang kumpirmahin ang download link o clinic detail. Huwag magpanggap na ibang tao, abusuhin ang chat, o subukang pumasok nang walang awtoridad.',
+      tlBody: 'May public clinic information, automated guide, Staff Support, contact links, at app-download information ang website. Hindi ito patient-account portal, booking confirmation, medical consultation, o emergency service. Sa Alphastar Android app gamitin ang medical forms, patient profile, at Staff Support features. Sa official link lang ng clinic mag-download kapag available ito. Magtanong sa staff kung kailangang kumpirmahin ang download link o clinic detail. Huwag magpanggap na ibang tao, abusuhin ang chat, o subukang pumasok nang walang awtoridad.',
     },
     {
       id: 'website-guidance', title: 'Website information and language choices',
@@ -88,9 +88,9 @@ const website = {
     },
     {
       id: 'website-support', title: 'Using Staff Support as a guest',
-      body: 'Provide accurate contact information and use Staff Support respectfully. Messages you send in staff chat go to the clinic, unlike local Help Bot replies or prepared drafts. Staff availability varies; replies may be delayed. You can end without a rating or comment. Ending or leaving does not erase the clinic transcript. Website guest access is temporary and cannot be restored using only your name or email after a refresh or page exit. The mobile app uses a registered patient account for saved staff conversations. Neither chat is an emergency service or a substitute for medical care.',
+      body: 'Provide accurate contact information and use Staff Support respectfully. Messages you send in staff chat go to the clinic, unlike local Help Bot replies or prepared drafts. Staff Support is available daily from 7:00 AM to 5:00 PM (Philippine time); replies depend on staff availability. You can end without a rating or comment. Ending or leaving does not erase the clinic transcript. Website guest access is temporary and cannot be restored using only your name or email after a refresh or page exit. The mobile app uses a registered patient account for saved staff conversations. Neither chat is an emergency service or a substitute for medical care.',
       tlTitle: 'Paggamit ng Staff Support bilang guest',
-      tlBody: 'Magbigay ng tamang contact information at gamitin nang may respeto ang Staff Support. Napupunta sa clinic ang mga mensaheng ipinadala sa staff chat, hindi tulad ng local Help Bot replies o prepared drafts. Maaaring iba-iba ang staff availability at maantala ang sagot. Puwedeng magtapos nang walang rating o komento. Hindi nabubura ang clinic transcript sa pagtatapos o pag-alis. Pansamantala ang website guest access at hindi ito maibabalik gamit lang ang pangalan o email matapos mag-refresh o umalis sa page. Registered patient account ang gamit ng mobile app para sa saved staff conversations. Hindi emergency service o kapalit ng medical care ang alinmang chat.',
+      tlBody: 'Magbigay ng tamang contact information at gamitin nang may respeto ang Staff Support. Napupunta sa clinic ang mga mensaheng ipinadala sa staff chat, hindi tulad ng local Help Bot replies o prepared drafts. Available ang Staff Support araw-araw, 7:00 AM–5:00 PM (oras sa Pilipinas); nakadepende sa staff availability ang sagot. Puwedeng magtapos nang walang rating o komento. Hindi nabubura ang clinic transcript sa pagtatapos o pag-alis. Pansamantala ang website guest access at hindi ito maibabalik gamit lang ang pangalan o email matapos mag-refresh o umalis sa page. Registered patient account ang gamit ng mobile app para sa saved staff conversations. Hindi emergency service o kapalit ng medical care ang alinmang chat.',
     },
   ],
 };
@@ -172,7 +172,7 @@ for (const [kind, notice] of Object.entries(notices)) {
   </main>
   <footer class="legal-footer"><div class="legal-footer-inner"><p>&copy; <span id="current-year">2026</span> Alphastar. <span data-i18n="footer.rights">All rights reserved.</span></p><nav aria-label="Legal information" data-i18n-aria-label="legal.legalNavigation"><a href="privacy-policy.html"${kind === 'privacy' ? ' aria-current="page"' : ''}>${common('privacy')}</a><a href="terms-and-conditions.html"${kind === 'terms' ? ' aria-current="page"' : ''}>${common('terms')}</a></nav></div></footer>
   <script src="assets/js/legal-translations.js?v=${updatedIsoDate.replaceAll('-', '')}-legal"></script>
-  <script src="assets/js/site-language.js?v=20261105-79"></script>
+  <script src="assets/js/site-language.js?v=20261110-80"></script>
   <script src="assets/js/legal-notices.js?v=20261012-1"></script>
 </body>
 </html>

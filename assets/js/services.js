@@ -151,22 +151,6 @@ const SERVICES_DATA = [
     </svg>`
   },
   {
-    id: 10,
-    title: 'Home Service',
-    desc: 'Home service is advertised by AlphaStar, subject to confirmation with the Kasiglahan branch.',
-    category: 'Home Care',
-    color: 'teal',
-    tag: null,
-    bestFor: 'Patients asking whether an eligible service can be provided at their location.',
-    prep: 'Confirm the requested service, coverage area, fees, requirements, and availability with Kasiglahan staff.',
-    turnaround: 'Availability and timing depend on the requested service and clinic hours.',
-    icon: `<svg viewBox="0 0 48 48" width="32" height="32" fill="none" aria-hidden="true">
-      <path d="M24 8L8 20v22h12v-10h8v10h12V20L24 8z" fill="#0D847B" opacity=".15"/>
-      <path d="M24 8L8 20v22h12v-10h8v10h12V20L24 8z" stroke="#0D847B" stroke-width="2" stroke-linejoin="round"/>
-      <path d="M20 26h8M24 22v8" stroke="#0D847B" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>`
-  },
-  {
     id: 11,
     title: 'Painless Tuli',
     desc: 'Painless circumcision service for patients seeking a comfortable, professionally supervised procedure.',

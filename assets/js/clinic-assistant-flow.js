@@ -1,5 +1,5 @@
 /* Video-inspired guided conversations, not a live-agent or AI integration.
- * Only public clinic/app guidance; never identify patients or invent a queue.
+ * Only public clinic/app guidance; never identify patients or access private records.
  */
 (() => {
   'use strict';
@@ -39,7 +39,7 @@
     'draft-cancelled': ['Cancel Support Draft', 'Huwag Ituloy ang Message'],
   };
   const supportTopics = Object.freeze([
-    ['booking', 'Home-service request', 'Pag-book ng home service'], ['app', 'App / sign-in problem', 'Problema sa app / login'],
+    ['app', 'App / sign-in problem', 'Problema sa app / login'],
     ['smpe', 'SMAPE / MAPE form / review status', 'SMAPE / MAPE form / status'], ['services', 'Service availability / fees', 'Serbisyo / presyo'],
     ['results', 'Result-release enquiry', 'Pagkuha ng resulta'], ['other', 'Other clinic question', 'Ibang tanong sa clinic'],
   ].map(([id, label, tagalog]) => Object.freeze({ id, label, tagalog })));
@@ -51,6 +51,7 @@
     // Safety always wins, even in the middle of a yes/no or support flow.
     if (['urgent', 'medical-advice', 'privacy-refusal'].includes(topic)) return topic;
     if (['terms', 'privacy', 'authenticator-help', 'authenticator-recovery'].includes(topic)) return topic;
+    if (topic === 'staff') return topic;
     if (topic === 'staff' && /\b(?:talk|speak|connect|contact|kausap|makakausap)\b/.test(text)) return 'staff';
     if (/^(?:not helpful|that (?:did not|didn't) help|this (?:did not|didn't) help|hindi nakatulong)(?: po)?$/.test(short)) return 'feedback-unhelpful';
     if (/^(?:cancel|stop|cancel (?:the |my )?(?:draft|support (?:draft|request))|kanselahin|i-cancel)(?: po)?$/.test(short)
@@ -110,6 +111,8 @@
     const fil = language === 'filipino';
     const pair = (en, tagalog) => fil ? tagalog : en;
     const result = base().replyFor(topic, language);
+    if (topic === 'app') result.text = pair('Use the Alphastar mobile app to manage your profile, view medical forms, submit SMAPE / MAPE forms, and manage account security.', 'Gamitin ang Alphastar mobile app para pamahalaan ang profile, tingnan ang medical forms, magsumite ng SMAPE / MAPE forms, at pamahalaan ang account security.');
+    if (topic === 'install-guide') result.text = pair('Download the Alphastar Android app to manage your account, submit SMAPE / MAPE forms, and view medical forms. ', 'I-download ang Alphastar Android app para pamahalaan ang account, magsumite ng SMAPE / MAPE forms, at tingnan ang medical forms. ');
     const details = {
       'technical-help': pair('Which part of the app needs help? Choose below and I’ll walk you through it.', 'Saan ka nahihirapan sa app? Pumili sa ibaba at tutulungan kita sa mga hakbang.'),
       'password-recovery': pair('Forgot your Alphastar password?\n1. On the app’s email login screen, tap Forgot password.\n2. Follow the email-code and new-password steps.\n3. Sign in with your new password.\n\nUsing Google? Reset your password through Google instead.', 'Nakalimutan ang password?\n1. Sa email login ng app, pindutin ang Forgot password.\n2. Sundin ang code sa email at paggawa ng bagong password.\n3. Mag-login gamit ang bagong password.\n\nKung Google ang gamit mo, sa Google ito i-reset.'),
@@ -127,7 +130,7 @@
       'consultation-services': pair('We offer consultations and check-ups. Ask staff about the doctor’s schedule before visiting. Clinic consultations are not booked in Alphastar Mobile.', 'May konsulta at check-up. Itanong muna sa staff ang schedule ng doktor bago pumunta. Hindi sa Alphastar Mobile bina-book ang konsulta sa clinic.'),
       'vaccination-services': pair('We offer vaccinations. Ask a doctor which vaccine is right for you, and ask staff about stock, schedule, and price. This chat cannot recommend a vaccine or dose.', 'May bakuna sa Alphastar. Sa doktor itanong kung anong bakuna ang para sa iyo. Sa staff naman itanong kung may stock, ang schedule, at presyo. Hindi nagrerekomenda ng bakuna o dose ang chat.'),
       'examination-services': pair('We offer APE and employment-related services. Ask staff what tests and documents are included and how much the package costs. An SMAPE / MAPE form is not automatically an APE package.', 'May APE at serbisyo para sa trabaho. Itanong sa staff ang kasamang tests, dokumento, at presyo ng package. Hindi awtomatikong APE package ang SMAPE / MAPE form.'),
-      'onsite-services': pair('For company on-site services, contact staff about the location, schedule, tests, and price quote. Company bookings are not made through this chat.', 'Para sa serbisyo sa lugar ng kumpanya, kausapin ang staff tungkol sa lugar, schedule, tests, at presyo. Hindi dito sa chat ginagawa ang company booking.'),
+      'onsite-services': pair('For company on-site services, contact staff about the service location, schedule, tests, and price quote.', 'Para sa serbisyo sa lugar ng kumpanya, kausapin ang staff tungkol sa lokasyon, schedule, tests, at presyo.'),
       'feedback-helpful': pair('Glad that helped! Your feedback stays in this chat only. What else do you need?', 'Mabuti at nakatulong! Dito lang sa chat ang feedback mo. Ano pa ang kailangan mo?'),
       'feedback-unhelpful': pair('Sorry that did not help. Want help writing a message to staff?', 'Pasensya kung hindi nakatulong. Gusto mo bang gumawa ng message para sa staff?'),
       'staff-offer': pair('I don’t have a reliable answer. Choose Chat with staff for human help, or prepare a message to send yourself. Staff may be offline.', 'Wala akong maaasahang sagot. Piliin ang Makipag-chat sa staff para sa human help, o gumawa ng message na ikaw ang magpapadala. Maaaring offline ang staff.'),
@@ -135,16 +138,25 @@
       'support-prepared': pair('Your message is ready. It has not been sent. Review it, then send the email draft or copy it into Messenger.', 'Handa na ang message mo. Hindi pa ito naipapadala. Basahin muna, tapos i-send sa email o kopyahin sa Messenger.'),
       'support-declined': pair('No problem! Choose another topic and we’ll continue.', 'Sige, walang problema! Pumili ng ibang tanong at ituloy natin.'),
       'draft-cancelled': pair('Draft cancelled. No message was sent. What else can I help with?', 'Hindi na itinuloy ang draft. Walang message na ipinadala. Ano pa ang maitutulong ko?'),
-      'app-installed': pair('Great! Open Book Appointment in the app. Choose a home service, date, and time, add notes, then review and submit. Wait for staff to confirm. No booking was made in this chat.', 'Sige! Buksan ang Book Appointment sa app. Piliin ang home service, petsa, at oras, maglagay ng notes, tapos tingnan ang sagot at i-submit. Hintayin ang kumpirmasyon ng staff. Walang booking na ginawa sa chat.'),
+      'home-service': pair('Contact clinic staff for current service information. View your saved medical forms in Alphastar Mobile > Profile > Medical History.', 'Makipag-ugnayan sa clinic staff para sa kasalukuyang impormasyon ng serbisyo. Makikita ang naka-save na medical forms sa Alphastar Mobile > Profile > Medical History.'),
+      'booking-guide': pair('Contact Staff Support for help with clinic services, medical forms, or your account. Staff Support is available daily from 7:00 AM to 5:00 PM (Philippine time).', 'Makipag-ugnayan sa Staff Support para sa serbisyo ng clinic, medical forms, o account. Available ito araw-araw, 7:00 AM–5:00 PM (oras sa Pilipinas).'),
+      status: pair('View your submitted SMAPE and MAPE forms and review status in Alphastar Mobile > Profile > Medical History. This public chatbot cannot open private patient records. Contact Staff Support if you need help.', 'Tingnan ang na-submit na SMAPE at MAPE forms at review status sa Alphastar Mobile > Profile > Medical History. Hindi binubuksan ng public chatbot ang private patient records. Humingi ng tulong sa Staff Support kung kailangan.'),
+      reschedule: pair('Contact Staff Support for help with clinic services, medical forms, or your account. Staff Support is available daily from 7:00 AM to 5:00 PM (Philippine time).', 'Makipag-ugnayan sa Staff Support para sa serbisyo ng clinic, medical forms, o account. Available ito araw-araw, 7:00 AM–5:00 PM (oras sa Pilipinas).'),
+      cancel: pair('Contact Staff Support for help with clinic services, medical forms, or your account. Staff Support is available daily from 7:00 AM to 5:00 PM (Philippine time).', 'Makipag-ugnayan sa Staff Support para sa serbisyo ng clinic, medical forms, o account. Available ito araw-araw, 7:00 AM–5:00 PM (oras sa Pilipinas).'),
+      prices: pair('Contact clinic staff to confirm current service prices and requirements. I do not have a verified final price quote here.', 'Makipag-ugnayan sa clinic staff para kumpirmahin ang kasalukuyang presyo at requirements. Wala akong verified na price quote dito.'),
+      requirements: pair('Requirements depend on the service or test. Contact clinic staff to confirm what to bring and any preparation instructions.', 'Nag-iiba ang requirements depende sa serbisyo o test. Makipag-ugnayan sa clinic staff para kumpirmahin ang dadalhin at paghahanda.'),
+      identity: pair('I’m the Alphastar Help Bot, not a live staff member or doctor. I can explain clinic services and app features, but I cannot open private records or give medical advice.', 'Ako ang Alphastar Help Bot, hindi staff o doktor. Makakatulong ako sa impormasyon tungkol sa clinic at app, pero hindi ko mabubuksan ang private records o makapagbibigay ng payong medikal.'),
+      unknown: pair('Sorry, I’m not sure what you mean yet. Is this about clinic services, the app, your account, or an SMAPE / MAPE form?', 'Pasensya, hindi ko pa maintindihan ang tanong. Tungkol ba ito sa serbisyo ng clinic, app, account, o SMAPE / MAPE form?'),
+      'app-installed': pair('You can use Alphastar Mobile to manage your account, submit SMAPE / MAPE forms, and view medical forms. ', 'Puwede mong gamitin ang Alphastar Mobile para pamahalaan ang account, magsumite ng SMAPE / MAPE forms, at tingnan ang medical forms. '),
       'clarify-answer': pair('What is your yes or no about? Choose a topic below so I can help.', 'Tungkol saan ang oo o hindi mo? Pumili sa ibaba para matulungan kita.'),
     };
     if (details[topic]) result.text = details[topic];
     const security = window.AlphastarSecurityGuides?.[topic === 'pin-recovery' || topic === 'change-pin-help' ? 'pin-help' : topic];
     if (security) result.text = fil ? security.tagalog : security.english;
-    if (topic === 'terms') result.text = pair('The Terms and Conditions explain responsible use of Alphastar, account security, home-service requests, SMAPE / MAPE forms and the limits of automated chat. A request is not a confirmed visit. Read them together with Privacy Policy using the links below. The legal pages open separately so you can keep this conversation.', 'Ipinaliliwanag ng Terms and Conditions ang tamang paggamit ng Alphastar, account security, home-service requests, SMAPE / MAPE forms at limitasyon ng chatbot. Hindi pa confirmed na visit ang isang request. Basahin ito kasama ng Privacy Policy sa mga link sa ibaba. Bubukas nang hiwalay ang legal page para manatili ang usapan.');
+    if (topic === 'terms') result.text = pair('The Terms and Conditions explain responsible use of Alphastar, account security, medical forms and the limits of automated chat. Read them together with the Privacy Policy using the links below. The legal pages open separately so you can keep this conversation.', 'Ipinaliliwanag ng Terms and Conditions ang tamang paggamit ng Alphastar, account security, medical forms at limitasyon ng chatbot. Basahin ito kasama ng Privacy Policy sa mga link sa ibaba. Bubukas nang hiwalay ang legal page para manatili ang usapan.');
     let topics = result.topics;
     let prompt;
-    if (topic === 'app') topics = ['booking-guide', 'records-guide', 'technical-help', 'profile-help', 'security', 'install-guide', 'main-menu'];
+    if (topic === 'app') topics = ['records-guide', 'technical-help', 'profile-help', 'security', 'install-guide', 'main-menu'];
     if (['account-help', 'technical-help'].includes(topic)) topics = technicalTopics;
     if (topic === 'security') topics = ['pin-recovery', 'change-password-help', 'authenticator-help', 'authenticator-recovery', 'main-menu'];
     if (['authenticator-help', 'authenticator-recovery'].includes(topic)) topics = ['authenticator-help', 'authenticator-recovery', 'security', 'staff', 'main-menu'];
@@ -153,23 +165,23 @@
     if (['password-recovery', 'pin-recovery', 'email-code-help', 'google-signin-help', 'create-account-help'].includes(topic)) topics = ['technical-help', 'staff', 'main-menu'];
     if (['change-password-help', 'change-pin-help'].includes(topic)) topics = ['security', 'staff', 'main-menu'];
     if (topic.startsWith('smpe-')) topics = ['records-guide', 'drafts', 'mobile-data', 'staff', 'main-menu'];
-    if (topic.endsWith('-services')) topics = ['services', 'home-service', 'prices', 'staff', 'main-menu'];
+    if (topic.endsWith('-services')) topics = ['services', 'prices', 'staff', 'main-menu'];
     if (topic === 'install-guide') topics = ['view-download', 'create-account-help', 'staff', 'main-menu'];
     if (topic === 'booking-guide') {
-      result.text += pair('\n\nHave you already installed Alphastar?', '\n\nNaka-install na ba ang Alphastar?');
-      topics = ['app-installed', 'install-guide', 'profile-help', 'main-menu']; prompt = 'install-check';
+      topics = ['staff', 'main-menu'];
     }
+    if (topic === 'home-service') topics = ['staff', 'main-menu'];
     if (['feedback-unhelpful', 'staff-offer'].includes(topic)) {
       topics = ['human-chat', 'support-request', 'support-declined']; prompt = 'staff-offer';
     }
     if (topic === 'staff') topics = ['human-chat', 'messenger', 'email', 'support-request', 'main-menu'];
     if (['support-request', 'support-prepared'].includes(topic)) { topics = []; prompt = 'support-draft'; }
     if (['feedback-helpful', 'support-declined', 'draft-cancelled'].includes(topic)) topics = base().replyFor('main-menu', language).topics;
-    if (topic === 'app-installed') topics = ['profile-help', 'requirements', 'staff', 'main-menu'];
+    if (topic === 'app-installed') topics = ['profile-help', 'staff', 'main-menu'];
     if (['unknown', 'clarify-answer'].includes(topic)) topics = ['human-chat', 'technical-help', 'staff', 'main-menu'];
     // Every mobile-feature guide offers a way to reach the official download,
     // without suggesting that the website can operate a patient's account.
-    const mobileGuides = ['app', 'booking-guide', 'records-guide', 'account-help', 'technical-help', 'profile-help', 'security', 'drafts', 'mobile-data', 'requirements', 'app-installed', 'password-recovery', 'pin-recovery', 'email-code-help', 'google-signin-help', 'create-account-help', 'change-password-help', 'change-pin-help', 'authenticator-help', 'authenticator-recovery'];
+    const mobileGuides = ['app', 'records-guide', 'account-help', 'technical-help', 'profile-help', 'security', 'drafts', 'mobile-data', 'requirements', 'app-installed', 'password-recovery', 'pin-recovery', 'email-code-help', 'google-signin-help', 'create-account-help', 'change-password-help', 'change-pin-help', 'authenticator-help', 'authenticator-recovery'];
     if ((mobileGuides.includes(topic) || topic.startsWith('smpe-')) && !topics.includes('view-download') && !topics.includes('install-guide')) topics = [...topics.filter(id => id !== 'main-menu'), 'view-download', 'main-menu'];
     const noFeedback = ['greeting', 'thanks', 'main-menu', 'identity', 'about', 'app', 'services', 'account-help', 'technical-help', 'security', 'records-guide', 'staff', 'support-request', 'support-declined', 'draft-cancelled', 'staff-offer', 'feedback-helpful', 'feedback-unhelpful', 'unknown', 'clarify-answer', 'urgent', 'medical-advice', 'privacy-refusal'];
     return { ...result, topics: topics.slice(), prompt, feedback: !prompt && !noFeedback.includes(topic), supportForm: topic === 'support-request' };

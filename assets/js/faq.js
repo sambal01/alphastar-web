@@ -1,15 +1,15 @@
 const FAQ_DATA = [
   {
     q: 'What is the Alphastar mobile application?',
-    a: 'Alphastar Mobile is our Android patient app for requesting home services and managing your patient information. You can update your profile, submit a Student Medical & Physical Examination (SMAPE) form, view submitted forms and their review status, check Appointment Schedule and Appointment History, receive clinic notifications, and manage your PIN in Security Settings. It also provides clinic information and access to Staff Support. In-person clinic appointments are not booked through the app.'
+    a: 'Alphastar Mobile is our Android patient app for managing your patient information. You can update your profile, submit a Student Medical & Physical Examination (SMAPE) or Medical & Physical Examination (MAPE) form, view submitted forms and their review status, receive clinic notifications, and manage your PIN in Security Settings. It also provides clinic information and access to Staff Support. '
   },
   {
     q: 'How do I start using Alphastar Mobile?',
-    a: 'Sign in or create a patient account with email and password, or use Google sign-in. Complete the account verification and patient details requested by the app, then set up your private 6-digit PIN. Before requesting a home service, save your complete name, contact details, and home address in Profile > Profile details.'
+    a: 'Sign in or create a patient account with email and password, or use Google sign-in. Complete the account verification and patient details requested by the app, then set up your private 6-digit PIN. Keep your profile and contact details current in Profile > Profile details.'
   },
   {
-    q: 'Do you offer home services?',
-    a: 'Yes. Use Book Appointment in Alphastar Mobile to request an available home service. Save your complete address in Profile > Profile details, complete any requirements shown, choose one service and an available date and time, add any helpful notes, then review and submit. Clinic staff must confirm service availability, area coverage, the schedule, and fees; submitting a request does not confirm a booking. Check Appointment Schedule and notifications for updates. Not every clinic service is available at home.'
+    q: 'When can I chat with staff?',
+    a: 'Staff Support is available daily from 7:00 AM to 5:00 PM (Philippine time). You can connect and send messages during these hours. Saved conversations remain readable outside support hours. Staff Support is not an emergency service.'
   },
   {
     q: 'Which medical forms can I complete in the app?',
@@ -17,7 +17,7 @@ const FAQ_DATA = [
   },
   {
     q: 'Will my information stay saved when I leave the app?',
-    a: 'Successfully saved profile details and submitted forms remain linked to your patient account. Sign in to the same account to retrieve them after logout or reinstalling the app. Unfinished SMAPE, booking, and profile forms are kept as temporary drafts on your phone when you switch apps or minimize Alphastar. These drafts are not submitted to the clinic and can be lost when you log out, uninstall, or clear app data. Always use Save or Submit to keep information in your account.'
+    a: 'Successfully saved profile details and submitted forms remain linked to your patient account. Sign in to the same account to retrieve them after logout or reinstalling the app. Unfinished SMAPE, MAPE and profile forms are kept as temporary drafts on your phone when you switch apps or minimize Alphastar. These drafts are not submitted to the clinic and can be lost when you log out, uninstall, or clear app data. Always use Save or Submit to keep information in your account.'
   },
   {
     q: 'How do I change my PIN or password?',
@@ -25,11 +25,11 @@ const FAQ_DATA = [
   },
   {
     q: 'Can I use the app with mobile data?',
-    a: 'Yes. You can use mobile data or Wi-Fi. An internet connection is needed to sign in, submit home-service requests or forms, and refresh account information and clinic updates. If a screen cannot load, check your connection and retry. For help, use Staff Support in the app or message the clinic through Messenger.'
+    a: 'Yes. You can use mobile data or Wi-Fi. An internet connection is needed to sign in, submit forms, and refresh account information and clinic updates. If a screen cannot load, check your connection and retry. For help, use Staff Support in the app or message the clinic through Messenger.'
   },
   {
     q: 'What services do you offer?',
-    a: 'Alphastar offers doctor consultations and check-ups, annual physical examinations (APE) and employment services, vaccinations, executive check-ups, laboratory testing, digital X-ray, ultrasound, ECG, drug testing, and company on-site services. Availability, provider schedules, and packages may vary. Message the clinic to confirm your requested service, price, and requirements. For home services, use the available options in the mobile app; the clinic service list does not mean every service is available at home.'
+    a: 'Alphastar offers doctor consultations and check-ups, annual physical examinations (APE) and employment services, vaccinations, executive check-ups, laboratory testing, digital X-ray, ultrasound, ECG, drug testing, and company on-site services. Availability, provider schedules, and packages may vary. Contact the clinic to confirm current service availability, prices, and requirements.'
   },
   {
     q: 'Where is the Kasiglahan branch?',
@@ -37,23 +37,23 @@ const FAQ_DATA = [
   },
   {
     q: 'What are the regular clinic hours?',
-    a: 'The regular Kasiglahan clinic schedule is Monday through Sunday, 7:00 AM to 4:00 PM. Holiday hours and individual service or doctor schedules may differ. Check the Clinic Hours section and confirm with staff before your visit. Home-service schedules are subject to clinic confirmation.'
+    a: 'The regular Kasiglahan clinic schedule is Monday through Sunday, 7:00 AM to 5:00 PM. Holiday hours and individual service or doctor schedules may differ. Check the Clinic Hours section and confirm with staff before your visit.'
   },
   {
     q: 'Do you accept walk-ins?',
-    a: 'Walk-ins are accepted for drug testing. Availability for consultations, imaging, vaccinations, packages, and specialized tests may vary, so message the Kasiglahan branch before visiting. The mobile app is for home-service requests, not for booking in-person or walk-in clinic visits.'
+    a: 'Walk-ins are accepted for drug testing. Availability for consultations, imaging, vaccinations, packages, and specialized tests may vary, so message the Kasiglahan branch before visiting.'
   },
   {
     q: 'How long does it take to get results?',
-    a: 'Release times depend on the test, package, and processing requirements. Ask clinic staff when and how your results will be released after specimen collection or your examination. Medical History in Alphastar Mobile shows your submitted SMAPE forms and review status; it does not confirm that a laboratory result is ready.'
+    a: 'Release times depend on the test, package, and processing requirements. Ask clinic staff when and how your results will be released after specimen collection or your examination. Medical History in Alphastar Mobile shows your submitted SMAPE and MAPE forms and review status; it does not confirm that a laboratory result is ready.'
   },
   {
     q: 'Do I need to fast or prepare before a test?',
-    a: 'Preparation depends on your requested test. Ask your doctor or Alphastar staff about fasting, water, medication, identification, and other requirements before your visit or home service. Follow the instructions for your specific test; do not assume the same preparation applies to every test.'
+    a: 'Preparation depends on your requested test. Ask your doctor or Alphastar staff about fasting, water, medication, identification, and other requirements before your visit. Follow the instructions for your specific test; do not assume the same preparation applies to every test.'
   },
   {
     q: 'Do you accept PhilHealth, HMOs, or specific payment methods?',
-    a: 'Please confirm current PhilHealth benefits, HMO eligibility, accepted payment methods, and any fees directly with the Kasiglahan branch before your visit or home service. Submitting an app request does not confirm coverage or payment. Staff can explain the requirements for your chosen service.'
+    a: 'Please confirm current PhilHealth benefits, HMO eligibility, accepted payment methods, and any fees directly with the Kasiglahan branch before your visit. Staff can explain the requirements for your chosen service.'
   },
   {
     q: 'Is the Kasiglahan X-ray facility licensed?',
@@ -61,7 +61,7 @@ const FAQ_DATA = [
   },
   {
     q: 'How can I contact Alphastar?',
-    a: 'Use the Official Messenger link on this website, visit the Alphastar Laboratory Facebook page, or email info@alphastarlabclinic.com. Mobile app users can also open Profile > Staff Support. For booking confirmation, service availability, fees, test preparation, or result release, contact clinic staff. Never send passwords, PINs, or verification codes in a message.'
+    a: 'Use the Official Messenger link on this website, visit the Alphastar Laboratory Facebook page, or email info@alphastarlabclinic.com. Mobile app users can also open Profile > Staff Support. For medical forms, service availability, fees, test preparation, or result release, contact clinic staff. Never send passwords, PINs, or verification codes in a message.'
   }
 ];
 

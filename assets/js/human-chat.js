@@ -10,6 +10,11 @@
   const transitionDelay = () => new Promise(resolve => setTimeout(resolve, 1000));
   const systemLabel = "Alphastar Support (System Message)";
   const localized = (english, tagalog) => window.alphastarChat?.getLanguage() === "tl" ? tagalog : english;
+  const supportHoursMessage = () => localized("Staff Support is available daily from 7:00 AM to 5:00 PM (Philippine time).", "Available ang Staff Support araw-araw, 7:00 AM–5:00 PM (oras sa Pilipinas).");
+  function supportIsOpen() {
+    const date = new Date(Date.now() + 8 * 3600000), minutes = date.getUTCHours() * 60 + date.getUTCMinutes();
+    return minutes >= 420 && minutes < 1020 && conversation?.supportHours?.open !== false;
+  }
   const merge = next => { rows = [...new Map([...rows, ...next].map(row => [row.id, row])).values()].sort((a, b) => a.time.localeCompare(b.time) || a.id.localeCompare(b.id)); };
   const firstName = value => ["Alphastar Staff", "Support assistant"].includes(value) ? value : String(value || "Support assistant").trim().split(/\s+/u)[0];
   const initials = value => String(value || "?").trim().split(/\s+/u).filter(Boolean).map((part, index, all) => index === 0 || index === all.length - 1 ? Array.from(part)[0] : "").join("").toLocaleUpperCase().slice(0, 4);
@@ -23,6 +28,7 @@
   }
   function stopTyping() { reportTyping(false); }
   function refreshTyping() {
+    if (!supportIsOpen()) { stopTyping(); return; }
     const panel = document.querySelector("#fab-menu"), input = controls?.querySelector("form textarea");
     reportTyping(Boolean(view && !view.hidden && !document.hidden && panel && !panel.hidden && !panel.inert && !busy && !feedback && !leavePrompt && input?.value.trim()));
   }
@@ -154,7 +160,7 @@
     log.hidden = feedback; renderMessages(); updatePresentation();
     endButton.hidden = conversation.status === "welcome" || rated || feedback || leavePrompt;
     endButton.disabled = busy;
-    const mode = leavePrompt ? "leave" : feedback ? "feedback" : ["waiting", "connected"].includes(conversation.status) ? "compose" : conversation.status;
+    const mode = leavePrompt ? "leave" : feedback ? "feedback" : !supportIsOpen() ? "closed" : ["waiting", "connected"].includes(conversation.status) ? "compose" : conversation.status;
     if (mode === controlMode) {
       for (const element of controls.querySelectorAll("button")) {
         if (element.dataset.send) element.disabled = busy || !controls.querySelector("textarea").value.trim();
@@ -200,6 +206,9 @@
       const finish = button(rating || comment.trim() ? localized("Submit feedback", "Ipadala ang feedback") : localized("End conversation", "Tapusin ang usapan"), () => void action("end", { rating: rating || null, comment: comment.trim() })); finish.dataset.finish = "true"; finish.disabled = busy;
       const actions = node("div", "native-chat-feedback-actions"); actions.append(button(localized("Continue conversation", "Ituloy ang usapan"), continueConversation, "native-chat-back"), finish);
       controls.append(choices, label, field, actions);
+    } else if (mode === "closed") {
+      controls.className = "native-chat-actions";
+      controls.append(node("p", "native-chat-hours", supportHoursMessage()));
     } else if (mode === "welcome") {
       controls.className = "native-chat-actions";
       controls.append(button(localized("Yes, connect me to support", "Oo, ikonekta ako sa support"), () => void action("request")));
@@ -231,6 +240,7 @@
     finally { if (current === epoch) reading = false; }
   }
   async function action(kind, body = {}) {
+    if (kind === "request" && !supportIsOpen()) { status.textContent = supportHoursMessage(); paint(); return; }
     if (busy || !session || !conversation) return;
     const current = epoch, identity = session; mutation++; busy = true; requestLoading = kind === "request"; operationError = ""; status.textContent = ""; paint();
     if (kind === "end") stopTyping();
@@ -247,6 +257,7 @@
     finally { if (current === epoch) { busy = false; requestLoading = false; paint(); } }
   }
   async function sendMessage(input) {
+    if (!supportIsOpen()) { status.textContent = supportHoursMessage(); paint(); return; }
     const text = input.value.trim(); if (!text || busy || !session || !["waiting", "connected"].includes(conversation?.status)) return;
     const current = epoch, identity = session, cycle = conversation.cycle;
     const attempt = pending?.text === text && pending.cycle === cycle ? pending : { text, cycle, id: crypto.randomUUID() };
@@ -289,7 +300,7 @@
       opening = false; session = identity; before = data.conversation.before || ""; accept(data);
       controls.querySelector("button")?.focus({ preventScroll: true });
       timer = setInterval(() => void read(), 2000);
-      presentationTimer = setInterval(() => { refreshTyping(); updatePresentation(); }, 1000);
+      presentationTimer = setInterval(() => { refreshTyping(); updatePresentation(); if (!feedback && !leavePrompt && (controlMode === "closed") !== !supportIsOpen()) paint(); }, 1000);
       heartbeatTimer = setInterval(() => {
         if (session && conversation?.status !== "ended") void request("/" + session.id + "/heartbeat", { cycle: conversation.cycle }).catch(() => {});
       }, 15000);

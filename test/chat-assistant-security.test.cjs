@@ -35,17 +35,13 @@ test('Privacy Policy and Terms and Conditions are adjacent in the main menu and 
   assert.ok(source.includes("noopener noreferrer"), 'external legal pages use safe link attributes');
 });
 
-test('existing booking questions guide patients to their account, not a duplicate request or invented schedule', () => {
-  for (const question of ['I have book appointment', 'I have booked an appointment', 'What time my book appointment?', 'Appointment ko anong oras?', 'Nag-book na ako']) {
-    assert.equal(flow.resolve(question), 'status', question);
-    const answer = flow.reply('status').text;
-    assert.match(answer, /cannot access your patient account/);
-    assert.match(answer, /Profile > Appointment Schedule/);
-    assert.match(answer, /Pending means you still need clinic confirmation/);
-    assert.doesNotMatch(answer, /your appointment is confirmed|your visit is at/i);
+test('removed booking and queue questions offer Staff Support without inventing records or schedules', () => {
+  for (const question of ['I have book appointment', 'I have booked an appointment', 'What time my book appointment?', 'Appointment ko anong oras?', 'Nag-book na ako', 'home service', 'queue status', 'pila ko']) {
+    assert.equal(flow.resolve(question), 'staff', question);
+    const answer = flow.reply('staff').text;
+    assert.doesNotMatch(answer, /Profile > Appointment Schedule|confirmed|your visit is at/i);
   }
-  assert.equal(flow.resolve('what time?', { previousTopic: 'status' }), 'status');
-  assert.equal(flow.resolve('How do I book my appointment?'), 'booking-guide');
+  assert.equal(flow.resolve('How do I book my appointment?'), 'staff');
   assert.equal(flow.resolve('I submitted a complaint'), 'unknown');
 });
 

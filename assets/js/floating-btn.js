@@ -65,7 +65,7 @@ function lockChatPage(locked) {
     chatPageShield = document.createElement('div');
     chatPageShield.className = 'chat-page-shield';
     chatPageShield.setAttribute('aria-hidden', 'true');
-    chatPageShield.addEventListener('click', event => event.stopPropagation());
+    chatPageShield.addEventListener('click', event => { event.stopPropagation(); closeFab(); });
     chatPageShield.addEventListener('wheel', event => event.preventDefault(), { passive: false });
     chatPageShield.addEventListener('touchmove', event => event.preventDefault(), { passive: false });
     document.body.append(chatPageShield);

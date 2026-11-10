@@ -1,7 +1,7 @@
 const CLINIC_TIME_ZONE = 'Asia/Manila';
 const CLINIC_OPEN_MINUTES = 7 * 60;
-const CLINIC_WEEKDAY_CLOSE_MINUTES = 16 * 60;
-const CLINIC_SUNDAY_CLOSE_MINUTES = 16 * 60;
+const CLINIC_WEEKDAY_CLOSE_MINUTES = 17 * 60;
+const CLINIC_SUNDAY_CLOSE_MINUTES = 17 * 60;
 const OFFER_INTERVAL_MS = 10000;
 const siteText = (key, english, values = {}) => window.AlphastarSiteLanguage?.text(key, english, values)
   ?? english.replace(/\{(\w+)\}/g, (match, name) => values[name] ?? match);

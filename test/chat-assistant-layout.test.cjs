@@ -62,7 +62,7 @@ let browser, server;
     assert.equal(await link.getAttribute('rel'), 'noopener noreferrer');
   }
   await send('I have book appointment');
-  assert.match(await page.locator('#clinic-chat-messages .clinic-chat-message:not(.is-patient) .clinic-chat-bubble').last().textContent(), /Profile > Appointment Schedule/);
+  assert.match(await page.locator('#clinic-chat-messages .clinic-chat-message:not(.is-patient) .clinic-chat-bubble').last().textContent(), /Staff Support|staff|support/i);
   await send('I lost my authenticator and recovery codes');
   assert.match(await page.locator('#clinic-chat-messages .clinic-chat-message:not(.is-patient) .clinic-chat-bubble').last().textContent(), /identity-checked account recovery/);
   await send('my code is 123456');

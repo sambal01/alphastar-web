@@ -31,8 +31,8 @@ let browser;
     assert.doesNotMatch(html, /Terms of Service|Sitemap|data-coming-soon/);
     if (file !== 'index.html') {
       assert.doesNotMatch(html, /tawk\.?to|agent support|session storage to resume/i, `${file}: obsolete chat provider and guest recovery wording removed`);
-      assert.match(html, /datetime="2026-11-05"/);
-      assert.match(html, /legal-translations\.js\?v=20261105-legal/);
+      assert.match(html, /datetime="2026-11-10"/);
+      assert.match(html, /legal-translations\.js\?v=20261110-legal/);
     }
     if (file !== 'index.html') assert.doesNotMatch(html, /legal-eyebrow|legal\.eyebrow|Alphastar Mobile &amp; Website/, `${file}: extra label is removed`);
     for (const [, css] of html.matchAll(/href="(assets\/css\/[^"?]+)(?:\?[^\"]*)?"/g)) postcss.parse(await fs.readFile(path.join(root, css), 'utf8'), { from: css });
