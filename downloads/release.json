@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.79",
-  "versionCode": 80,
-  "filename": "Alphastar-1.0.79-build80.apk",
-  "url": "Alphastar-1.0.79-build80.apk",
-  "sizeBytes": 97319181,
-  "sha256": "ba4cb6d64661610cd8dac887b7511fb81c9fb34507c2b8d423d88bfed05b0789",
+  "version": "1.0.80",
+  "versionCode": 81,
+  "filename": "Alphastar-1.0.80-build81.apk",
+  "url": "Alphastar-1.0.80-build81.apk",
+  "sizeBytes": 97331049,
+  "sha256": "bca9919c7ec6e899a4a205e3dd1e785563c16e0bb83b5015b686168ad91126ec",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.79 / build 80 updates clinic and Staff Support hours to 7:00 AM–5:00 PM daily (Asia/Manila). Staff messaging is available only during those hours; saved conversations remain readable and can be ended after hours. Removes booking, home-service and queue navigation and guidance, refreshes clinic FAQs and notices, and allows tapping outside chat to minimize without clearing the conversation. SMAPE/MAPE medical forms and saved records are preserved. Requires the matching Staff Support hours backend. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation and actual patient push delivery were not verified."
+  "note": "Version 1.0.80 / build 81 updates the SMAPE/MAPE submission and review workflow. Patients no longer enter vital signs; authorized clinic personnel manage these measurements. Adds Medical Records History for the signed-in patient's released clinical results; draft records remain private. Existing forms, saved records and support conversations are preserved. Requires the matching clinical-records backend and private database rules. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation and actual patient push delivery were not verified."
 }
