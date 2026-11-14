@@ -10,7 +10,8 @@
   const transitionDelay = () => new Promise(resolve => setTimeout(resolve, 1000));
   const systemLabel = "Alphastar Support (System Message)";
   const localized = (english, tagalog) => window.alphastarChat?.getLanguage() === "tl" ? tagalog : english;
-  const supportHoursMessage = () => localized("Staff Support is available daily from 7:00 AM to 5:00 PM (Philippine time).", "Available ang Staff Support araw-araw, 7:00 AM–5:00 PM (oras sa Pilipinas).");
+  const staffNoticeText = value => String(value || "").replace(/\s*\((?:Philippine time|oras sa Pilipinas)\)/gi, "");
+  const supportHoursMessage = () => localized("Staff Support is available daily from 7:00 AM to 5:00 PM.", "Available ang Staff Support araw-araw, 7:00 AM–5:00 PM.");
   function supportIsOpen() {
     const date = new Date(Date.now() + 8 * 3600000), minutes = date.getUTCHours() * 60 + date.getUTCMinutes();
     return minutes >= 420 && minutes < 1020 && conversation?.supportHours?.open !== false;
@@ -69,7 +70,7 @@
         headers: { "Content-Type": "application/json", ...(credentials ? { "X-Alphastar-Chat-Token": credentials.token } : {}) },
         credentials: "omit", signal: controller.signal, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
       const data = await response.json();
-      if (!response.ok) throw Error(data.error || "Unable to connect. Please retry.");
+      if (!response.ok) throw Error(staffNoticeText(data.error || "Unable to connect. Please retry."));
       return data;
     } finally { clearTimeout(timeout); }
   }
@@ -147,7 +148,7 @@
       }
       const content = node("div", "native-chat-message-body"), timestamp = node("time", "", relative(row.time));
       timestamp.dataset.sent = row.time; timestamp.dateTime = row.time; timestamp.title = absolute(row.time); timestamp.setAttribute("aria-label", absolute(row.time));
-      const surface = node("div", "native-chat-message-bubble"); surface.append(node("p", "", row.text), timestamp);
+      const surface = node("div", "native-chat-message-bubble"); surface.append(node("p", "", row.sender === "system" ? staffNoticeText(row.text) : row.text), timestamp);
       content.append(node("strong", "", name), surface); bubble.append(content);
       const next = [...log.children].find(element => element.dataset.message && rows.findIndex(item => item.id === element.dataset.message) > rows.indexOf(row));
       log.insertBefore(bubble, next || typingIndicator);
@@ -157,7 +158,9 @@
   function paint() {
     if (!view || view.hidden || !conversation || opening) return;
     view.querySelector(".native-chat-loading")?.remove();
-    log.hidden = feedback; renderMessages(); updatePresentation();
+    log.hidden = false; renderMessages(); updatePresentation();
+    if (feedback && controls.parentNode !== log) log.append(controls);
+    else if (!feedback && controls.parentNode === log) view.append(controls);
     endButton.hidden = conversation.status === "welcome" || rated || feedback || leavePrompt;
     endButton.disabled = busy;
     const mode = leavePrompt ? "leave" : feedback ? "feedback" : !supportIsOpen() ? "closed" : ["waiting", "connected"].includes(conversation.status) ? "compose" : conversation.status;
@@ -185,7 +188,7 @@
       const prompt = node("div", "native-chat-message"), avatar = node("span", "native-chat-avatar", "S"), content = node("div", "native-chat-message-body");
       avatar.setAttribute("aria-hidden", "true");
       const surface = node("div", "native-chat-message-bubble"); surface.append(node("p", "", localized("Was our staff helpful?", "Nakatulong ba ang aming staff?")));
-      content.append(node("strong", "", "Alphastar Help Bot"), surface); prompt.append(avatar, content); controls.append(prompt);
+      content.append(node("strong", "", systemLabel), surface); prompt.append(avatar, content); controls.append(prompt);
       controls.append(node("p", "native-chat-feedback-label", localized("Feedback is optional.", "Opsyonal ang feedback.")));
       const choices = node("div", "native-chat-rating");
       for (const [value, label] of [["up", "👍"], ["down", "👎"]]) {
@@ -206,6 +209,7 @@
       const finish = button(rating || comment.trim() ? localized("Submit feedback", "Ipadala ang feedback") : localized("End conversation", "Tapusin ang usapan"), () => void action("end", { rating: rating || null, comment: comment.trim() })); finish.dataset.finish = "true"; finish.disabled = busy;
       const actions = node("div", "native-chat-feedback-actions"); actions.append(button(localized("Continue conversation", "Ituloy ang usapan"), continueConversation, "native-chat-back"), finish);
       controls.append(choices, label, field, actions);
+      log.scrollTop = log.scrollHeight;
     } else if (mode === "closed") {
       controls.className = "native-chat-actions";
       controls.append(node("p", "native-chat-hours", supportHoursMessage()));

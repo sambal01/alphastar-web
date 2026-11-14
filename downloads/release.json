@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.80",
-  "versionCode": 81,
-  "filename": "Alphastar-1.0.80-build81.apk",
-  "url": "Alphastar-1.0.80-build81.apk",
-  "sizeBytes": 97331049,
-  "sha256": "bca9919c7ec6e899a4a205e3dd1e785563c16e0bb83b5015b686168ad91126ec",
+  "version": "1.0.81",
+  "versionCode": 82,
+  "filename": "Alphastar-1.0.81-build82.apk",
+  "url": "Alphastar-1.0.81-build82.apk",
+  "sizeBytes": 98511653,
+  "sha256": "bafc0ba0e836331d78145971357d4d367faae2a2c63f1a1d78f65f0629abaa71",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.80 / build 81 updates the SMAPE/MAPE submission and review workflow. Patients no longer enter vital signs; authorized clinic personnel manage these measurements. Adds Medical Records History for the signed-in patient's released clinical results; draft records remain private. Existing forms, saved records and support conversations are preserved. Requires the matching clinical-records backend and private database rules. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation and actual patient push delivery were not verified."
+  "note": "Version 1.0.81 / build 82 uses the SMAPE/MAPE PDF templates, adds the student/non-student Medical Info Form selector and optional 1x1 form photo, and moves Medical Records History into the Records workspace. Staff-chat feedback stays inside the conversation with optional rating and comment. The matching private medical-form backend is live. Existing saved forms and conversations are preserved; no data reset or database-rule deployment is included. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation and actual patient push delivery were not verified."
 }
