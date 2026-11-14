@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.82",
-  "versionCode": 83,
-  "filename": "Alphastar-1.0.82-build83.apk",
-  "url": "Alphastar-1.0.82-build83.apk",
-  "sizeBytes": 98511961,
-  "sha256": "cc4b4d35d9adf87720b61d25f179409a5519ca0b13f41552fd5cfe44e0749d34",
+  "version": "1.0.83",
+  "versionCode": 84,
+  "filename": "Alphastar-1.0.83-build84.apk",
+  "url": "Alphastar-1.0.83-build84.apk",
+  "sizeBytes": 98520181,
+  "sha256": "e58ae0d16ee744a3f42b429f98d55d57ba8b752eca44fc3fa0078462bc228194",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.82 / build 83 moves Medical Forms History to Profile > Account and Keep Your Records Safe to the Form landing page, titled Medical Form. Student and Non-student options expand in one connected selector; patient type is not repeated in the editor. White inputs fit the page with labels inside their top-left corners. Next, Back and Submit scroll with the form. Built-in form help uses the updated names and navigation. Existing drafts, submitted forms, photos, PDF templates, previous forms, results and conversations are preserved; no backend, data reset or database-rule deployment is included. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible existing app without uninstalling or clearing app data. Physical-phone installation and actual patient push delivery were not verified."
+  "note": "Version 1.0.83 / build 84 fixes immediate PDF deletion during Android viewer hand-off and opens the native save/share chooser. Student/Non-student, Sex, Civil Status and Relation to You selectors stay anchored without moving fields below. Medical form headings are teal, MAPE Requested By is optional, and optional item 26 contains SMAPE Remarks or MAPE Last Menstrual Period. Validation errors no longer have white strips outside their borders. The previous cropped privacy banner returns below Next. Medical Records shows released results without SMAPE/MAPE application cards and uses a clearer empty state. TypeScript, 95 focused tests, PDF field/render inspection and five-width offline layout checks passed. Existing drafts, forms, photos, previous forms, results and chats are preserved; no backend, reset or database-rule deployment is included. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible app without uninstalling or clearing app data. No physical phone was connected, so the exact reported crash and installation were not verified."
 }
