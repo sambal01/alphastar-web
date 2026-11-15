@@ -31,8 +31,8 @@ let browser;
     assert.doesNotMatch(html, /Terms of Service|Sitemap|data-coming-soon/);
     if (file !== 'index.html') {
       assert.doesNotMatch(html, /tawk\.?to|agent support|session storage to resume/i, `${file}: obsolete chat provider and guest recovery wording removed`);
-      assert.match(html, /datetime="2026-11-10"/);
-      assert.match(html, /legal-translations\.js\?v=20261110-legal/);
+      assert.match(html, /datetime="2026-11-16"/);
+      assert.match(html, /legal-translations\.js\?v=20261116-legal/);
     }
     if (file !== 'index.html') assert.doesNotMatch(html, /legal-eyebrow|legal\.eyebrow|Alphastar Mobile &amp; Website/, `${file}: extra label is removed`);
     for (const [, css] of html.matchAll(/href="(assets\/css\/[^"?]+)(?:\?[^\"]*)?"/g)) postcss.parse(await fs.readFile(path.join(root, css), 'utf8'), { from: css });
@@ -43,6 +43,10 @@ let browser;
   assert.match(privacyHtml, /id="staff-chat"/);
   assert.match(privacyHtml, /id="website-staff-chat"/);
   assert.match(privacyHtml, /Like\/Dislike ratings and comments are optional/);
+  assert.match(privacyHtml, /saves it to Downloads rather than opening a sharing screen/);
+  assert.match(privacyHtml, /attached 1x1 patient photo/);
+  assert.match(privacyHtml, /Patient access is view-only/);
+  assert.doesNotMatch(privacyHtml, /Prepare a Support Message|Profile &gt; Staff Support|company\/emergency/);
   assert.match(privacyHtml, /Refreshing or leaving the page requests/);
   assert.match(privacyHtml, /not access to a mobile patient account/);
   assert.match(catalog, /Opsyonal ang Like\/Dislike rating at komento/);

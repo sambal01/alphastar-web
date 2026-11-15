@@ -28,16 +28,16 @@ const ui = {
   legalNavigation: 'Legal information', privacy: 'Privacy Policy', terms: 'Terms and Conditions',
   privacyPageTitle: 'Privacy Policy | Alphastar', termsPageTitle: 'Terms and Conditions | Alphastar',
   privacyDescription: 'Read how Alphastar Mobile and this website handle information, and how to ask about your privacy.',
-  termsDescription: 'Read the terms for Alphastar Mobile, SMAPE and MAPE forms, and this website.',
+  termsDescription: 'Read the terms for Alphastar Mobile, medical forms, medical results, PDF exports, and this website.',
 };
 for (const key of Object.keys(ui)) catalog[`legal.${key}`] = translated.ui[key];
 const website = {
   privacy: [
     {
       id: 'website-chat', title: 'This website and its Help Bot',
-      body: 'This public website explains clinic services and the mobile app. Its Help Bot uses built-in, rule-based English/Tagalog replies, not a generative AI service. It does not sign you in, look up your patient account, retrieve SMAPE or MAPE records, or submit bookings. Help Bot messages, support drafts, timestamps, and bot feedback stay in the current page memory and reset on reload. Your Help Bot transcript is not automatically shared with clinic staff. Preparing an email draft or copying a message does not send it.',
+      body: 'This public website explains clinic services and the mobile app. Its Help Bot uses built-in, rule-based English/Tagalog replies, not a generative AI service. It does not sign you in, look up your patient account, retrieve medical forms or results, or submit bookings. Help Bot messages, timestamps, and bot feedback stay in the current page memory and reset on reload. Your Help Bot transcript is not automatically shared with clinic staff. Choose Talk to Staff Support and confirm the connection to send a message to a person.',
       tlTitle: 'Ang website at Help Bot nito',
-      tlBody: 'Nagbibigay ng impormasyon tungkol sa clinic at mobile app ang public website. Built-in, rule-based English/Tagalog replies ang gamit ng Help Bot, hindi generative AI service. Hindi ka nito sina-sign in, tinitingnan ang patient account o SMAPE at MAPE records, o nagsu-submit ng booking. Nasa memory ng kasalukuyang page ang Help Bot messages, support drafts, timestamps, at bot feedback at nawawala sa reload. Hindi awtomatikong ibinabahagi sa clinic staff ang Help Bot transcript. Hindi pa naipapadala ang message kapag gumawa ng email draft o nag-copy.',
+      tlBody: 'Nagbibigay ng impormasyon tungkol sa clinic at mobile app ang public website. Built-in, rule-based English/Tagalog replies ang gamit ng Help Bot, hindi generative AI service. Hindi ka nito sina-sign in, tinitingnan ang patient account, kinukuha ang medical forms o results, o nagsu-submit ng booking. Nasa memory ng kasalukuyang page ang Help Bot messages, timestamps, at bot feedback at nawawala sa reload. Hindi awtomatikong ibinabahagi sa clinic staff ang Help Bot transcript. Piliin ang Talk to Staff Support at kumpirmahin ang koneksyon para magpadala ng mensahe sa tao.',
     },
     {
       id: 'website-staff-chat', title: 'Website Staff Support and guest sessions',
@@ -88,9 +88,9 @@ const website = {
     },
     {
       id: 'website-support', title: 'Using Staff Support as a guest',
-      body: 'Provide accurate contact information and use Staff Support respectfully. Messages you send in staff chat go to the clinic, unlike local Help Bot replies or prepared drafts. Staff Support is available daily from 7:00 AM to 5:00 PM (Philippine time); replies depend on staff availability. You can end without a rating or comment. Ending or leaving does not erase the clinic transcript. Website guest access is temporary and cannot be restored using only your name or email after a refresh or page exit. The mobile app uses a registered patient account for saved staff conversations. Neither chat is an emergency service or a substitute for medical care.',
+      body: 'Provide accurate contact information and use Staff Support respectfully. Messages you send in staff chat go to the clinic, unlike local Help Bot replies. Staff Support is available daily from 7:00 AM to 5:00 PM, using the clinic\'s local time; replies depend on staff availability. You can end without a rating or comment. Ending or leaving does not erase the clinic transcript. Website guest access is temporary and cannot be restored using only your name or email after a refresh or page exit. The mobile app uses a registered patient account for saved staff conversations. Neither chat is an emergency service or a substitute for medical care.',
       tlTitle: 'Paggamit ng Staff Support bilang guest',
-      tlBody: 'Magbigay ng tamang contact information at gamitin nang may respeto ang Staff Support. Napupunta sa clinic ang mga mensaheng ipinadala sa staff chat, hindi tulad ng local Help Bot replies o prepared drafts. Available ang Staff Support araw-araw, 7:00 AM–5:00 PM (oras sa Pilipinas); nakadepende sa staff availability ang sagot. Puwedeng magtapos nang walang rating o komento. Hindi nabubura ang clinic transcript sa pagtatapos o pag-alis. Pansamantala ang website guest access at hindi ito maibabalik gamit lang ang pangalan o email matapos mag-refresh o umalis sa page. Registered patient account ang gamit ng mobile app para sa saved staff conversations. Hindi emergency service o kapalit ng medical care ang alinmang chat.',
+      tlBody: 'Magbigay ng tamang contact information at gamitin nang may respeto ang Staff Support. Napupunta sa clinic ang mga mensaheng ipinadala sa staff chat, hindi tulad ng local Help Bot replies. Available ang Staff Support araw-araw mula 7:00 AM hanggang 5:00 PM ayon sa lokal na oras ng clinic; nakadepende sa staff availability ang sagot. Puwedeng magtapos nang walang rating o komento. Hindi nabubura ang clinic transcript sa pagtatapos o pag-alis. Pansamantala ang website guest access at hindi ito maibabalik gamit lang ang pangalan o email matapos mag-refresh o umalis sa page. Registered patient account ang gamit ng mobile app para sa saved staff conversations. Hindi emergency service o kapalit ng medical care ang alinmang chat.',
     },
   ],
 };
