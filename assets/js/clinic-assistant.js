@@ -39,7 +39,7 @@
     messenger: ['Open Messenger', 'Buksan ang Messenger'],
     email: ['Email the Clinic', 'Email ang Clinic'],
   };
-  const mainTopics = ['about', 'app', 'install-guide', 'privacy', 'terms', 'security', 'staff'];
+  const mainTopics = ['about', 'app', 'install-guide', 'privacy', 'terms', 'staff'];
   const aboutTopics = ['hours', 'services', 'parking', 'license', 'main-menu'];
   const appTopics = ['records-guide', 'account-help', 'profile-help', 'security', 'main-menu'];
   const normalize = input => String(input).toLowerCase().normalize('NFKC')
@@ -168,7 +168,7 @@
     if (topic === 'staff') topics = ['human-chat', 'messenger', 'email', 'main-menu'];
     if (topic === 'unknown') topics = ['human-chat', 'main-menu', 'view-faq'];
     if (topic === 'urgent') topics = []; // Do not present routine chat as emergency support.
-    return { text: answers[topic] || answers.unknown, topics: topics.slice(), language };
+    return { text: answers[topic] || answers.unknown, topics: topics.filter(id => id !== 'security'), language };
   }
 
   const containsPrivateDetails = input => {
@@ -715,14 +715,15 @@
     window.alphastarChat = Object.freeze({
       setLanguage(value) { setLanguage(value === 'tl' ? 'filipino' : 'english', true); },
       getLanguage: () => language === 'filipino' ? 'tl' : 'en',
-      showMainMenu({ feedback = true } = {}) {
+      showMainMenu({ feedback = true, ended = true } = {}) {
         window.clearTimeout(pendingTimer); busy = false; pendingMenuSelection = false;
         previousTopic = activePrompt = undefined; unknownCount = 0;
         input.value = ''; status.textContent = ''; status.classList.remove('is-typing');
         log.setAttribute('aria-busy', 'false'); syncTypingIndicator();
         const reply = appendMessage('assistant', feedback
           ? localized('Thank you for your feedback. What would you like help with?', 'Salamat sa iyong feedback. Saan mo kailangan ng tulong?')
-          : localized('Conversation ended. What would you like help with?', 'Natapos na ang usapan. Saan mo kailangan ng tulong?'));
+          : ended ? localized('Conversation ended. What would you like help with?', 'Natapos na ang usapan. Saan mo kailangan ng tulong?')
+          : localized('What would you like help with? Choose a topic below. Your staff conversation is still saved.', 'Saan mo kailangan ng tulong? Pumili ng paksa sa ibaba. Naka-save pa rin ang usapan mo sa staff.'));
         renderTopics(mainTopics); syncComposer(); revealMessage(reply); refreshTimestamps();
         topics.querySelector('button, a')?.focus({ preventScroll: true });
       },

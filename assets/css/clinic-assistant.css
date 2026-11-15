@@ -133,6 +133,7 @@
 .native-chat-status { margin: 0; padding: 4px 12px; color: #a33237; font-size: 12px; }
 .native-chat-status:empty { display: none; }
 .native-chat-composer { display: flex; align-items: flex-end; gap: 8px; padding: 8px; border-top: 1px solid #d6e9e4; }
+.native-chat-composer[hidden], .native-chat-actions[hidden], .native-chat-feedback[hidden] { display: none; }
 .native-chat-composer textarea { min-width: 0; flex: 1; min-height: 44px; max-height: 100px; resize: vertical; border: 1px solid #d6e9e4; border-radius: 4px; padding: 10px; box-sizing: border-box; font: inherit; color: #153d37; }
 .native-chat-composer button { min-height: 44px; padding: 10px 12px; border: 0; border-radius: 10px; background: #0f766e; color: #fff; font: inherit; cursor: pointer; }
 .native-chat-composer button:disabled { opacity: .4; cursor: default; }

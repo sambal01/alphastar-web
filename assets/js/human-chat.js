@@ -1,12 +1,13 @@
 (function () {
   "use strict";
   const base = "https://alphastar-mobile.onrender.com/api/support/chats";
-  let session = null, conversation = null, view, log, status, controls, endButton, typingIndicator, hidden = [];
+  let session = null, conversation = null, view, log, status, controls, composer, endButton, typingIndicator, hidden = [];
   let timer, heartbeatTimer, epoch = 0, reading = false, busy = false, pending = null, rows = [], before = "";
   let presentationTimer, typingClient = "", typingSequence = 0, typingOn = false, lastTyping = 0;
-  let feedback = false, rating = "", comment = "", rated = false, controlMode = "", leavePrompt = false, draft = "";
+  let feedback = false, rating = "", comment = "", rated = false, controlMode = "", draft = "";
   let opening = false, requestLoading = false;
   let operationError = "", mutation = 0;
+  let systemReplyTimer = null, systemReplyPending = false;
   const transitionDelay = () => new Promise(resolve => setTimeout(resolve, 1000));
   const systemLabel = "Alphastar Support (System Message)";
   const localized = (english, tagalog) => window.alphastarChat?.getLanguage() === "tl" ? tagalog : english;
@@ -30,23 +31,23 @@
   function stopTyping() { reportTyping(false); }
   function refreshTyping() {
     if (!supportIsOpen()) { stopTyping(); return; }
-    const panel = document.querySelector("#fab-menu"), input = controls?.querySelector("form textarea");
-    reportTyping(Boolean(view && !view.hidden && !document.hidden && panel && !panel.hidden && !panel.inert && !busy && !feedback && !leavePrompt && input?.value.trim()));
+    const panel = document.querySelector("#fab-menu"), input = composer?.querySelector("form textarea");
+    reportTyping(Boolean(view && !view.hidden && !document.hidden && panel && !panel.hidden && !panel.inert && !busy && !feedback && !systemReplyPending && input?.value.trim()));
   }
-  function changedDraft(value) { draft = value; reportTyping(Boolean(!document.hidden && !busy && value.trim())); }
+  function changedDraft(value) { draft = value; refreshTyping(); }
   function updatePresentation() {
     if (!view || view.hidden || !conversation) return;
     for (const stamp of log.querySelectorAll("time[data-sent]")) { const label = relative(stamp.dataset.sent); if (stamp.textContent !== label) stamp.textContent = label; }
-    const visible = !feedback && !leavePrompt && (requestLoading || ["waiting", "connected"].includes(conversation.status) && conversation.typing?.staff?.expiresAt > Date.now());
+    const visible = systemReplyPending || requestLoading || !feedback && ["waiting", "connected"].includes(conversation.status) && conversation.typing?.staff?.expiresAt > Date.now();
     const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 80;
     typingIndicator.hidden = !visible;
-    const label = visible ? (requestLoading ? "Alphastar Support" : firstName(conversation.connectedName)) + " is typing…" : "";
+    const label = visible ? (systemReplyPending || requestLoading ? "Alphastar Support" : firstName(conversation.connectedName)) + " is typing…" : "";
     const caption = typingIndicator.querySelector("[data-typing-label]");
     if (caption.textContent !== label) caption.textContent = label;
-    const picture = typingIndicator.querySelector(".native-chat-avatar"), key = requestLoading ? "system" : `${conversation.connectedAvatar}:${conversation.connectedInitials}`;
+    const picture = typingIndicator.querySelector(".native-chat-avatar"), key = systemReplyPending || requestLoading ? "system" : `${conversation.connectedAvatar}:${conversation.connectedInitials}`;
     if (picture.dataset.key !== key) {
       picture.replaceChildren();
-      if (requestLoading) picture.textContent = "S";
+      if (systemReplyPending || requestLoading) picture.textContent = "S";
       else if (conversation.connectedAvatar !== "initials") { const logo = node("img"); logo.src = "assets/images/alphastarlogo.png"; logo.alt = ""; picture.append(logo); }
       else picture.textContent = conversation.connectedInitials || initials(conversation.connectedName);
       picture.dataset.key = key;
@@ -82,41 +83,57 @@
   }
   function close() {
     stopTyping();
+    cancelSystemReply();
     exit(session, conversation?.cycle);
     epoch++; clearInterval(timer); clearInterval(heartbeatTimer); clearInterval(presentationTimer); timer = heartbeatTimer = presentationTimer = null;
     typingClient = ""; typingSequence = 0; typingOn = false; lastTyping = 0;
     session = conversation = null; rows = []; before = ""; pending = null; busy = reading = false;
     opening = requestLoading = false;
     operationError = "";
-    view?.remove(); view = log = controls = status = typingIndicator = null;
+    view?.remove(); view = log = controls = composer = status = typingIndicator = null;
     for (const [element, display] of hidden) element.style.display = display;
     hidden = [];
     // Old guest capabilities must not recover a prior visit after refresh.
     try { sessionStorage.removeItem("alphastar-staff-chat-v1"); } catch {}
   }
   function back() {
-    if (feedback || leavePrompt) { returnToBot(); return; }
-    if (busy) return;
-    stopTyping();
-    if (["waiting", "connected"].includes(conversation?.status)) { feedback = false; leavePrompt = true; paint(); controls.querySelector("button")?.focus(); return; }
-    returnToBot();
+    if (busy && !feedback) return;
+    returnToBot(false, false);
+  }
+  function cancelSystemReply() {
+    clearTimeout(systemReplyTimer); systemReplyTimer = null; systemReplyPending = false;
+  }
+  function queueSystemReply(kind) {
+    if (busy || systemReplyPending || !view || view.hidden) return;
+    const current = epoch;
+    stopTyping(); feedback = false; systemReplyPending = true; paint();
+    log.scrollTop = log.scrollHeight;
+    systemReplyTimer = setTimeout(() => {
+      systemReplyTimer = null;
+      if (current !== epoch || !view || view.hidden) return;
+      systemReplyPending = false; feedback = kind === "feedback";
+      paint(); refreshTyping();
+      const panel = document.getElementById("fab-menu");
+      if (!document.hidden && panel && !panel.hidden && !panel.inert) (feedback ? controls : composer).querySelector("textarea, button")?.focus({ preventScroll: true });
+      log.scrollTop = feedback ? Math.max(0, log.scrollTop + controls.getBoundingClientRect().top - log.getBoundingClientRect().top - 8) : log.scrollHeight;
+    }, 1000);
   }
   function openFeedback() {
-    if (busy) return;
-    stopTyping(); leavePrompt = false; feedback = true; paint(); controls.querySelector("button")?.focus();
+    queueSystemReply("feedback");
   }
   function continueConversation() {
-    leavePrompt = feedback = false; paint(); refreshTyping(); controls.querySelector("textarea")?.focus();
+    queueSystemReply("continue");
   }
   function returnToBot(finished = false, suppliedFeedback = true) {
     stopTyping();
     if (!view) return;
+    cancelSystemReply();
     view.hidden = true; view.inert = true; view.dataset.backHidden = "true";
     for (const [element, display] of hidden) element.style.display = display;
     hidden = [];
     const submit = document.querySelector('.clinic-chat-support button[type="submit"]');
     if (submit) submit.textContent = conversation?.status === "ended" ? localized("Open staff chat", "Buksan ang staff chat") : localized("Continue conversation", "Ituloy ang usapan");
-    if (finished) window.alphastarChat?.showMainMenu({ feedback: suppliedFeedback });
+    window.alphastarChat?.showMainMenu({ feedback: finished && suppliedFeedback, ended: finished });
   }
   function minimize() { stopTyping(); }
   function hasSession() { return Boolean(view && (opening || session && conversation?.status !== "ended")); }
@@ -124,8 +141,9 @@
     if (!hasSession()) return false;
     for (const id of ["clinic-chat-body", "clinic-chat-form", "clinic-chat-status"]) { const element = document.getElementById(id); if (element && !hidden.some(([saved]) => saved === element)) { hidden.push([element, element.style.display]); element.style.display = "none"; } }
     delete view.dataset.backHidden; view.hidden = false; view.inert = false; paint(); void read();
+    if (["waiting", "connected"].includes(conversation?.status)) queueSystemReply("continue");
     refreshTyping();
-    controls.querySelector("textarea, button")?.focus({ preventScroll: true }); return true;
+    (composer?.hidden ? controls : composer)?.querySelector("textarea, button")?.focus({ preventScroll: true }); return true;
   }
   function renderMessages() {
     const bottom = log.scrollHeight - log.scrollTop - log.clientHeight < 80, top = log.scrollTop, height = log.scrollHeight;
@@ -159,11 +177,13 @@
     if (!view || view.hidden || !conversation || opening) return;
     view.querySelector(".native-chat-loading")?.remove();
     log.hidden = false; renderMessages(); updatePresentation();
-    if (feedback && controls.parentNode !== log) log.append(controls);
+    if (feedback) log.insertBefore(controls, typingIndicator);
     else if (!feedback && controls.parentNode === log) view.append(controls);
-    endButton.hidden = conversation.status === "welcome" || rated || feedback || leavePrompt;
+    endButton.hidden = conversation.status === "welcome" || rated || feedback || systemReplyPending;
     endButton.disabled = busy;
-    const mode = leavePrompt ? "leave" : feedback ? "feedback" : !supportIsOpen() ? "closed" : ["waiting", "connected"].includes(conversation.status) ? "compose" : conversation.status;
+    const mode = feedback ? "feedback" : !supportIsOpen() ? "closed" : ["waiting", "connected"].includes(conversation.status) ? "compose" : conversation.status;
+    controls.hidden = mode === "compose";
+    syncStaffComposer();
     if (mode === controlMode) {
       for (const element of controls.querySelectorAll("button")) {
         if (element.dataset.send) element.disabled = busy || !controls.querySelector("textarea").value.trim();
@@ -177,13 +197,7 @@
       return;
     }
     controlMode = mode; controls.replaceChildren();
-    if (leavePrompt) {
-      controls.className = "native-chat-actions";
-      controls.append(node("strong", "", localized("Continue this conversation?", "Itutuloy ang usapan?")));
-      const actions = node("div", "native-chat-feedback-actions");
-      actions.append(button(localized("Continue conversation", "Ituloy ang usapan"), continueConversation, "native-chat-back"), button(localized("End conversation", "Tapusin ang usapan"), openFeedback));
-      controls.append(actions);
-    } else if (feedback) {
+    if (feedback) {
       controls.className = "native-chat-feedback";
       const prompt = node("div", "native-chat-message"), avatar = node("span", "native-chat-avatar", "S"), content = node("div", "native-chat-message-body");
       avatar.setAttribute("aria-hidden", "true");
@@ -220,7 +234,14 @@
       controls.className = "native-chat-actions";
       controls.append(node("p", "", "Conversation ended"), button("Back", back, "native-chat-back"));
     } else {
-      controls.className = "native-chat-composer";
+      controls.className = "native-chat-actions";
+    }
+  }
+  function syncStaffComposer() {
+    const visible = supportIsOpen() && ["waiting", "connected"].includes(conversation.status);
+    composer.hidden = !visible;
+    if (!visible) return;
+    if (!composer.querySelector("form")) {
       const form = node("form"), input = node("textarea"), send = node("button", "", "Send");
       input.maxLength = 2000; input.rows = 1; input.placeholder = "Type your message…"; input.setAttribute("aria-label", "Message for clinic staff");
       input.value = draft;
@@ -228,8 +249,11 @@
       input.addEventListener("input", () => { send.disabled = busy || !input.value.trim(); changedDraft(input.value); });
       input.addEventListener("keydown", event => { if (event.key === "Enter" && !event.shiftKey && !event.isComposing) { event.preventDefault(); form.requestSubmit(); } });
       form.addEventListener("submit", event => { event.preventDefault(); void sendMessage(input); });
-      form.append(input, send); controls.append(form);
+      form.append(input, send); composer.append(form);
     }
+    const locked = busy || feedback || systemReplyPending;
+    composer.querySelector("textarea").disabled = locked;
+    composer.querySelector("button").disabled = locked || !draft.trim();
   }
   function accept(data, older = false) {
     conversation = data.conversation; merge(conversation.messages || []);
@@ -246,14 +270,14 @@
   async function action(kind, body = {}) {
     if (kind === "request" && !supportIsOpen()) { status.textContent = supportHoursMessage(); paint(); return; }
     if (busy || !session || !conversation) return;
-    const current = epoch, identity = session; mutation++; busy = true; requestLoading = kind === "request"; operationError = ""; status.textContent = ""; paint();
+    const current = epoch, identity = session; mutation++; busy = true; requestLoading = true; operationError = ""; status.textContent = ""; paint();
     if (kind === "end") stopTyping();
     try {
       const [data] = await Promise.all([request("/" + identity.id + "/" + kind, { cycle: conversation.cycle, ...body }, identity), kind === "request" ? transitionDelay() : Promise.resolve()]);
       if (current !== epoch) return;
       if (kind === "end") {
         if (data.conversation?.status !== "ended") throw Error("Unable to end this conversation. Please retry.");
-        feedback = leavePrompt = false; rated = true; draft = comment = "";
+        feedback = false; rated = true; draft = comment = "";
       }
       accept(data);
       if (kind === "end" && view && !view.hidden) returnToBot(true, Boolean(body.rating || String(body.comment || "").trim()));
@@ -262,7 +286,7 @@
   }
   async function sendMessage(input) {
     if (!supportIsOpen()) { status.textContent = supportHoursMessage(); paint(); return; }
-    const text = input.value.trim(); if (!text || busy || !session || !["waiting", "connected"].includes(conversation?.status)) return;
+    const text = input.value.trim(); if (!text || busy || feedback || systemReplyPending || !session || !["waiting", "connected"].includes(conversation?.status)) return;
     const current = epoch, identity = session, cycle = conversation.cycle;
     const attempt = pending?.text === text && pending.cycle === cycle ? pending : { text, cycle, id: crypto.randomUUID() };
     pending = attempt; busy = true; operationError = ""; status.textContent = ""; paint();
@@ -287,15 +311,16 @@
     const spinner = node("span", "clinic-chat-intro-spinner"); loading.append(spinner);
     log = node("div", "native-chat-log"); log.setAttribute("role", "log"); log.setAttribute("aria-label", "Staff messages"); log.hidden = true;
     status = node("p", "native-chat-status"); status.setAttribute("role", "status"); controls = node("div", "native-chat-actions");
+    composer = node("div", "native-chat-composer"); composer.hidden = true;
     typingIndicator = node("div", "native-chat-typing"); typingIndicator.setAttribute("role", "status"); typingIndicator.setAttribute("aria-live", "polite"); typingIndicator.hidden = true;
     const dots = node("span", "native-chat-typing-dots"); dots.setAttribute("aria-hidden", "true"); for (let i = 0; i < 3; i++) dots.append(node("i"));
     const typingProfile = node("span", "native-chat-avatar"), typingContent = node("div", "native-chat-typing-content"), typingCaption = node("span", "", ""); typingCaption.dataset.typingLabel = "true";
     typingProfile.setAttribute("aria-hidden", "true"); typingContent.append(dots, typingCaption); typingIndicator.append(typingProfile, typingContent);
     log.append(typingIndicator);
-    view.append(header, loading, log, status, controls);
+    view.append(header, loading, log, status, controls, composer);
     for (const id of ["clinic-chat-body", "clinic-chat-form", "clinic-chat-status"]) { const element = document.getElementById(id); if (element) { hidden.push([element, element.style.display]); element.style.display = "none"; } }
     panel.append(view); header.querySelector("button")?.focus({ preventScroll: true });
-    feedback = leavePrompt = false; rating = comment = draft = controlMode = ""; rated = false;
+    feedback = false; rating = comment = draft = controlMode = ""; rated = false;
     try {
       const [data] = await Promise.all([request("", { name, email, consent: true }, null), transitionDelay()]);
       const identity = { id: data.id, token: data.token, name, email };
@@ -304,7 +329,7 @@
       opening = false; session = identity; before = data.conversation.before || ""; accept(data);
       controls.querySelector("button")?.focus({ preventScroll: true });
       timer = setInterval(() => void read(), 2000);
-      presentationTimer = setInterval(() => { refreshTyping(); updatePresentation(); if (!feedback && !leavePrompt && (controlMode === "closed") !== !supportIsOpen()) paint(); }, 1000);
+      presentationTimer = setInterval(() => { refreshTyping(); updatePresentation(); if (!feedback && (controlMode === "closed") !== !supportIsOpen()) paint(); }, 1000);
       heartbeatTimer = setInterval(() => {
         if (session && conversation?.status !== "ended") void request("/" + session.id + "/heartbeat", { cycle: conversation.cycle }).catch(() => {});
       }, 15000);

@@ -11,6 +11,14 @@ for (const name of ['clinic-assistant', 'clinic-assistant-security', 'clinic-ass
 }
 const base = window.AlphastarClinicAssistant, flow = window.AlphastarChatFlow;
 
+test('website chat menus omit Security Settings while typed security help remains available', () => {
+  for (const language of ['english', 'filipino']) for (const topic of ['greeting','main-menu','app','account-help','authenticator-help','authenticator-recovery','change-pin-help']) {
+    assert.ok(!base.replyFor(topic, language).topics.includes('security'));
+    assert.ok(!flow.reply(topic, language).topics.includes('security'));
+  }
+  assert.match(flow.reply('security').text, /PIN, email OTP and authenticator code are different/);
+});
+
 test('current staff guidance describes the built-in chat without legacy provider wording', () => {
   for (const language of ['english', 'filipino']) {
     const reply = flow.reply('staff', language);

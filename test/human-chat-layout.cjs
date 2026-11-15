@@ -152,18 +152,33 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
     await page.screenshot({path:path.join(root,'test-results/native-chat',width+'.png')});
   }
   await page.locator('.native-staff-chat > header').getByRole('button',{name:'Back',exact:true}).click();
-  assert.equal(chat.conversation.status,'connected');assert.equal(await page.locator('.native-staff-chat').isVisible(),true);
-  assert.equal(await page.getByText('Continue this conversation?',{exact:true}).isVisible(),true);
-  for(const width of [320,393,1366]){await page.setViewportSize({width,height:width===1366?768:740});assert.equal(await page.evaluate(()=>{const[a,b]=[...document.querySelectorAll('.native-chat-feedback-actions button')].map(node=>node.getBoundingClientRect());return a.width>80&&Math.abs(a.width-b.width)<1&&Math.abs(a.height-b.height)<1&&b.right<=innerWidth;}),true);await page.screenshot({path:path.join(root,'test-results/native-chat','leave-'+width+'.png')});}
-  await page.getByRole('button',{name:'Continue conversation',exact:true}).click();
+  assert.equal(chat.conversation.status,'connected');assert.equal(await page.locator('.native-staff-chat').isVisible(),false);
+  assert.equal(await page.locator('#clinic-chat-topics').getByRole('button',{name:'Security Settings',exact:true}).count(),0);
+  assert.equal(await page.locator('#clinic-chat-topics > button').count(),6);
+  for(const width of [320,393,1366]){await page.setViewportSize({width,height:width===1366?768:740});assert.equal(await page.evaluate(()=>document.querySelector('#fab-menu').scrollWidth<=document.querySelector('#fab-menu').clientWidth+1),true);await page.screenshot({path:path.join(root,'test-results/native-chat','menu-return-'+width+'.png')});}
+  await page.locator('#clinic-chat-topics').getByRole('button',{name:'Talk to Staff Support',exact:true}).click();
+  await page.locator('#clinic-chat-topics').getByRole('button',{name:'Chat with staff',exact:true}).click();
+  assert.equal(await page.locator('.native-chat-typing').isVisible(),true);
+  await page.locator('.native-chat-composer textarea:enabled').waitFor();
   assert.equal(chats.size,1);assert.equal(await page.locator('.native-chat-composer textarea').inputValue(),'Draft remains while staff connect');
   await page.locator('#clinic-chat-close').click();await page.waitForTimeout(150);assert.equal(chat.conversation.status,'connected');
   await page.locator('#fab-main').click();await page.waitForFunction(()=>!document.querySelector('#fab-menu').classList.contains('is-connecting'));
   assert.equal(await page.locator('.native-staff-chat').isVisible(),true);assert.equal(chats.size,1);
   assert.equal(await page.locator('.native-chat-composer textarea').inputValue(),'Draft remains while staff connect');
   await page.getByRole('button',{name:'End conversation',exact:true}).click();
-  assert.equal(await page.getByText('Was our staff helpful?',{exact:true}).isVisible(),true);
-  assert.equal(await page.locator('.native-chat-log').isVisible(),false);
+  assert.equal(await page.locator('.native-chat-typing').isVisible(),true);
+  assert.equal(await page.locator('.native-chat-composer textarea').isVisible(),true);
+  assert.equal(await page.locator('.native-chat-composer textarea').inputValue(),'Draft remains while staff connect');
+  await page.getByText('Was our staff helpful?',{exact:true}).waitFor();
+  assert.equal(await page.evaluate(()=>{const prompt=document.querySelector('.native-chat-feedback .native-chat-message').getBoundingClientRect(),log=document.querySelector('.native-chat-log').getBoundingClientRect();return prompt.top>=log.top-1&&prompt.top<log.bottom;}),true,'The system feedback question starts in view');
+  assert.equal(await page.locator('.native-chat-log').isVisible(),true);
+  assert.equal(await page.locator('.native-chat-composer textarea').isDisabled(),true);
+  await page.getByRole('button',{name:'Continue conversation',exact:true}).click();
+  assert.equal(await page.locator('.native-chat-typing').isVisible(),true);
+  assert.equal(await page.locator('.native-chat-composer textarea').inputValue(),'Draft remains while staff connect');
+  await page.locator('.native-chat-composer textarea:enabled').waitFor();
+  await page.locator('.native-staff-chat > header').getByRole('button',{name:'End conversation',exact:true}).click();
+  await page.getByText('Was our staff helpful?',{exact:true}).waitFor();
   const submitFeedback=page.getByRole('button',{name:'Submit feedback',exact:true});assert.equal(await page.getByRole('button',{name:'End conversation',exact:true}).isEnabled(),true);
   const beforeSelection=requests.filter(row=>row.path.endsWith('/end')).length;
   await page.getByRole('button',{name:'Like',exact:true}).click();
@@ -182,8 +197,8 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
   await page.waitForFunction(()=>document.querySelectorAll('.native-chat-rating button:disabled').length===2);
   while(!releaseEnd)await new Promise(resolve=>setTimeout(resolve,20));assert.equal(requests.filter(row=>row.path.endsWith('/end')).length,endCount+1);
   holdEnd=false;releaseEnd();await page.getByText('Thank you for your feedback. What would you like help with?',{exact:true}).waitFor();
-  assert.equal(chat.conversation.status,'ended');assert.equal(await page.locator('.native-chat-composer textarea').count(),0);
-  assert.equal(chat.feedback.rating,'up');assert.equal(await page.locator('.native-staff-chat').isVisible(),false);assert.equal(await page.locator('#clinic-chat-topics > button').count(),7);
+  assert.equal(chat.conversation.status,'ended');assert.equal(await page.locator('.native-chat-composer textarea').isVisible(),false);
+  assert.equal(chat.feedback.rating,'up');assert.equal(await page.locator('.native-staff-chat').isVisible(),false);assert.equal(await page.locator('#clinic-chat-topics > button').count(),6);
   async function openNewGuest(){
     await page.locator('#clinic-chat-topics').getByRole('button',{name:'Talk to Staff Support',exact:true}).click();
     await page.locator('#clinic-chat-topics').getByRole('button',{name:'Chat with staff',exact:true}).click();
@@ -195,7 +210,6 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
   assert.equal(chats.size,2);assert.equal(await page.getByText('Synthetic staff answer',{exact:true}).count(),0);
   await page.getByRole('button',{name:'Yes, connect me to support',exact:true}).click();await page.locator('.native-chat-composer').waitFor();
   const second=[...chats.values()][1];
-  await page.locator('.native-staff-chat > header').getByRole('button',{name:'Back',exact:true}).click();
   await page.getByRole('button',{name:'End conversation',exact:true}).click();await page.getByRole('button',{name:'Dislike',exact:true}).click();
   assert.equal(await page.getByRole('textbox',{name:'Feedback comment',exact:true}).inputValue(),'');assert.equal(second.conversation.status,'waiting');
   await page.getByRole('button',{name:'Submit feedback',exact:true}).click();
@@ -213,7 +227,7 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
     await openNewGuest();await page.getByRole('button',{name:'Yes, connect me to support',exact:true}).click();await page.locator('.native-chat-composer').waitFor();
     const currentChat=[...chats.values()].at(-1);
     await page.getByRole('button',{name:'End conversation',exact:true}).click();
-    assert.equal(await page.getByText('Feedback is optional.',{exact:true}).isVisible(),true);
+    await page.getByText('Feedback is optional.',{exact:true}).waitFor();
     await page.getByRole('button',{name:'Like',exact:true}).click();await page.getByRole('button',{name:'Like',exact:true}).click();
     assert.equal(await page.getByRole('button',{name:'Like',exact:true}).getAttribute('aria-pressed'),'false');
     if(commentOnly)await page.getByRole('textbox',{name:'Feedback comment',exact:true}).fill('  Synthetic comment only  ');
@@ -222,6 +236,9 @@ const root=path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT||path.join(__dirnam
       await page.locator('.native-staff-chat > header').getByRole('button',{name:'Back',exact:true}).click();
       assert.equal(currentChat.conversation.status,'waiting');assert.equal(await page.locator('.native-staff-chat').isVisible(),false);
       assert.equal(await page.evaluate(()=>window.AlphastarHumanChat.resume()),true);
+      await page.locator('.native-chat-composer textarea:enabled').waitFor();
+      await page.locator('.native-staff-chat > header').getByRole('button',{name:'End conversation',exact:true}).click();
+      await page.getByText('Feedback is optional.',{exact:true}).waitFor();
     }
     await page.getByRole('button',{name:commentOnly?'Submit feedback':'End conversation',exact:true}).click();
     await page.locator('#clinic-chat-topics').getByRole('button',{name:'Talk to Staff Support',exact:true}).waitFor();

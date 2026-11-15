@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.84",
-  "versionCode": 85,
-  "filename": "Alphastar-1.0.84-build85.apk",
-  "url": "Alphastar-1.0.84-build85.apk",
-  "sizeBytes": 98594897,
-  "sha256": "83023af5f4b83f61b7b1f16bf25c848cf1055b763e6c8b1f20b6b47fb28b7a0b",
+  "version": "1.0.85",
+  "versionCode": 86,
+  "filename": "Alphastar-1.0.85-build86.apk",
+  "url": "Alphastar-1.0.85-build86.apk",
+  "sizeBytes": 98595841,
+  "sha256": "ebdb4cb20885a27f71132948aa5090ee49639f74cb39d8b1c927ed5650b5ac45",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.84 / build 85 renames Medical Form History and Export PDF. Android 10 and newer save PDFs directly to Downloads/AlphaStar; older Android versions use a folder picker. Attached patient photos remain in the printed 1x1 frame. Submitted form titles are centered, form guidance uses consistent typography, Continue and Submit labels are clearer, and leaving an unfinished form offers Save draft and leave or Keep editing. Medical Records uses the folder illustration, a black heading and a simpler empty state without the full-screen spinner. TypeScript, 105 focused tests, actual PDF field/render inspection and five-width offline layout checks passed. Existing drafts, forms, photos, previous forms, results and chats are preserved; no backend, reset or database-rule deployment is included. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible app without uninstalling or clearing app data. No physical phone was connected, so device installation and the exact reported crash were not verified."
+  "note": "Version 1.0.85 / build 86 includes Personal Information headings, compact personal/guardian spacing, a simplified save-draft prompt, the one-time patient form UI and an explicit logout confirmation. Staff-chat Back returns to the saved Chat with Us menu; system typing precedes inline optional feedback and Continue, with the composer and draft retained. The mobile help option is Security Settings. Existing direct Android PDF downloads, attached 1x1 patient photos, forms, results, drafts and chats are preserved. TypeScript, 164 focused mobile tests, 10 website chat tests and responsive chat checks passed. Two additional legacy navigation tests still expect the removed home-service menu and are not counted as passing. APK inspection verified signature continuity, 127 unchanged source files, native modules and clinic PDF templates; all 33 older APKs were preserved. No backend, database-rule deployment, account cleanup or patient-data reset is included; the separate server-side one-submission policy remains undeployed. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible app without uninstalling or clearing app data. No physical-device installation is claimed."
 }

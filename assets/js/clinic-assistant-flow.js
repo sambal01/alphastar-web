@@ -184,7 +184,7 @@
     const mobileGuides = ['app', 'records-guide', 'account-help', 'technical-help', 'profile-help', 'security', 'drafts', 'mobile-data', 'requirements', 'app-installed', 'password-recovery', 'pin-recovery', 'email-code-help', 'google-signin-help', 'create-account-help', 'change-password-help', 'change-pin-help', 'authenticator-help', 'authenticator-recovery'];
     if ((mobileGuides.includes(topic) || topic.startsWith('smpe-')) && !topics.includes('view-download') && !topics.includes('install-guide')) topics = [...topics.filter(id => id !== 'main-menu'), 'view-download', 'main-menu'];
     const noFeedback = ['greeting', 'thanks', 'main-menu', 'identity', 'about', 'app', 'services', 'account-help', 'technical-help', 'security', 'records-guide', 'staff', 'support-request', 'support-declined', 'draft-cancelled', 'staff-offer', 'feedback-helpful', 'feedback-unhelpful', 'unknown', 'clarify-answer', 'urgent', 'medical-advice', 'privacy-refusal'];
-    return { ...result, topics: topics.slice(), prompt, feedback: !prompt && !noFeedback.includes(topic), supportForm: topic === 'support-request' };
+    return { ...result, topics: topics.filter(id => id !== 'security'), prompt, feedback: !prompt && !noFeedback.includes(topic), supportForm: topic === 'support-request' };
   }
   function createSupportDraft({ topic, comments, consent, language = 'english' }) {
     const pair = (en, fil) => language === 'filipino' ? fil : en;

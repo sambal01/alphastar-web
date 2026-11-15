@@ -1,5 +1,5 @@
 'use strict';
-// Publish only the verified APK and its website download identity.
+// Publish only the verified APK, its download identity and the tested chat flow.
 const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto'), assert = require('node:assert/strict');
 const { execFileSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
@@ -8,8 +8,8 @@ assert.equal(git(['diff', '--cached', '--name-only']).trim(), '', 'Preserve the 
 assert.equal(git(['branch', '--show-current']).trim(), 'main');
 assert.equal(git(['remote', 'get-url', 'origin']).trim(), 'https://github.com/sambal01/alphastar-web.git');
 const release = JSON.parse(fs.readFileSync(path.join(root, 'downloads/release.json'), 'utf8'));
-assert.equal(release.version, '1.0.84'); assert.equal(release.versionCode, 85);
-const verified = JSON.parse(fs.readFileSync(path.resolve(root, '../alphastar-mobile/.expo/apk85-verification.json'), 'utf8'));
+assert.equal(release.version, '1.0.85'); assert.equal(release.versionCode, 86);
+const verified = JSON.parse(fs.readFileSync(path.resolve(root, '../alphastar-mobile/.expo/apk86-verification.json'), 'utf8'));
 assert.equal(verified.version, release.version); assert.equal(verified.build, release.versionCode);
 assert.equal(verified.signatureVerified, true); assert.equal(verified.certificateMatchesPrevious, true);
 const apk = fs.readFileSync(path.join(root, 'downloads', release.filename));
@@ -17,7 +17,9 @@ assert.equal(apk.length, release.sizeBytes); assert.equal(crypto.createHash('sha
 assert.equal(release.sha256, verified.sha256);
 let html = git(['show', 'HEAD:index.html']);
 const working = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-for (const expression of [/<a class="app-download-btn android-download-btn"[^>]*>/, /<p class="download-release"[^>]*>[^<]*<\/p>/, /<script src="assets\/js\/site-config\.js\?[^>]*><\/script>/]) {
+for (const expression of [/<a class="app-download-btn android-download-btn"[^>]*>/, /<p class="download-release"[^>]*>[^<]*<\/p>/, /<script src="assets\/js\/site-config\.js\?[^>]*><\/script>/,
+  /<link rel="stylesheet" href="assets\/css\/clinic-assistant\.css\?[^>]*>/,
+  ...['human-chat', 'clinic-assistant', 'clinic-assistant-flow'].map(name => new RegExp('<script src="assets/js/' + name + '\\.js\\?[^>]*><\\/script>'))]) {
   const before = html.match(expression), after = working.match(expression);
   assert.ok(before && after, 'Missing release marker'); html = html.replace(before[0], after[0]);
 }
@@ -25,8 +27,10 @@ assert.ok(html.includes('downloads/' + release.filename));
 const blob = git(['hash-object', '-w', '--stdin'], html).trim();
 git(['update-index', '--cacheinfo', '100644,' + blob + ',index.html']);
 const files = ['assets/js/site-config.js', 'downloads/release.json', 'downloads/' + release.filename,
-  'downloads/' + release.filename + '.sha256', 'docs/android-release-1.0.84.md',
-  'test/android-download-release.test.cjs', 'scripts/stage-form-download-release.cjs'];
+  'downloads/' + release.filename + '.sha256', 'docs/android-release-1.0.85.md',
+  'test/android-download-release.test.cjs', 'scripts/stage-form-download-release.cjs',
+  'assets/css/clinic-assistant.css', 'assets/js/clinic-assistant.js', 'assets/js/clinic-assistant-flow.js', 'assets/js/human-chat.js',
+  'test/chat-assistant-security.test.cjs', 'test/human-chat-layout.cjs', 'docs/staff-chat-menu-flow.md'];
 git(['add', '--', ...files]);
 const staged = git(['diff', '--cached', '--name-only']).trim().split(/\r?\n/);
 assert.ok(staged.every(name => name === 'index.html' || files.includes(name))); git(['diff', '--cached', '--check']);
