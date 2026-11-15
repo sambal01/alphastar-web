@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.83",
-  "versionCode": 84,
-  "filename": "Alphastar-1.0.83-build84.apk",
-  "url": "Alphastar-1.0.83-build84.apk",
-  "sizeBytes": 98520181,
-  "sha256": "e58ae0d16ee744a3f42b429f98d55d57ba8b752eca44fc3fa0078462bc228194",
+  "version": "1.0.84",
+  "versionCode": 85,
+  "filename": "Alphastar-1.0.84-build85.apk",
+  "url": "Alphastar-1.0.84-build85.apk",
+  "sizeBytes": 98594897,
+  "sha256": "83023af5f4b83f61b7b1f16bf25c848cf1055b763e6c8b1f20b6b47fb28b7a0b",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.83 / build 84 fixes immediate PDF deletion during Android viewer hand-off and opens the native save/share chooser. Student/Non-student, Sex, Civil Status and Relation to You selectors stay anchored without moving fields below. Medical form headings are teal, MAPE Requested By is optional, and optional item 26 contains SMAPE Remarks or MAPE Last Menstrual Period. Validation errors no longer have white strips outside their borders. The previous cropped privacy banner returns below Next. Medical Records shows released results without SMAPE/MAPE application cards and uses a clearer empty state. TypeScript, 95 focused tests, PDF field/render inspection and five-width offline layout checks passed. Existing drafts, forms, photos, previous forms, results and chats are preserved; no backend, reset or database-rule deployment is included. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible app without uninstalling or clearing app data. No physical phone was connected, so the exact reported crash and installation were not verified."
+  "note": "Version 1.0.84 / build 85 renames Medical Form History and Export PDF. Android 10 and newer save PDFs directly to Downloads/AlphaStar; older Android versions use a folder picker. Attached patient photos remain in the printed 1x1 frame. Submitted form titles are centered, form guidance uses consistent typography, Continue and Submit labels are clearer, and leaving an unfinished form offers Save draft and leave or Keep editing. Medical Records uses the folder illustration, a black heading and a simpler empty state without the full-screen spinner. TypeScript, 105 focused tests, actual PDF field/render inspection and five-width offline layout checks passed. Existing drafts, forms, photos, previous forms, results and chats are preserved; no backend, reset or database-rule deployment is included. Existing development/test signing certificate retained; not Play Store or production-signing approval. Install over a compatible app without uninstalling or clearing app data. No physical phone was connected, so device installation and the exact reported crash were not verified."
 }
