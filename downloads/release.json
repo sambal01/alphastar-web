@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.86",
-  "versionCode": 87,
-  "filename": "Alphastar-1.0.86-build87.apk",
-  "url": "Alphastar-1.0.86-build87.apk",
-  "sizeBytes": 98675589,
-  "sha256": "9f3e2419950d206c67ede5fbee95d4bd626b8c2aadbc663f44147a9b8987d99c",
+  "version": "1.0.87",
+  "versionCode": 88,
+  "filename": "Alphastar-1.0.87-build88.apk",
+  "url": "Alphastar-1.0.87-build88.apk",
+  "sizeBytes": 100283229,
+  "sha256": "f150a5085238952361e575683d8ec67413069efe569522554b5fab749e1dd931",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.86 / build 87 updates Terms and Conditions and Privacy Policy for current medical forms, review status, optional patient photos, direct PDF downloads, released read-only medical results, saved drafts and staff support. Includes the submitted-form illustration, matching medical page headings, centered form-history logo, scrollable anchored choices and Back navigation from form history to Medical Form. Existing PDF/photo handling is preserved. TypeScript, 130 focused mobile tests, a cold-restart navigation test and responsive control checks passed. Signature continuity, package version, all 128 unchanged source files, native modules and both clinic PDF templates were verified; 34 previous APKs were preserved. No backend or database-rule deployment, patient/account cleanup or data reset is included. Legal notices are informational and require clinic review, not a compliance certification. Existing development/test signing certificate retained; no production/Play Store signing or physical-phone installation is claimed. Install over a compatible app without uninstalling or clearing app data."
+  "note": "Version 1.0.87 / build 88 packages current Mobile changes, including read-only multi-service medical results, service-linked image/PDF viewing and direct Android result-PDF downloads. Existing medical forms, photos, legal notices and staff support are retained. TypeScript and 19 focused history/PDF tests passed. Actual package version, signature continuity, all 128 unchanged source files, native modules and both clinic PDF templates were verified; 35 previous APKs were preserved. This APK publication does not deploy the backend, provision file storage, enable billing, reset data or delete accounts/records. Result attachments require the matching backend and approved private storage. Existing development/test signing retained; no physical-phone installation or production/Play Store signing is claimed. Install over a compatible app without uninstalling or clearing data."
 }
