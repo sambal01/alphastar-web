@@ -35,3 +35,18 @@ const staged = git(['diff', '--cached', '--name-only']).trim().split(/\r?\n/);
 assert.ok(staged.every(file => file === 'index.html' || allow.includes(file)), 'Unexpected staged change.');
 git(['diff', '--cached', '--check']);
 console.log(JSON.stringify({ version: release.version, build: release.versionCode, staged, unrelatedChangesPreserved: true }));
+if (process.argv.includes('--preview')) {
+  const temp = path.join(root, '.tmp'); fs.mkdirSync(temp, { recursive: true });
+  const preview = fs.mkdtempSync(path.join(temp, 'apk-download-preview-'));
+  const downloadFiles = new Set(['downloads/release.json', 'downloads/' + release.filename, 'downloads/' + release.filename + '.sha256']);
+  const names = git(['ls-files', '-z']).split('\0').filter(name =>
+    /^(?:index\.html|privacy-policy\.html|terms-and-conditions\.html|firebase\.json|assets\/[^\0]+)$/.test(name) || downloadFiles.has(name));
+  for (const name of names) {
+    const target = path.resolve(preview, name);
+    assert.ok(target.startsWith(preview + path.sep), 'Unsafe preview path');
+    const bytes = execFileSync('git', ['show', ':' + name], { cwd: root, windowsHide: true, maxBuffer: 128 * 1024 * 1024 });
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.writeFileSync(target, bytes, { flag: 'wx' });
+  }
+  console.log(JSON.stringify({ preview, files: names.length, fromStagedIndex: true, includesUnrelatedWorkingChanges: false }));
+}
