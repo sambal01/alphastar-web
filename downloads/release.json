@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.90",
-  "versionCode": 91,
-  "filename": "Alphastar-1.0.90-build91.apk",
-  "url": "Alphastar-1.0.90-build91.apk",
-  "sizeBytes": 100285585,
-  "sha256": "5d18cdd9c0ca51fb7c1d97897335ca5928bdb70d14a657f189381aa9b9dfb4fa",
+  "version": "1.0.91",
+  "versionCode": 92,
+  "filename": "Alphastar-1.0.91-build92.apk",
+  "url": "Alphastar-1.0.91-build92.apk",
+  "sizeBytes": 100285573,
+  "sha256": "f276fd35adc3230febd8e7d024d84f7c3f67927cf04599a1f955387b171740f2",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.90 / build 91 updates the read-only Medical Records screen. The header chevron returns to the records list, the workspace tabs are hidden while a visit is open, and the folder illustration appears only after an empty response is confirmed. The APK uses the existing testing signing certificate."
+  "note": "Version 1.0.91 / build 92 fixes patient access to released visit result attachments and moves the Medical Records detail back arrow to the left of its title. Result files remain protected by patient ownership and released-record authorization."
 }
