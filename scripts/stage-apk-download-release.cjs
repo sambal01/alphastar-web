@@ -9,6 +9,8 @@ assert.equal(git(['branch', '--show-current']).trim(), 'main');
 assert.equal(git(['remote', 'get-url', 'origin']).trim(), 'https://github.com/sambal01/alphastar-web.git');
 const release = JSON.parse(fs.readFileSync(path.join(root, 'downloads/release.json'), 'utf8'));
 const verified = JSON.parse(fs.readFileSync(path.resolve(root, '../alphastar-mobile/.expo/apk' + release.versionCode + '-verification.json'), 'utf8'));
+const hostedExternally = /^https:\/\//i.test(String(release.url || ''));
+const publicDownloadUrl = hostedExternally ? release.url : 'downloads/' + release.filename;
 assert.match(release.filename, /^Alphastar-\d+\.\d+\.\d+-build\d+\.apk$/);
 assert.equal(verified.version, release.version); assert.equal(verified.build, release.versionCode);
 assert.equal(verified.signatureVerified, true); assert.equal(verified.certificateMatchesPrevious, true);
@@ -25,10 +27,10 @@ for (const expression of [/<a class="app-download-btn android-download-btn"[^>]*
   assert.ok(before && after && before.length === 1 && after.length === 1, 'Required unique download HTML marker.');
   html = html.replace(before[0], after[0]);
 }
-assert.ok(html.includes('downloads/' + release.filename));
+assert.ok(html.includes(publicDownloadUrl), 'Website download link must match the published APK URL.');
 const blob = git(['hash-object', '-w', '--stdin'], html).trim();
 git(['update-index', '--cacheinfo', '100644,' + blob + ',index.html']);
-const allow = ['assets/js/site-config.js', 'downloads/release.json', 'downloads/' + release.filename, 'downloads/' + release.filename + '.sha256',
+const allow = ['assets/js/site-config.js', 'downloads/release.json', ...(!hostedExternally ? ['downloads/' + release.filename] : []), 'downloads/' + release.filename + '.sha256',
   'docs/android-release-' + release.version + '.md', 'test/android-download-release.test.cjs', 'scripts/stage-apk-download-release.cjs'];
 git(['add', '--', ...allow]);
 const staged = git(['diff', '--cached', '--name-only']).trim().split(/\r?\n/);
@@ -38,7 +40,8 @@ console.log(JSON.stringify({ version: release.version, build: release.versionCod
 if (process.argv.includes('--preview')) {
   const temp = path.join(root, '.tmp'); fs.mkdirSync(temp, { recursive: true });
   const preview = fs.mkdtempSync(path.join(temp, 'apk-download-preview-'));
-  const downloadFiles = new Set(['downloads/release.json', 'downloads/' + release.filename, 'downloads/' + release.filename + '.sha256']);
+  const downloadFiles = new Set(['downloads/release.json', 'downloads/' + release.filename + '.sha256']);
+  if (!hostedExternally) downloadFiles.add('downloads/' + release.filename);
   const names = git(['ls-files', '-z']).split('\0').filter(name =>
     /^(?:index\.html|privacy-policy\.html|terms-and-conditions\.html|firebase\.json|assets\/[^\0]+)$/.test(name) || downloadFiles.has(name));
   for (const name of names) {

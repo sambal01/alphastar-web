@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.91",
-  "versionCode": 92,
-  "filename": "Alphastar-1.0.91-build92.apk",
-  "url": "Alphastar-1.0.91-build92.apk",
-  "sizeBytes": 100285573,
-  "sha256": "f276fd35adc3230febd8e7d024d84f7c3f67927cf04599a1f955387b171740f2",
+  "version": "1.0.92",
+  "versionCode": 93,
+  "filename": "Alphastar-1.0.92-build93.apk",
+  "url": "https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.92/Alphastar-1.0.92-build93.apk",
+  "sizeBytes": 100285897,
+  "sha256": "48af624c92ad11e0f734f65e1fbbac71c5f567a052a7991a517ab90d8f953ee5",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.91 / build 92 fixes patient access to released visit result attachments and moves the Medical Records detail back arrow to the left of its title. Result files remain protected by patient ownership and released-record authorization."
+  "note": "Version 1.0.92 / build 93 hides clinic-removed medical forms from patient history, unlocks a new patient form submission after removal, and opens notifications in a dismissible detail popup."
 }
