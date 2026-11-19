@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.89",
-  "versionCode": 90,
-  "filename": "Alphastar-1.0.89-build90.apk",
-  "url": "Alphastar-1.0.89-build90.apk",
-  "sizeBytes": 100285125,
-  "sha256": "24b814c066e81b04e05a771d6e437f45609478fd83fc7415cb92d2e8b8d91a03",
+  "version": "1.0.90",
+  "versionCode": 91,
+  "filename": "Alphastar-1.0.90-build91.apk",
+  "url": "Alphastar-1.0.90-build91.apk",
+  "sizeBytes": 100285585,
+  "sha256": "5d18cdd9c0ca51fb7c1d97897335ca5928bdb70d14a657f189381aa9b9dfb4fa",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.89 / build 90 packages the aligned Medical Form History arrow/title with a larger back target, fitted submitted-form heading and school-ID review preview. Existing forms, read-only multi-service medical results, photos, direct Android PDF downloads, legal notices and staff support are retained. TypeScript, focused header/navigation checks and 36 offline header layouts passed. The wider UI suite has two confirmed pre-existing unrelated failures. Actual package version, signing continuity, all 129 source-manifest files, eight native modules and both clinic PDF templates were verified; 37 previous APKs were preserved. This publication does not deploy the backend, provision private storage, enable billing, reset data or delete accounts/records. Result attachments require the matching backend and approved private storage. Existing development/test signing retained; no physical-phone installation or production/Play Store signing is claimed. Install over a compatible app without uninstalling or clearing data."
+  "note": "Version 1.0.90 / build 91 updates the read-only Medical Records screen. The header chevron returns to the records list, the workspace tabs are hidden while a visit is open, and the folder illustration appears only after an empty response is confirmed. The APK uses the existing testing signing certificate."
 }
