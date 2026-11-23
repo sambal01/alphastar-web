@@ -17,6 +17,13 @@ test('HTML fallback, JavaScript settings and release metadata refer to the publi
   assert.equal(config.androidApkRelease.version, release.version); assert.equal(config.androidApkRelease.build, release.versionCode);
   assert.equal(config.androidApkRelease.bytes, release.sizeBytes);
   assert.equal(config.androidApkRelease.url, release.url);
+  assert.equal(config.androidApkRelease.progressUrl, release.progressUrl);
+  if (release.progressUrl) {
+    assert.equal(release.progressUrl, 'https://sambal01.github.io/alphastar-web/downloads/' + release.filename);
+    const apk = fs.readFileSync(path.join(root, 'downloads', release.filename));
+    assert.equal(apk.length, release.sizeBytes);
+    assert.equal(crypto.createHash('sha256').update(apk).digest('hex'), release.sha256);
+  }
   assert.ok(html.includes(`href="${release.url}"`));
   assert.ok(html.includes('target="_blank" rel="noopener noreferrer"'));
   assert.match(html, /aria-disabled="false"/); assert.doesNotMatch(html, /Testing build/);

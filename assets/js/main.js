@@ -187,7 +187,9 @@ function bindPlaceholderDownloads() {
 
   document.querySelectorAll('[data-app-download]').forEach((link) => {
     link.addEventListener('click', (event) => {
-      if (getConfiguredAppDownloadUrl()) {
+      const downloadUrl = getConfiguredAppDownloadUrl();
+      if (downloadUrl) {
+        if (window.AlphastarAndroidDownload?.start(event, link, downloadUrl)) return;
         return;
       }
       event.preventDefault();
