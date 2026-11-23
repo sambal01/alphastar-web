@@ -3,12 +3,12 @@ const test = require('node:test'), assert = require('node:assert/strict'), fs = 
 const root = path.resolve(process.env.ALPHASTAR_SITE_TEST_ROOT || path.join(__dirname, '..'));
 const release = JSON.parse(fs.readFileSync(path.join(root, 'downloads/release.json'), 'utf8'));
 test('published download payload matches its verified SHA-256 and declared testing version', () => {
-  assert.equal(release.version, '1.0.92'); assert.equal(release.versionCode, 93); assert.equal(release.testingBuild, true);
-  assert.equal(release.filename, 'Alphastar-1.0.92-build93.apk');
-  assert.match(release.url, /^https:\/\/github\.com\/sambal01\/alphastar-web\/releases\/download\/mobile-v1\.0\.92\//);
+  assert.equal(release.version, '1.0.93'); assert.equal(release.versionCode, 94); assert.equal(release.testingBuild, true);
+  assert.equal(release.filename, 'Alphastar-1.0.93-build94.apk');
+  assert.equal(release.url, 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.93/Alphastar-1.0.93-build94.apk');
   assert.match(release.sha256, /^[a-f0-9]{64}$/);
   assert.match(fs.readFileSync(path.join(root, 'downloads', release.filename + '.sha256'), 'utf8'), new RegExp('^' + release.sha256 + '\\s{2}' + release.filename + '\\n?$'));
-  assert.equal(release.sizeBytes, 100285897);
+  assert.equal(release.sizeBytes, 100294977);
 });
 test('HTML fallback, JavaScript settings and release metadata refer to the public APK asset', () => {
   const c = vm.createContext({ window: {} }); vm.runInContext(fs.readFileSync(path.join(root, 'assets/js/site-config.js'), 'utf8'), c);

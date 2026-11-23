@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.92",
-  "versionCode": 93,
-  "filename": "Alphastar-1.0.92-build93.apk",
-  "url": "https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.92/Alphastar-1.0.92-build93.apk",
-  "sizeBytes": 100285897,
-  "sha256": "48af624c92ad11e0f734f65e1fbbac71c5f567a052a7991a517ab90d8f953ee5",
+  "version": "1.0.93",
+  "versionCode": 94,
+  "filename": "Alphastar-1.0.93-build94.apk",
+  "url": "https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.93/Alphastar-1.0.93-build94.apk",
+  "sizeBytes": 100294977,
+  "sha256": "a4afaf42558b20a1622a42d452100971454478e70bc1d81ab48627e4a2af665c",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Version 1.0.92 / build 93 hides clinic-removed medical forms from patient history, unlocks a new patient form submission after removal, and opens notifications in a dismissible detail popup."
+  "note": "This build includes the current Mobile loading feedback for account actions, Medical Records, and staff chat."
 }
