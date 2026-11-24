@@ -2,11 +2,11 @@ window.ALPHASTAR_WEBSITE_CONFIG = Object.freeze({
   siteName: 'Alphastar',
   siteUrl: 'https://alphastarkasiglahan.com/',
   apiBaseUrl: window.ALPHASTAR_API_BASE_URL || '',
-  androidApkUrl: window.ALPHASTAR_ANDROID_APK_URL || 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.93/Alphastar-1.0.93-build94.apk',
+  androidApkUrl: window.ALPHASTAR_ANDROID_APK_URL || 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.95/Alphastar-1.0.95-build96.apk',
   androidApkRelease: window.ALPHASTAR_ANDROID_APK_URL ? null : Object.freeze({
-    version: '1.0.93', build: 94, bytes: 100294977,
-    filename: 'Alphastar-1.0.93-build94.apk',
-    url: 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.93/Alphastar-1.0.93-build94.apk', testing: true
+    version: '1.0.95', build: 96, bytes: 100295729,
+    filename: 'Alphastar-1.0.95-build96.apk',
+    url: 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.95/Alphastar-1.0.95-build96.apk', testing: true
   }),
   firebase: {
     apiKey: 'AIzaSyDovlYRntcWR9RbPRVE3Bvtj_zxy14houI',
