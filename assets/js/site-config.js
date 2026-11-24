@@ -6,9 +6,7 @@ window.ALPHASTAR_WEBSITE_CONFIG = Object.freeze({
   androidApkRelease: window.ALPHASTAR_ANDROID_APK_URL ? null : Object.freeze({
     version: '1.0.93', build: 94, bytes: 100294977,
     filename: 'Alphastar-1.0.93-build94.apk',
-    url: 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.93/Alphastar-1.0.93-build94.apk',
-    progressUrl: 'https://sambal01.github.io/alphastar-web/downloads/Alphastar-1.0.93-build94.apk',
-    testing: true
+    url: 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.93/Alphastar-1.0.93-build94.apk', testing: true
   }),
   firebase: {
     apiKey: 'AIzaSyDovlYRntcWR9RbPRVE3Bvtj_zxy14houI',

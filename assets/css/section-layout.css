@@ -1516,43 +1516,6 @@
   opacity: .72;
 }
 
-.app-download-btn[aria-busy="true"] { cursor: progress; }
-
-.apk-download-progress {
-  display: grid;
-  justify-self: stretch;
-  gap: 8px;
-  min-width: 0;
-  padding: 12px;
-  border: 1px solid rgba(8, 114, 104, .22);
-  border-radius: 12px;
-  background: #f1fbf8;
-  color: #163731;
-  font-size: 13px;
-}
-
-.apk-download-progress [hidden], .apk-download-progress[hidden] { display: none; }
-.apk-download-meter { display: grid; grid-template-columns: minmax(0, 1fr) 4ch; align-items: center; gap: 10px; }
-.apk-download-meter progress { width: 100%; height: 10px; accent-color: #0b7166; }
-.apk-download-meter span { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
-.apk-download-progress p { margin: 0; line-height: 1.5; }
-.apk-download-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.apk-download-actions :is(a, button) {
-  display: inline-flex;
-  align-items: center;
-  min-height: 36px;
-  padding: 4px 10px;
-  border: 1px solid rgba(8, 114, 104, .28);
-  border-radius: 8px;
-  background: #fff;
-  color: #075e54;
-  font: inherit;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-}
-.apk-download-actions :is(a, button):hover { background: #e1f5ef; }
-
 .content-section .contact-grid.contact-grid-centered {
   grid-template-areas: "info";
   grid-template-columns: minmax(0, 1fr);

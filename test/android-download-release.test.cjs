@@ -7,7 +7,8 @@ test('published download payload matches its verified SHA-256 and declared testi
   assert.equal(release.filename, 'Alphastar-1.0.93-build94.apk');
   assert.equal(release.url, 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.93/Alphastar-1.0.93-build94.apk');
   assert.match(release.sha256, /^[a-f0-9]{64}$/);
-  assert.match(fs.readFileSync(path.join(root, 'downloads', release.filename + '.sha256'), 'utf8'), new RegExp('^' + release.sha256 + '\\s{2}' + release.filename + '\\n?$'));
+  const checksum = fs.readFileSync(path.join(root, 'downloads', release.filename + '.sha256'), 'utf8');
+  assert.equal(checksum.replace(/\r?\n$/, ''), release.sha256 + '  ' + release.filename);
   assert.equal(release.sizeBytes, 100294977);
 });
 test('HTML fallback, JavaScript settings and release metadata refer to the public APK asset', () => {
@@ -17,15 +18,19 @@ test('HTML fallback, JavaScript settings and release metadata refer to the publi
   assert.equal(config.androidApkRelease.version, release.version); assert.equal(config.androidApkRelease.build, release.versionCode);
   assert.equal(config.androidApkRelease.bytes, release.sizeBytes);
   assert.equal(config.androidApkRelease.url, release.url);
-  assert.equal(config.androidApkRelease.progressUrl, release.progressUrl);
-  if (release.progressUrl) {
-    assert.equal(release.progressUrl, 'https://sambal01.github.io/alphastar-web/downloads/' + release.filename);
-    const apk = fs.readFileSync(path.join(root, 'downloads', release.filename));
+  const localApk = path.join(root, 'downloads', release.filename);
+  if (fs.existsSync(localApk)) {
+    const apk = fs.readFileSync(localApk);
     assert.equal(apk.length, release.sizeBytes);
     assert.equal(crypto.createHash('sha256').update(apk).digest('hex'), release.sha256);
   }
   assert.ok(html.includes(`href="${release.url}"`));
-  assert.ok(html.includes('target="_blank" rel="noopener noreferrer"'));
+  const downloadLink = html.match(/<a class="app-download-btn android-download-btn"[^>]*>/)?.[0];
+  assert.ok(downloadLink);
+  assert.doesNotMatch(downloadLink, /\btarget=/);
+  assert.doesNotMatch(html, /data-apk-progress|android-download-progress\.js|Save APK|Download complete/);
+  const main = fs.readFileSync(path.join(root, 'assets/js/main.js'), 'utf8');
+  assert.doesNotMatch(main, /AlphastarAndroidDownload/);
   assert.match(html, /aria-disabled="false"/); assert.doesNotMatch(html, /Testing build/);
 });
 test('Firebase serves APKs as downloadable Android packages and excludes test/source directories', () => {

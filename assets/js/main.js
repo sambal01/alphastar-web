@@ -111,7 +111,11 @@ function syncAppDownloadLinks() {
         link.removeAttribute('target'); link.removeAttribute('rel');
       } else {
         link.removeAttribute('download');
-        link.setAttribute('target', '_blank'); link.setAttribute('rel', 'noopener noreferrer');
+        if (matchingRelease) {
+          link.removeAttribute('target'); link.removeAttribute('rel');
+        } else {
+          link.setAttribute('target', '_blank'); link.setAttribute('rel', 'noopener noreferrer');
+        }
       }
       link.removeAttribute('tabindex');
     } else {
@@ -187,9 +191,7 @@ function bindPlaceholderDownloads() {
 
   document.querySelectorAll('[data-app-download]').forEach((link) => {
     link.addEventListener('click', (event) => {
-      const downloadUrl = getConfiguredAppDownloadUrl();
-      if (downloadUrl) {
-        if (window.AlphastarAndroidDownload?.start(event, link, downloadUrl)) return;
+      if (getConfiguredAppDownloadUrl()) {
         return;
       }
       event.preventDefault();
