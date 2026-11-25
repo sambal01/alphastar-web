@@ -11,6 +11,8 @@
     'hero.intro': 'Mabilis, maaasahan, at de-kalidad na serbisyong pangkalusugan na may malasakit sa iyo. Mula sa laboratory tests hanggang executive check-up, kasama mo kami sa bawat hakbang.',
     'download.heading': 'I-DOWNLOAD ANG APP', 'download.through': 'I-download gamit ang', 'download.for': 'I-download para sa',
     'download.ready': 'Pindutin ang I-download para sa Android para i-save ang APK. Buksan ang na-download na file para i-install ang Alphastar.',
+    'download.guide': 'Paano i-download ang app',
+    'download.openGuide': 'Buksan ang gabay na video',
     'download.release': 'Bersyon {version} · {size} MB',
     'download.missing': 'Inihahanda pa ang download link. Hingin muna sa clinic staff ang opisyal na APK link.',
     'action.home': 'Pumunta sa Simula', 'action.faq': 'Tingnan ang mga tanong', 'action.scroll': 'Tingnan sa ibaba',

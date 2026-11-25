@@ -1510,6 +1510,38 @@
   overflow-wrap: anywhere;
 }
 
+.download-guide {
+  width: min(100%, 34rem);
+  margin-top: 12px;
+}
+
+.download-guide summary {
+  width: fit-content;
+  max-width: 100%;
+  padding: 10px 0;
+  color: #075e54;
+  font-size: .9375rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.download-guide summary:focus-visible {
+  outline: 2px solid #075e54;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.download-guide video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin-top: 4px;
+  border-radius: 12px;
+  background: #0d2521;
+  object-fit: contain;
+}
+
 .app-download-btn.is-disabled,
 .app-download-btn[aria-disabled="true"] {
   cursor: not-allowed;
