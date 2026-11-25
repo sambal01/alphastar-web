@@ -28,7 +28,7 @@ test('HTML fallback, JavaScript settings and release metadata refer to the publi
   const downloadLink = html.match(/<a class="app-download-btn android-download-btn"[^>]*>/)?.[0];
   assert.ok(downloadLink);
   assert.doesNotMatch(downloadLink, /\btarget=/);
-  assert.doesNotMatch(html, /data-apk-progress|android-download-progress\.js|Save APK|Download complete/);
+  assert.doesNotMatch(html, /data-app-download-release|data-apk-progress|android-download-progress\.js|Save APK|Download complete/);
   const main = fs.readFileSync(path.join(root, 'assets/js/main.js'), 'utf8');
   assert.doesNotMatch(main, /AlphastarAndroidDownload/);
   assert.match(html, /aria-disabled="false"/); assert.doesNotMatch(html, /Testing build/);

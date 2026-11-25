@@ -127,13 +127,6 @@ function syncAppDownloadLinks() {
     }
   });
 
-  document.querySelectorAll('[data-app-download-release]').forEach((node) => {
-    node.hidden = !matchingRelease;
-    if (matchingRelease) node.textContent = siteText('download.release', 'Version {version} · {size} MB', {
-      version: matchingRelease.version, size: (matchingRelease.bytes / 1000000).toFixed(1),
-    });
-  });
-
   document.querySelectorAll('[data-download-status]').forEach((node) => {
     node.textContent = hasDownloadUrl
       ? siteText('download.ready', 'Tap Download for Android to save the APK, then open the downloaded file to install Alphastar.')

@@ -22,7 +22,7 @@ assert.equal(release.sha256, verified.sha256);
 assert.ok(apk.length < 100 * 1024 * 1024, 'APK exceeds the existing Git publication limit.');
 let html = git(['show', 'HEAD:index.html']);
 const working = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-for (const expression of [/<a class="app-download-btn android-download-btn"[^>]*>/, /<p class="download-release"[^>]*>[^<]*<\/p>/, /<script src="assets\/js\/site-config\.js\?[^>]*><\/script>/]) {
+for (const expression of [/<a class="app-download-btn android-download-btn"[^>]*>/, /<script src="assets\/js\/site-config\.js\?[^>]*><\/script>/]) {
   const before = html.match(expression), after = working.match(expression);
   assert.ok(before && after && before.length === 1 && after.length === 1, 'Required unique download HTML marker.');
   html = html.replace(before[0], after[0]);

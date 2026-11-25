@@ -12,7 +12,9 @@ let browser;
   assert.equal(response.status, 200); const metadata = await response.json();
   assert.equal(metadata.version, expected.version); assert.equal(metadata.versionCode, expected.build); assert.equal(metadata.testingBuild, true);
   assert.equal(metadata.sha256, expected.sha256); assert.equal(metadata.sizeBytes, expected.bytes);
-  const url = origin + '/downloads/' + expected.filename;
+  assert.equal(metadata.url, localRelease.url);
+  const url = new URL(metadata.url, origin).href;
+  const localApk = new URL(url).origin === origin;
   const head = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(40000) });
   assert.equal(head.status, 200); assert.equal(head.headers.get('content-type'), 'application/vnd.android.package-archive');
   assert.equal(Number(head.headers.get('content-length')), expected.bytes);
@@ -22,17 +24,22 @@ let browser;
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, acceptDownloads: true,
     reducedMotion: 'reduce', timezoneId: 'Asia/Manila',
     userAgent: 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36' });
-  await context.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort());
+  await context.route('**/*', route => {
+    const requested = new URL(route.request().url());
+    return requested.origin === origin || requested.href === url ||
+      (!localApk && requested.hostname === 'release-assets.githubusercontent.com') ? route.continue() : route.abort();
+  });
   const page = await context.newPage(), errors = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto(origin, { waitUntil: 'networkidle', timeout: 60000 });
   const button = page.locator('[data-app-download]');
   assert.equal(await button.getAttribute('aria-disabled'), 'false');
-  assert.equal(await button.getAttribute('download'), expected.filename); assert.equal(await button.getAttribute('target'), null);
+  assert.equal(await button.getAttribute('download'), localApk ? expected.filename : null); assert.equal(await button.getAttribute('target'), null);
+  assert.equal(new URL(await button.getAttribute('href'), origin).href, url);
   assert.equal(await page.locator('.android-logo').evaluate(img => img.complete && img.naturalWidth > 0), true);
   for (const language of ['en', 'tl']) {
     await page.evaluate(language => window.AlphastarSiteLanguage.setLanguage(language), language);
-    const label = await page.locator('[data-app-download-release]').textContent();
-    assert.ok(label.includes(expected.version)); assert.match(label, /MB/); assert.doesNotMatch(label, /Testing build/i);
+    assert.equal(await page.locator('[data-app-download-release]').count(), 0);
+    assert.equal(await page.locator('#app-download .download-guide summary').textContent(), language === 'en' ? 'How to download the app' : 'Paano i-download ang app');
     const geometry = await page.locator('#app-download').evaluate(node => {
       const box = node.getBoundingClientRect(); return box.left >= 0 && box.right <= innerWidth && node.scrollWidth <= node.clientWidth;
     });
@@ -50,5 +57,5 @@ let browser;
     checksumMatches: true, androidEmulatedTouchDownload: true, bilingualLayout: true, rangeRequests: true,
     physicalPhoneTest: false, installedApp: false, patientOrAccountOperations: false, errors };
   await fs.writeFile(path.join(folder, 'verification.json'), JSON.stringify(report, null, 2));
-  console.log(`PASS: Live custom-domain Android touch download completed; exact ${expected.bytes} bytes and SHA-256 match, correct filename/type, range support, Android logo and English/Tagalog version labels without Testing build text. No app installation or patient/account operations.`);
+  console.log(`PASS: Live custom-domain Android touch download completed; exact ${expected.bytes} bytes and SHA-256 match, correct filename/type, range support, Android logo and English/Tagalog guide with the version label removed. No app installation or patient/account operations.`);
 })().catch(error => { console.error(error); process.exitCode = 1; }).finally(async () => { if (browser) await browser.close(); });

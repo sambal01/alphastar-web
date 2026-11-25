@@ -1501,24 +1501,16 @@
   object-fit: contain;
 }
 
-.hero-download-single .download-release {
-  max-width: 100%;
-  margin: 0;
-  color: var(--gray-500, #526562);
-  font-size: 12px;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-}
-
 .download-guide {
   width: min(100%, 34rem);
-  margin-top: 12px;
+  margin-top: 4px;
 }
 
 .download-guide summary {
   width: fit-content;
   max-width: 100%;
-  padding: 10px 0;
+  min-height: 44px;
+  padding: 4px 0 10px;
   color: #075e54;
   font-size: .9375rem;
   font-weight: 600;
