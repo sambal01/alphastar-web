@@ -488,6 +488,10 @@ window.syncNavbarHeightVariable = syncNavbarHeightVariable;
 window.addEventListener('DOMContentLoaded', () => {
   syncNavbarHeightVariable();
   bindPlaceholderDownloads();
+  const downloadGuide = document.querySelector('.download-guide');
+  downloadGuide?.addEventListener('toggle', () => {
+    if (!downloadGuide.open) downloadGuide.querySelector('video')?.pause();
+  });
   refreshClinicTimeUI();
   initOfferCarousel();
   initRevealObserver();

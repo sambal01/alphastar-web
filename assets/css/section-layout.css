@@ -1503,16 +1503,24 @@
 
 .download-guide {
   width: min(100%, 34rem);
-  margin-top: 8px;
-  padding: 0;
+  margin-top: 4px;
 }
 
-.download-guide h2 {
-  margin: 0;
+.download-guide summary {
+  width: fit-content;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 4px 0 10px;
   color: #075e54;
   font-size: .9375rem;
   font-weight: 600;
-  line-height: 1.4;
+  cursor: pointer;
+}
+
+.download-guide summary:focus-visible {
+  outline: 2px solid #075e54;
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 .download-guide video {
