@@ -39,15 +39,27 @@ let browser, server;
     assert.equal(await download.getAttribute('download'), localApk ? release.filename : null);
     assert.equal(new URL(await download.getAttribute('href'), origin).href, apkUrl.href);
     assert.equal(await page.locator('[data-app-download-release]').count(), 0);
-    const guide = page.locator('#app-download .download-guide summary');
-    assert.equal(await guide.textContent(), language === 'en' ? 'How to download the app' : 'Paano i-download ang app');
-    const spacing = await guide.evaluate(summary => {
-      const button = summary.closest('#app-download').querySelector('[data-app-download]').getBoundingClientRect();
-      const { top, height } = summary.getBoundingClientRect();
-      return { gap: top - button.bottom, height };
+    const guideTitle = page.locator('#download-guide-title');
+    assert.equal(await guideTitle.textContent(), language === 'en' ? 'How to download the app' : 'Paano i-download ang app');
+    const player = page.locator('.download-guide video');
+    assert.equal(await player.isVisible(), true, 'The tutorial player is visible on page load');
+    const layout = await player.evaluate(video => {
+      const button = video.closest('#app-download').querySelector('[data-app-download]').getBoundingClientRect();
+      const title = document.getElementById('download-guide-title').getBoundingClientRect();
+      const bounds = video.getBoundingClientRect();
+      return {
+        gap: title.top - button.bottom,
+        fits: bounds.left >= 0 && bounds.right <= innerWidth && bounds.top >= title.bottom,
+        hasControls: video.controls,
+        paused: video.paused,
+        preload: video.preload,
+      };
     });
-    assert.ok(spacing.gap >= 0 && spacing.gap <= 8, `Download guide gap at ${width}px: ${spacing.gap}`);
-    assert.ok(spacing.height >= 44, 'The guide retains a touch-friendly target');
+    assert.ok(layout.gap >= 0 && layout.gap <= 8);
+    assert.equal(layout.fits, true, 'The tutorial fits below the button');
+    assert.equal(layout.hasControls, true);
+    assert.equal(layout.paused, true);
+    assert.equal(layout.preload, 'none');
     await page.locator('#app-download').screenshot({ path: path.join(folder, `${width}-${language}.png`) });
   }
   const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, acceptDownloads: true,
@@ -57,7 +69,25 @@ let browser, server;
     return url.origin === origin || url.href === apkUrl.href ||
       (!localApk && url.hostname === 'release-assets.githubusercontent.com') ? route.continue() : route.abort();
   });
-  const phone = await mobile.newPage(); await phone.goto(origin, { waitUntil: 'networkidle' });
+  const phone = await mobile.newPage();
+  const videoRequests = [];
+  phone.on('request', request => {
+    if (new URL(request.url()).pathname.endsWith('/how-to-download.mp4')) videoRequests.push(request);
+  });
+  await phone.goto(origin, { waitUntil: 'networkidle' });
+  const player = phone.locator('.download-guide video');
+  assert.equal(await player.isVisible(), true);
+  assert.equal(videoRequests.length, 0, 'The video waits for playback before downloading');
+  await player.evaluate(async video => {
+    video.muted = true;
+    await video.play();
+  });
+  await phone.waitForFunction(() => document.querySelector('.download-guide video').currentTime > 0);
+  const duration = await player.evaluate(video => {
+    video.pause();
+    return video.duration;
+  });
+  assert.ok(duration >= 151 && duration <= 153, 'The tutorial plays in full');
   const event = phone.waitForEvent('download'); await phone.locator('[data-app-download]').tap(); const downloaded = await event;
   assert.equal(downloaded.suggestedFilename(), release.filename); assert.equal(await downloaded.failure(), null);
   const bytes = await fs.readFile(await downloaded.path()); assert.equal(bytes.length, release.sizeBytes);

@@ -39,7 +39,10 @@ let browser;
   for (const language of ['en', 'tl']) {
     await page.evaluate(language => window.AlphastarSiteLanguage.setLanguage(language), language);
     assert.equal(await page.locator('[data-app-download-release]').count(), 0);
-    assert.equal(await page.locator('#app-download .download-guide summary').textContent(), language === 'en' ? 'How to download the app' : 'Paano i-download ang app');
+    assert.equal(await page.locator('#download-guide-title').textContent(), language === 'en' ? 'How to download the app' : 'Paano i-download ang app');
+    const player = page.locator('.download-guide video');
+    assert.equal(await player.isVisible(), true, 'The tutorial player is visible on page load');
+    assert.equal(await player.evaluate(video => video.controls && video.paused && video.preload === 'none'), true);
     const geometry = await page.locator('#app-download').evaluate(node => {
       const box = node.getBoundingClientRect(); return box.left >= 0 && box.right <= innerWidth && node.scrollWidth <= node.clientWidth;
     });
