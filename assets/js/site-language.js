@@ -13,6 +13,7 @@
     'download.ready': 'Pindutin ang I-download para sa Android para i-save ang APK. Buksan ang na-download na file para i-install ang Alphastar.',
     'download.guide': 'Paano i-download ang app',
     'download.openGuide': 'Buksan ang gabay na video',
+    'download.loadingGuide': 'Inihahanda ang video…',
     'download.missing': 'Inihahanda pa ang download link. Hingin muna sa clinic staff ang opisyal na APK link.',
     'action.home': 'Pumunta sa Simula', 'action.faq': 'Tingnan ang mga tanong', 'action.scroll': 'Tingnan sa ibaba',
     'about.heading': 'Alaga sa Kalusugan na may', 'about.expertise': 'Kaalaman', 'word.and': 'at', 'about.compassion': 'Malasakit',

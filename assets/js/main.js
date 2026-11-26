@@ -485,13 +485,38 @@ window.showSiteToast = showSiteToast;
 window.getClinicAvailabilityState = getClinicAvailabilityState;
 window.syncNavbarHeightVariable = syncNavbarHeightVariable;
 
+function initDownloadGuide() {
+  const guide = document.querySelector('.download-guide');
+  const video = guide?.querySelector('video');
+  const loading = guide?.querySelector('.download-guide-loading');
+  if (!video || !loading) return;
+
+  function updateLoading() {
+    const loadingMetadata = video.readyState === video.HAVE_NOTHING && video.networkState === video.NETWORK_LOADING;
+    const waitingToPlay = !video.paused && !video.ended && video.readyState < video.HAVE_FUTURE_DATA;
+    const failed = video.error || video.networkState === video.NETWORK_NO_SOURCE;
+    loading.hidden = !guide.open || failed || !(loadingMetadata || waitingToPlay);
+  }
+
+  for (const eventName of ['loadstart', 'loadedmetadata', 'play', 'waiting', 'canplay', 'playing', 'pause', 'ended', 'suspend', 'emptied']) {
+    video.addEventListener(eventName, updateLoading);
+  }
+  video.addEventListener('error', () => { loading.hidden = true; }, true);
+
+  guide.addEventListener('toggle', () => {
+    if (guide.open) {
+      video.preload = 'metadata';
+    } else {
+      video.pause();
+    }
+    updateLoading();
+  });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   syncNavbarHeightVariable();
   bindPlaceholderDownloads();
-  const downloadGuide = document.querySelector('.download-guide');
-  downloadGuide?.addEventListener('toggle', () => {
-    if (!downloadGuide.open) downloadGuide.querySelector('video')?.pause();
-  });
+  initDownloadGuide();
   refreshClinicTimeUI();
   initOfferCarousel();
   initRevealObserver();

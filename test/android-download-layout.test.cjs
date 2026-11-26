@@ -52,12 +52,38 @@ let browser, server;
   }
   const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, acceptDownloads: true,
     userAgent: 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36' });
-  await mobile.route('**/*', route => {
+  let releaseVideo;
+  const waitForVideo = new Promise(resolve => { releaseVideo = resolve; });
+  await mobile.route('**/*', async route => {
+    if (new URL(route.request().url()).pathname.endsWith('/how-to-download.mp4')) await waitForVideo;
     const url = new URL(route.request().url());
     return url.origin === origin || url.href === apkUrl.href ||
       (!localApk && url.hostname === 'release-assets.githubusercontent.com') ? route.continue() : route.abort();
   });
   const phone = await mobile.newPage(); await phone.goto(origin, { waitUntil: 'networkidle' });
+  const guide = phone.locator('.download-guide summary');
+  const video = phone.locator('.download-guide video');
+  const loading = phone.locator('.download-guide-loading');
+  assert.equal(await video.getAttribute('preload'), 'none');
+  assert.equal(await loading.isVisible(), false);
+  await guide.tap();
+  await loading.waitFor({ state: 'visible' });
+  assert.equal(await video.getAttribute('preload'), 'metadata');
+  assert.equal(await loading.textContent().then(text => text.trim()), 'Loading tutorial\u2026');
+  await guide.tap();
+  assert.equal(await loading.isVisible(), false, 'Closing the tutorial hides its loading message');
+  await guide.tap();
+  await loading.waitFor({ state: 'visible' });
+  await video.evaluate(player => {
+    player.muted = true;
+    void player.play();
+  });
+  releaseVideo();
+  await phone.waitForFunction(() => document.querySelector('.download-guide video').currentTime > 0);
+  await loading.waitFor({ state: 'hidden' });
+  assert.ok(await video.evaluate(player => player.duration >= 151 && player.duration <= 153));
+  await guide.tap();
+  await phone.waitForFunction(() => document.querySelector('.download-guide video').paused);
   const event = phone.waitForEvent('download'); await phone.locator('[data-app-download]').tap(); const downloaded = await event;
   assert.equal(downloaded.suggestedFilename(), release.filename); assert.equal(await downloaded.failure(), null);
   const bytes = await fs.readFile(await downloaded.path()); assert.equal(bytes.length, release.sizeBytes);

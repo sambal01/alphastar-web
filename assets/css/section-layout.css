@@ -1523,15 +1523,39 @@
   border-radius: 4px;
 }
 
+.download-guide-player {
+  position: relative;
+  margin-top: 4px;
+}
+
 .download-guide video {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
-  margin-top: 4px;
   border-radius: 12px;
   background: #0d2521;
   object-fit: contain;
+}
+
+.download-guide-loading:not([hidden]) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: min(10rem, calc(100% - 16px));
+  min-height: 84px;
+  padding: 8px;
+  border: 1px solid #51998b;
+  border-radius: 12px;
+  background: #0d2521;
+  color: #c9fff1;
+  font-size: .875rem;
+  font-weight: 600;
+  text-align: center;
+  pointer-events: none;
 }
 
 .app-download-btn.is-disabled,
