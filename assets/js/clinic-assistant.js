@@ -5,6 +5,8 @@
 (() => {
   'use strict';
 
+  const clinicWebsite = 'https://alphastarkasiglahan.com/';
+
   const labels = {
     'human-chat': ['Chat with staff', 'Makipag-chat sa staff'],
     about: ['About Alphastar', 'Tungkol sa Alphastar'],
@@ -13,6 +15,8 @@
     staff: ['Talk to Staff Support', 'Kausapin ang Staff Support'],
     hours: ['Clinic Schedule', 'Oras at Lokasyon'],
     services: ['All Services Offered', 'Mga Serbisyo'],
+    'view-services': ['View All Clinic Services', 'Tingnan ang Lahat ng Serbisyo'],
+    'clinic-website': ['Visit Clinic Website', 'Buksan ang Website ng Clinic'],
     parking: ['Vehicle Parking', 'Paradahan'],
     'home-service': ['Staff Support', 'Staff Support'],
     license: ['Is Alphastar Licensed?', 'Lisensya ng Alphastar'],
@@ -39,7 +43,7 @@
     messenger: ['Open Messenger', 'Buksan ang Messenger'],
     email: ['Email the Clinic', 'Email ang Clinic'],
   };
-  const mainTopics = ['about', 'app', 'install-guide', 'privacy', 'terms', 'staff'];
+  const mainTopics = ['about', 'services', 'app', 'install-guide', 'privacy', 'terms', 'staff', 'clinic-website'];
   const aboutTopics = ['hours', 'services', 'parking', 'license', 'main-menu'];
   const appTopics = ['records-guide', 'account-help', 'profile-help', 'security', 'main-menu'];
   const normalize = input => String(input).toLowerCase().normalize('NFKC')
@@ -77,6 +81,7 @@
     if (/\b(drafts?|minimize|switch apps|unsaved|uninstall|reinstall|nawala|disappeared|stay saved|save my form)\b/.test(text)) return 'drafts';
     if (/\b(security|seguridad|protect (?:my )?account|change (?:my )?(?:pin|password)|(?:palitan|baguhin).*(?:pin|password))\b/.test(text)) return 'security';
     if (secret.test(text) || /\b(log[- ]?in|sign[- ]?in|sign[- ]?up|log[- ]?out|register|registration|account|verification email)\b|\b(change|update|palitan)\b.*\bemail\b/.test(text)) return 'account-help';
+    if (/\b(website|web site|alphastarkasiglahan\.com)\b/.test(text)) return 'website';
     if (/\b(where|nasaan|saan|location|directions)\b.*\b(clinic|kasiglahan|alphastar)\b|\b(clinic|kasiglahan) address\b/.test(text)) return 'hours';
     if (/\b(profile|home address|house (?:number|no)|street|village|subdivision|barangay|province|zip|postal|my address|address ko)\b|\b(change|update|edit|palitan|baguhin)\b.*\b(name|pangalan|address|phone|contact number)\b/.test(text)) return 'profile-help';
     if (/\b(reschedule|move (?:my |the )?appointment|change (?:my |the )?(?:appointment|booking|schedule)|palitan ng (?:petsa|oras))\b|\b(change|move|baguhin|ilipat)\b.*\b(date|time|petsa|oras)\b.*\b(appointment|schedule|booking)\b/.test(text)) return 'reschedule';
@@ -114,16 +119,20 @@
     const filipino = language === 'filipino';
     const pair = (en, fil) => filipino ? fil : en;
     let topics = ['staff', 'main-menu'];
+    const services = topic === 'services' ? (window.SERVICES_DATA || []).map(service => `• ${service.title}`).join('\n') : '';
+    const serviceIntro = services ? pair(`Here are the services listed by AlphaStar Kasiglahan.\n\n${services}`, `Narito ang mga serbisyo ng AlphaStar Kasiglahan.\n\n${services}`)
+      : pair('Open the clinic services page for the full list.', 'Buksan ang pahina ng mga serbisyo para sa buong listahan.');
     const answers = {
       about: pair('Alphastar is a laboratory and clinic in Kasiglahan, San Jose, Rodriguez, Rizal. We offer lab tests and other clinic services. What would you like to know?', 'Ang Alphastar ay laboratory at clinic sa Kasiglahan, San Jose, Rodriguez, Rizal. May lab tests at iba pang serbisyo. Ano ang gusto mong malaman?'),
-      app: pair('Use Alphastar Mobile to manage your profile, view medical forms, submit SMAPE / MAPE forms, and manage account security.', 'Gamitin ang Alphastar Mobile para pamahalaan ang profile, tingnan ang dati nang medical forms, magsumite ng SMAPE / MAPE forms, at pamahalaan ang account security.'),
+      app: pair('Use Alphastar Mobile to submit a medical form, view your form history and released results, manage your profile, and chat with clinic staff.', 'Sa Alphastar Mobile, puwede kang magsumite ng medical form, tingnan ang mga form at resultang inilabas ng clinic, ayusin ang profile mo, at makipag-chat sa staff.'),
       'install-guide': pair('Download the Alphastar Android app:\n1. Open this website in Google Chrome on your Android phone.\n2. Tap Go to App Download below to reach the download section on Home, then tap the download button when the official APK link is available.\n3. When the APK finishes downloading, open it and follow your phone’s installation prompts.\n4. Open Alphastar, sign in or create a patient account, and complete your profile.\n\nYou can use the app to manage your profile, submit SMAPE / MAPE forms, and view medical forms. If the APK link is unavailable, ask clinic staff for the official link.', 'I-download ang Alphastar Android app:\n1. Buksan ang website na ito sa Google Chrome ng Android phone mo.\n2. Pindutin ang Pumunta sa Download ng App sa ibaba para makita ang download sa Home. Pindutin ang download button kapag available na ang official APK link.\n3. Kapag tapos na ang download, buksan ang APK at sundin ang installation steps ng phone mo.\n4. Buksan ang Alphastar, mag-login o gumawa ng patient account, at kumpletuhin ang profile.\n\nGamitin ang app para pamahalaan ang profile, magsumite ng SMAPE / MAPE forms, at tingnan ang dati nang medical forms. Kung wala pang APK link, hingin ang official link sa staff.'),
       hours: pair('Regular hours: Monday through Sunday, 7:00 AM to 5:00 PM. Ask staff about holiday and doctor schedules.\n\nFind us at Lot 3-A, Block 9, Phase 1B, Kasiglahan Village, San Jose, Rodriguez, Rizal, near McDonald’s Kasiglahan.', 'Regular na bukas: Lunes–Linggo, 7:00 AM–5:00 PM. Magtanong muna sa staff para sa holidays at schedule ng doktor.\n\nNasa Lot 3-A, Block 9, Phase 1B, Kasiglahan Village, San Jose, Rodriguez, Rizal, malapit sa McDonald’s Kasiglahan.'),
-      services: pair('We offer lab tests, drug testing, X-ray, ultrasound, ECG, check-ups, vaccinations, and company services. Choose a service below. Ask staff about the schedule and price.', 'May lab tests, drug testing, X-ray, ultrasound, ECG, check-up, bakuna, at serbisyo para sa mga kumpanya. Pumili sa ibaba. Magtanong sa staff tungkol sa schedule at presyo.'),
+      services: `${serviceIntro}\n\n${pair('Ask clinic staff about availability, prices, and what to bring.', 'Magtanong sa staff kung available ang serbisyo, magkano, at ano ang kailangang dalhin.')}`,
+      website: pair('Open the official clinic website below.', 'Buksan ang official website ng clinic sa ibaba.'),
       'home-service': pair('Contact clinic staff for current service information. View saved medical forms in Alphastar Mobile > Records > Medical Forms History.', 'Makipag-ugnayan sa clinic staff para sa kasalukuyang impormasyon ng serbisyo. Makikita ang naka-save na medical forms sa Alphastar Mobile > Records > Medical Forms History.'),
       'walk-ins': pair('Walk-ins are accepted for drug testing. For other services, ask staff before visiting.', 'Puwedeng walk-in sa drug testing. Para sa ibang serbisyo, magtanong muna sa staff bago pumunta.'),
       'booking-guide': pair('Open Schedule in Alphastar Mobile to view medical forms. Contact clinic staff if you need help with a saved record or clinic service.', 'Buksan ang Schedule sa Alphastar Mobile para makita ang mga dati nang appointment record. Makipag-ugnayan sa clinic staff kung kailangan ng tulong sa record o serbisyo ng clinic.'),
-      'records-guide': pair('Open Form > Medical Info Form and choose Student (SMAPE) or Non-student (MAPE). After submitting, check Records > Medical Forms History. The form is not a lab result. Open your own record in the app, not in this chat.', 'Buksan ang Form > Medical Info Form at piliin ang Student (SMAPE) o Non-student (MAPE). Pagkatapos mag-submit, tingnan ang Records > Medical Forms History. Form ito, hindi lab result. Sa app mo buksan ang sarili mong record.'),
+      'records-guide': pair('Open Form and choose Student (SMAPE) or Non-student (MAPE). Find submitted forms in Profile > Account > Medical Form History. Find results released by the clinic in Records.', 'Buksan ang Form at piliin ang Student (SMAPE) o Non-student (MAPE). Tingnan ang na-submit na form sa Profile > Account > Medical Form History. Nasa Records ang mga resultang inilabas ng clinic.'),
       'profile-help': pair('Open Profile > Profile details in the app. Fill in your name, contact number, and full address. Choose the province before the city, check your 4-digit ZIP code, then tap Save profile details. Keep your address out of this chat.', 'Buksan ang Profile > Profile details sa app. Ilagay ang pangalan, contact number, at kumpletong address. Piliin muna ang province bago ang city, tingnan ang 4-digit ZIP code, at pindutin ang Save profile details. Huwag ilagay ang address dito sa chat.'),
       'account-help': pair('Sign in using the same email or Google account you registered with. If you forgot your password or PIN, use Forgot password or Forgot PIN in the app. Need help with an email code? Choose a topic below. Keep passwords and codes private.', 'Mag-login gamit ang email o Google account na ginamit mo noon. Kung nakalimutan ang password o PIN, gamitin ang Forgot password o Forgot PIN sa app. Walang dumating na email code? Pumili ng tulong sa ibaba. Huwag ibigay ang password o code dito.'),
       security: pair('Open Profile > Security Settings in the app. Choose Change PIN or Change password. Change password is for email/password accounts; Google users change their password through Google.', 'Buksan ang Profile > Security Settings sa app. Piliin ang Change PIN o Change password. Para sa email/password account ang Change password. Kung Google ang gamit mo, sa Google palitan ang password.'),
@@ -134,7 +143,7 @@
       cancel: pair('Appointment records are read-only in the app. Contact clinic staff for help with an existing record.', 'Read-only ang medical forms sa app. Makipag-ugnayan sa clinic staff para sa tulong sa dati nang record.'),
       prices: pair('Contact clinic staff to confirm current service prices and requirements. I do not have a verified final price quote here.', 'Makipag-ugnayan sa clinic staff para kumpirmahin ang kasalukuyang presyo at requirements. Wala akong verified na price quote dito.'),
       payment: pair('Ask staff which payment methods, PhilHealth benefits, or HMOs apply to your service. Confirm the fee and requirements before your visit.', 'Itanong sa staff kung anong bayad, PhilHealth benefit, o HMO ang puwede sa serbisyo mo. Alamin muna ang presyo at mga kailangan bago pumunta.'),
-      results: pair('Result times depend on the test. Ask staff when and how to get yours. Medical History shows SMAPE / MAPE forms, not proof that a lab result is ready. I cannot open or explain your results here.', 'Depende sa test kung kailan lalabas ang resulta. Itanong sa staff kung kailan at paano makukuha. SMAPE / MAPE forms ang nasa Medical History, hindi patunay na ready na ang lab result. Hindi ko mabubuksan o maipapaliwanag ang resulta dito.'),
+      results: pair('Result times depend on the test. Check Records in Alphastar Mobile for results released by the clinic. Ask staff when your result will be ready.', 'Depende sa test kung kailan lalabas ang resulta. Tingnan ang Records sa Alphastar Mobile para sa mga resultang inilabas ng clinic. Itanong sa staff kung kailan makukuha ang resulta mo.'),
       preparation: pair('Test preparation depends on your test. Ask your doctor or staff about fasting, water, medicines, and what to bring. Do not change medicines based on a chatbot reply.', 'Depende sa test ang paghahanda. Itanong sa doktor o staff kung kailangang mag-ayuno, uminom ng tubig, o may kailangang dalhin. Huwag baguhin ang gamot dahil lang sa sagot ng bot.'),
       requirements: pair('Save your contact number and full address in the app. Fill out an SMAPE / MAPE form if required. Ask staff what ID, test preparation, and fees are needed for your home service.', 'I-save ang contact number at buong address sa app. Sagutan ang SMAPE kung kailangan. Itanong sa staff kung anong ID, paghahanda, at bayad ang kailangan para sa home service.'),
       parking: pair('There is no car parking at Kasiglahan. Space for 1–3 motorcycles may be available. Ask staff before visiting; parking is not reserved through chat.', 'Walang paradahan ng kotse sa Kasiglahan. Puwedeng may lugar para sa 1–3 motor, depende sa bakante. Magtanong muna sa staff; hindi makakapag-reserve ng parking dito.'),
@@ -158,8 +167,9 @@
     if (topic === 'app') topics = [...appTopics, 'view-download'];
     if (topic === 'install-guide') topics = ['view-download', 'account-help', 'staff', 'main-menu'];
     if (['status', 'reschedule', 'cancel'].includes(topic)) topics = ['view-download', 'messenger', 'email', 'main-menu'];
-    if (topic === 'hours') topics = ['view-contact', 'staff', 'main-menu'];
-    if (topic === 'services') topics = ['prices', 'staff', 'main-menu'];
+    if (topic === 'hours') topics = ['view-contact', 'clinic-website', 'staff', 'main-menu'];
+    if (topic === 'services') topics = ['view-services', 'clinic-website', 'staff', 'main-menu'];
+    if (topic === 'website') topics = ['clinic-website', 'main-menu'];
     if (topic === 'home-service') topics = ['staff', 'main-menu'];
     if (topic === 'booking-guide') topics = ['staff', 'main-menu'];
     if (topic === 'records-guide') topics = ['drafts', 'mobile-data', 'staff', 'main-menu'];
@@ -444,14 +454,23 @@
       currentTopicCards = ids.map(id => ({ id, label: labelFor(id) }));
       for (const id of ids) {
         const legalPage = { 'view-privacy-policy': 'privacy-policy.html', 'view-terms-and-conditions': 'terms-and-conditions.html' }[id];
-        const isLink = Boolean(legalPage) || ['messenger', 'email', 'view-download'].includes(id);
+        const isLink = Boolean(legalPage) || ['messenger', 'email', 'view-download', 'view-services', 'clinic-website'].includes(id);
         const action = document.createElement(isLink ? 'a' : 'button');
         action.className = `clinic-chat-topic${id === 'staff' || isLink ? ' is-staff' : ''}`;
         bindTopic(action, id);
         if (isLink) {
-          action.href = legalPage || (id === 'view-download' ? '#app-download' : id === 'messenger' ? 'https://m.me/alphastarlaboratory' : 'mailto:info@alphastarlabclinic.com');
+          const links = { 'view-download': '#app-download', 'view-services': '#services', 'clinic-website': clinicWebsite,
+            messenger: 'https://m.me/alphastarlaboratory', email: 'mailto:info@alphastarlabclinic.com' };
+          action.href = legalPage || links[id];
           if (legalPage) { action.target = '_blank'; action.rel = 'noopener noreferrer'; }
           if (id === 'messenger') { action.target = '_blank'; action.rel = 'noopener noreferrer'; }
+          if (id === 'view-services') action.addEventListener('click', event => {
+            event.preventDefault();
+            if (busy || panel.classList.contains('is-connecting')) return;
+            window.closeFab?.();
+            if (typeof scrollToSection === 'function') scrollToSection('#services');
+            else window.location.hash = '#services';
+          });
           if (id === 'view-download') action.addEventListener('click', event => {
             event.preventDefault();
             if (busy || panel.classList.contains('is-connecting')) return;

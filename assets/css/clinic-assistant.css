@@ -48,9 +48,10 @@
 .clinic-chat-header-button:hover { background: #096d65; }
 .clinic-chat-language { color: #fff; }
 .clinic-chat-language:hover { background: transparent; color: #fff; }
-.clinic-chat-intro { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; color: #0d847b; }
-.clinic-chat-intro p { margin: 0; color: inherit; font-size: 14px; font-weight: 600; line-height: 1.5; }
-.clinic-chat-intro-spinner { width: 32px; height: 32px; border: 3px solid #d9eeeb; border-top-color: #0d847b; border-radius: 50%; animation: clinic-intro-spin 800ms linear infinite; }
+.clinic-chat-intro { flex: 1; min-height: 0; color: #0d847b; }
+.clinic-chat-intro p { margin: 12px 16px 0; color: inherit; font-size: 14px; font-weight: 600; line-height: 1.5; }
+.clinic-chat-loading-line { display: block; height: 3px; overflow: hidden; background: #bde8df; }
+.clinic-chat-loading-line::before { content: ""; display: block; width: 36%; height: 100%; background: #0d847b; animation: clinic-loading-sweep 1.05s linear infinite; }
 .clinic-chat-intro[hidden], .clinic-chat-body[hidden], .clinic-chat-status[hidden], .clinic-chat-composer[hidden] { display: none !important; }
 .clinic-chat-body { position: relative; flex: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
 .clinic-chat-messages { min-width: 0; padding: 10px 10px 0; }
@@ -150,7 +151,7 @@
   to { opacity: 1; transform: none; }
 }
 @keyframes clinic-typing-bounce { 0%, 50%, 100% { opacity: .45; transform: translateY(0); } 25% { opacity: 1; transform: translateY(-3px); } }
-@keyframes clinic-intro-spin { to { transform: rotate(360deg); } }
+@keyframes clinic-loading-sweep { from { transform: translateX(-100%); } to { transform: translateX(280%); } }
 
 @media (max-width: 639px) {
   .clinic-chat { --chat-max-height: 450px; width: min(340px, calc(100vw - 32px)); height: min(var(--chat-max-height), calc(var(--chat-viewport-height, 100dvh) - 36px - env(safe-area-inset-bottom, 0px))); }
@@ -169,7 +170,7 @@
   .clinic-chat { transform: none; }
   .clinic-chat-message { animation: none; }
   .clinic-chat-typing, .clinic-chat-typing-dot { animation: none; }
-  .clinic-chat-intro-spinner { animation: none; }
+  .clinic-chat-loading-line::before { width: 100%; animation: none; }
 }
 .native-chat-loading { display: grid; flex: 1; place-items: center; min-height: 120px; }
 .native-chat-log[hidden], .native-staff-chat button[hidden] { display: none; }
