@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.95",
-  "versionCode": 96,
-  "filename": "Alphastar-1.0.95-build96.apk",
-  "url": "https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.95/Alphastar-1.0.95-build96.apk",
-  "sizeBytes": 100295729,
-  "sha256": "a554cf99594a943f71202c632738ad61a919478d56e9f6173831f8955436df2c",
+  "version": "1.0.96",
+  "versionCode": 97,
+  "filename": "Alphastar-1.0.96-build97.apk",
+  "url": "https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.96/Alphastar-1.0.96-build97.apk",
+  "sizeBytes": 100298917,
+  "sha256": "df796b991e77545b872f0a187c1dcef6d1b18897822dd9e649d5925993086492",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Create Account and Forgot Password now show a live ?Passwords match? check below Confirm Password."
+  "note": "Student and Non-student forms open while patient records sync in the background."
 }
