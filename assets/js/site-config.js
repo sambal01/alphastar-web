@@ -2,11 +2,11 @@ window.ALPHASTAR_WEBSITE_CONFIG = Object.freeze({
   siteName: 'Alphastar',
   siteUrl: 'https://alphastarkasiglahan.com/',
   apiBaseUrl: window.ALPHASTAR_API_BASE_URL || '',
-  androidApkUrl: window.ALPHASTAR_ANDROID_APK_URL || 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.96/Alphastar-1.0.96-chat-update.apk',
+  androidApkUrl: window.ALPHASTAR_ANDROID_APK_URL || 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.97/Alphastar-1.0.97-build98.apk',
   androidApkRelease: window.ALPHASTAR_ANDROID_APK_URL ? null : Object.freeze({
-    version: '1.0.96', build: 97, bytes: 100300637,
-    filename: 'Alphastar-1.0.96-chat-update.apk',
-    url: 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.96/Alphastar-1.0.96-chat-update.apk', testing: true
+    version: '1.0.97', build: 98, bytes: 100300837,
+    filename: 'Alphastar-1.0.97-build98.apk',
+    url: 'https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.97/Alphastar-1.0.97-build98.apk', testing: true
   }),
   firebase: {
     apiKey: 'AIzaSyDovlYRntcWR9RbPRVE3Bvtj_zxy14houI',

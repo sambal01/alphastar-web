@@ -2,13 +2,13 @@
   "name": "Alphastar",
   "platform": "android",
   "package": "com.alphastar.mobile",
-  "version": "1.0.96",
-  "versionCode": 97,
-  "filename": "Alphastar-1.0.96-chat-update.apk",
-  "url": "https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.96/Alphastar-1.0.96-chat-update.apk",
-  "sizeBytes": 100300637,
-  "sha256": "228b53fbd227aeed059b42fd71335e363bbf635bf11d25517a6c195d6cbd01f1",
+  "version": "1.0.97",
+  "versionCode": 98,
+  "filename": "Alphastar-1.0.97-build98.apk",
+  "url": "https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.97/Alphastar-1.0.97-build98.apk",
+  "sizeBytes": 100300837,
+  "sha256": "6bac1a427c5d88073874fab3fc50b30ee16f01098698efc77a37d3b200c2b20b",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Adds a top loading bar, the full clinic service list in Chat With Us, and a direct link to the clinic website."
+  "note": "Find All Services Offered and Visit Clinic Website in About Alphastar."
 }

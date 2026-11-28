@@ -43,8 +43,8 @@
     messenger: ['Open Messenger', 'Buksan ang Messenger'],
     email: ['Email the Clinic', 'Email ang Clinic'],
   };
-  const mainTopics = ['about', 'services', 'app', 'install-guide', 'privacy', 'terms', 'staff', 'clinic-website'];
-  const aboutTopics = ['hours', 'services', 'parking', 'license', 'main-menu'];
+  const mainTopics = ['about', 'app', 'install-guide', 'privacy', 'terms', 'staff'];
+  const aboutTopics = ['hours', 'services', 'clinic-website', 'parking', 'license', 'main-menu'];
   const appTopics = ['records-guide', 'account-help', 'profile-help', 'security', 'main-menu'];
   const normalize = input => String(input).toLowerCase().normalize('NFKC')
     .replace(/[\u2018\u2019]/g, "'")
