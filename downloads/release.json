@@ -4,11 +4,11 @@
   "package": "com.alphastar.mobile",
   "version": "1.0.96",
   "versionCode": 97,
-  "filename": "Alphastar-1.0.96-build97.apk",
-  "url": "https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.96/Alphastar-1.0.96-build97.apk",
-  "sizeBytes": 100298917,
-  "sha256": "df796b991e77545b872f0a187c1dcef6d1b18897822dd9e649d5925993086492",
+  "filename": "Alphastar-1.0.96-chat-update.apk",
+  "url": "https://github.com/sambal01/alphastar-web/releases/download/mobile-v1.0.96/Alphastar-1.0.96-chat-update.apk",
+  "sizeBytes": 100300637,
+  "sha256": "228b53fbd227aeed059b42fd71335e363bbf635bf11d25517a6c195d6cbd01f1",
   "signingCertificateSha256": "fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c",
   "testingBuild": true,
-  "note": "Student and Non-student forms open while patient records sync in the background."
+  "note": "Adds a top loading bar, the full clinic service list in Chat With Us, and a direct link to the clinic website."
 }
